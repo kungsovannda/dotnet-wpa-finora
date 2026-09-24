@@ -1,4 +1,4 @@
-﻿namespace PersonalExpenseTracker.Controls
+﻿namespace PersonalExpenseTracker.Views.Controls
 {
     partial class Header
     {

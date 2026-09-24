@@ -1,4 +1,4 @@
-﻿namespace PersonalExpenseTracker
+﻿namespace PersonalExpenseTracker.Views.Forms
 {
     partial class LoginForm
     {

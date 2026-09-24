@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PersonalExpenseTracker.Controls
+namespace PersonalExpenseTracker.Views.Forms
 {
     public partial class DashboardControl : UserControl
     {

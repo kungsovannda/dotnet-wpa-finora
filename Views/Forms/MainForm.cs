@@ -1,6 +1,6 @@
-﻿using PersonalExpenseTracker.Controls;
-using PersonalExpenseTracker.Navigations;
-using PersonalExpenseTracker.UI;
+﻿using PersonalExpenseTracker.Views.Forms;
+using PersonalExpenseTracker.Views.Navigations;
+using PersonalExpenseTracker.Views.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Runtime;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PersonalExpenseTracker.Forms
+namespace PersonalExpenseTracker.Views.Forms
 {
     public partial class MainForm : Form
     {

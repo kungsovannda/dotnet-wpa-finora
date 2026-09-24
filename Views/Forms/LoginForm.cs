@@ -1,6 +1,6 @@
-using PersonalExpenseTracker.UI;
-using PersonalExpenseTracker.Forms;
-namespace PersonalExpenseTracker
+using PersonalExpenseTracker.Views.Forms;
+using PersonalExpenseTracker.Views.UI;
+namespace PersonalExpenseTracker.Views.Forms
 {
     public partial class LoginForm : Form
     {

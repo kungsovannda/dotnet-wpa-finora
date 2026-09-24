@@ -1,4 +1,4 @@
-﻿namespace PersonalExpenseTracker.Forms
+﻿namespace PersonalExpenseTracker.Views.Forms
 {
     partial class MainForm
     {
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            sidebar = new PersonalExpenseTracker.Controls.Sidebar();
+            sidebar = new PersonalExpenseTracker.Views.Controls.Sidebar();
             panel = new Panel();
-            header1 = new PersonalExpenseTracker.Controls.Header();
+            header1 = new PersonalExpenseTracker.Views.Controls.Header();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();

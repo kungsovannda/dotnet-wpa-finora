@@ -1,4 +1,4 @@
-﻿using PersonalExpenseTracker.Navigations;
+﻿using PersonalExpenseTracker.Views.Navigations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PersonalExpenseTracker.Controls
+namespace PersonalExpenseTracker.Views.Controls
 {
     public partial class Sidebar : UserControl
     {

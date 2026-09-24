@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PersonalExpenseTracker.UI
+namespace PersonalExpenseTracker.Views.UI
 {
     public class Typography
     {

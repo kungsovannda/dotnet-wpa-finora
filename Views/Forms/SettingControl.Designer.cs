@@ -1,4 +1,4 @@
-﻿namespace PersonalExpenseTracker.Controls
+﻿namespace PersonalExpenseTracker.Views.Forms
 {
     partial class SettingControl
     {

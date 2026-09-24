@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PersonalExpenseTracker.Navigations
+namespace PersonalExpenseTracker.Views.Navigations
 {
     public enum NavigationItem
     {

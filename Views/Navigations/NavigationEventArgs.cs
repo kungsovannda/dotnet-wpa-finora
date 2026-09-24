@@ -1,4 +1,4 @@
-﻿namespace PersonalExpenseTracker.Navigations
+﻿namespace PersonalExpenseTracker.Views.Navigations
 {
     public class NavigationEventArgs : EventArgs
     {

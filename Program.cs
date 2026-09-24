@@ -1,4 +1,4 @@
-using PersonalExpenseTracker.Forms;
+using PersonalExpenseTracker.Views.Forms;
 
 namespace PersonalExpenseTracker
 {

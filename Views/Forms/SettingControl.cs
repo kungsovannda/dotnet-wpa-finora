@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PersonalExpenseTracker.Controls
+namespace PersonalExpenseTracker.Views.Forms
 {
-    public partial class Header : UserControl
+    public partial class SettingControl : UserControl
     {
-        public Header()
+        public SettingControl()
         {
             InitializeComponent();
         }
