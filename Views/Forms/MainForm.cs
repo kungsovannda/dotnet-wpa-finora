@@ -1,23 +1,17 @@
-﻿using PersonalExpenseTracker.Views.Forms;
-using PersonalExpenseTracker.Views.Navigations;
+﻿using PersonalExpenseTracker.Views.Navigations;
 using PersonalExpenseTracker.Views.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Runtime;
-using System.Text;
-using System.Windows.Forms;
-
 namespace PersonalExpenseTracker.Views.Forms
 {
     public partial class MainForm : Form
     {
-        private readonly DashboardControl _dashboard = new();
-        private readonly SettingControl _setting = new();
-        public MainForm()
+        private readonly DashboardControl _dashboard;
+        private readonly SettingControl _setting;
+        private readonly CategoryControl _category;
+        public MainForm(DashboardControl dashboard, SettingControl setting, CategoryControl category)
         {
+            _dashboard = dashboard;
+            _setting = setting;
+            _category = category;
             InitializeComponent();
             Typography.Apply(this);
             sidebar.NavigationRequested += Sidebar_NavigationRequested;
@@ -37,6 +31,10 @@ namespace PersonalExpenseTracker.Views.Forms
             {
                 case NavigationItem.Dashboard:
                     ShowPage(_dashboard);
+                    break;
+
+                case NavigationItem.Category:
+                    ShowPage(_category);
                     break;
 
                 case NavigationItem.Setting:

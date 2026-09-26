@@ -7,6 +7,7 @@ namespace PersonalExpenseTracker.Views.Navigations
     public enum NavigationItem
     {
         Dashboard,
-        Setting
+        Setting,
+        Category
     }
 }

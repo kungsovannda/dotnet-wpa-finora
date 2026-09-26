@@ -26,5 +26,10 @@ namespace PersonalExpenseTracker.Views.Controls
         {
             NavigationRequested?.Invoke(this, new NavigationEventArgs(NavigationItem.Setting));
         }
+
+        private void btnCategory_Click(object sender, EventArgs e)
+        {
+            NavigationRequested?.Invoke(this, new NavigationEventArgs(NavigationItem.Category));
+        }
     }
 }

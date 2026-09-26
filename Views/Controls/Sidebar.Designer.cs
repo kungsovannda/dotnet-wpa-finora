@@ -32,6 +32,7 @@
             btnSetting = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
+            btnCategory = new Button();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -53,7 +54,7 @@
             // 
             btnSetting.Dock = DockStyle.Top;
             btnSetting.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSetting.Location = new Point(0, 30);
+            btnSetting.Location = new Point(0, 60);
             btnSetting.Name = "btnSetting";
             btnSetting.Size = new Size(140, 30);
             btnSetting.TabIndex = 1;
@@ -80,12 +81,26 @@
             // panel1
             // 
             panel1.Controls.Add(btnSetting);
+            panel1.Controls.Add(btnCategory);
             panel1.Controls.Add(btnDashboard);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(5, 67);
             panel1.Name = "panel1";
             panel1.Size = new Size(140, 323);
             panel1.TabIndex = 0;
+            // 
+            // btnCategory
+            // 
+            btnCategory.Dock = DockStyle.Top;
+            btnCategory.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCategory.Location = new Point(0, 30);
+            btnCategory.Name = "btnCategory";
+            btnCategory.Size = new Size(140, 30);
+            btnCategory.TabIndex = 2;
+            btnCategory.Text = "Category";
+            btnCategory.TextAlign = ContentAlignment.MiddleLeft;
+            btnCategory.UseVisualStyleBackColor = true;
+            btnCategory.Click += btnCategory_Click;
             // 
             // Sidebar
             // 
@@ -106,5 +121,6 @@
         private Button btnSetting;
         private TableLayoutPanel tableLayoutPanel1;
         private Panel panel1;
+        private Button btnCategory;
     }
 }

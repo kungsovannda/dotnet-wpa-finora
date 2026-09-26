@@ -145,6 +145,7 @@
             // splitter3
             // 
             splitter3.Dock = DockStyle.Top;
+            splitter3.Enabled = false;
             splitter3.Location = new Point(0, 90);
             splitter3.Name = "splitter3";
             splitter3.Size = new Size(314, 5);
@@ -165,6 +166,7 @@
             // splitter1
             // 
             splitter1.Dock = DockStyle.Top;
+            splitter1.Enabled = false;
             splitter1.Location = new Point(0, 59);
             splitter1.Name = "splitter1";
             splitter1.Size = new Size(314, 10);
@@ -183,6 +185,7 @@
             // splitter2
             // 
             splitter2.Dock = DockStyle.Top;
+            splitter2.Enabled = false;
             splitter2.Location = new Point(0, 21);
             splitter2.Name = "splitter2";
             splitter2.Size = new Size(314, 5);

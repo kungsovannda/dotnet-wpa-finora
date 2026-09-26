@@ -23,4 +23,14 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\User\" />
+    <Folder Include="Mappers\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+  </ItemGroup>
+
 </Project>
