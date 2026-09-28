@@ -38,9 +38,10 @@ namespace PersonalExpenseTracker.Views.Forms
             dgv.DataSource = categories;
             dgv.Columns["Id"].DisplayIndex = 0;
             dgv.Columns["Name"].DisplayIndex = 1;
-            dgv.Columns["Description"].DisplayIndex = 2;
-            dgv.Columns["CreatedAt"].DisplayIndex = 3;
-            dgv.Columns["Actions"].DisplayIndex = 4;
+            dgv.Columns["Type"].DisplayIndex = 2;
+            dgv.Columns["Description"].DisplayIndex = 3;
+            dgv.Columns["CreatedAt"].DisplayIndex = 4;
+            dgv.Columns["Actions"].DisplayIndex = 5;
         }
 
         private void CategoryControl_Load(object sender, EventArgs e)
@@ -79,11 +80,11 @@ namespace PersonalExpenseTracker.Views.Forms
         {
             var menu = new ContextMenuStrip();
 
-            var editItem = new ToolStripMenuItem("Edit", Resources.Resources.trash);
+            var editItem = new ToolStripMenuItem("Edit", Resources.Resources.edit);
             var deleteItem = new ToolStripMenuItem("Delete", Resources.Resources.trash);
 
-            //editItem.Click += (_, _) => EditCategory(id);
-            //deleteItem.Click += (_, _) => DeleteCategory(id);
+            editItem.Click += (_, _) => EditCategory(id);
+            deleteItem.Click += (_, _) => DeleteCategory(id);
 
             menu.Items.Add(editItem);
             menu.Items.Add(deleteItem);
@@ -95,11 +96,48 @@ namespace PersonalExpenseTracker.Views.Forms
             );
 
             var location = new Point(
-                cellRect.Width/2,
+                cellRect.Right,
                 cellRect.Bottom
             );
 
             menu.Show(dgv, location);
+        }
+
+        private void EditCategory(long id)
+        {
+            var category = _controller.GetCategory(id);
+            var categoryDialog = new CategoryDialog(category);
+            if (categoryDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var update = categoryDialog.GetUpdateData();
+                    update.Id = id;
+                    _controller.UpdateCategory(update);
+                    LoadCategories();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        
+        private void DeleteCategory(long id) {
+            var category = _controller.GetCategory(id);
+            DialogResult result = MessageBox.Show($"Are you sure you want to delete the category '{category.Name}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    _controller.DeleteCategory(id);
+                    LoadCategories();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

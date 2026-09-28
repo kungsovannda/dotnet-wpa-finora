@@ -1,3 +1,5 @@
+using PersonalExpenseTracker.Domains;
+
 namespace PersonalExpenseTracker.Dtos
 {
     public class UpdateCategoryDto
@@ -7,5 +9,7 @@ namespace PersonalExpenseTracker.Dtos
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public TransactionType Type { get; set; }
     }
 }

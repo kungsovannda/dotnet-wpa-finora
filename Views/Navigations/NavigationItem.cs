@@ -8,6 +8,7 @@ namespace PersonalExpenseTracker.Views.Navigations
     {
         Dashboard,
         Setting,
-        Category
+        Category,
+        Transaction
     }
 }

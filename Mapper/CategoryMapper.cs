@@ -10,7 +10,8 @@ namespace PersonalExpenseTracker.Mapper
             return new Category
             {
                 Name = dto.Name,
-                Description = dto.Description
+                Description = dto.Description,
+                Type = dto.Type
             };
         }
 
@@ -18,6 +19,7 @@ namespace PersonalExpenseTracker.Mapper
         {
             existingCategory.Name = dto.Name;
             existingCategory.Description = dto.Description;
+            existingCategory.Type = dto.Type;
             return existingCategory;
         }
 
@@ -28,6 +30,7 @@ namespace PersonalExpenseTracker.Mapper
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description,
+                Type = category.Type,
                 CreatedAt = category.CreatedAt
             };
         }

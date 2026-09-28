@@ -17,11 +17,20 @@ namespace PersonalExpenseTracker.Views.Forms
         {
             InitializeComponent();
             _controller = controller;
+        }
+
+        private void LoadSummary()
+        {
             var summary = _controller.GetDashboardSummary();
             cardBalance.Value = summary.TotalBalance.ToString("C");
             cardIncome.Value = summary.TotalIncome.ToString("C");
             cardExpense.Value = summary.TotalExpense.ToString("C");
             cardTransaction.Value = summary.TransactionCount.ToString();
+        }
+
+        private void DashboardControl_Load(object sender, EventArgs e)
+        {
+            LoadSummary();
         }
     }
 }

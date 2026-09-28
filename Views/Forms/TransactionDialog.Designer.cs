@@ -1,6 +1,6 @@
 ﻿namespace PersonalExpenseTracker.Views.Forms
 {
-    partial class CategoryDialog
+    partial class TransactionDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            cbType = new ComboBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
             panel1 = new Panel();
@@ -36,18 +37,30 @@
             btnCancel = new Button();
             panel2 = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
+            cbCategory = new ComboBox();
             label3 = new Label();
             txtDescription = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            txtCategoryName = new TextBox();
-            cbType = new ComboBox();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
+            // 
+            // cbType
+            // 
+            cbType.Dock = DockStyle.Fill;
+            cbType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbType.Enabled = false;
+            cbType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cbType.FormattingEnabled = true;
+            cbType.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
+            cbType.Location = new Point(3, 73);
+            cbType.Name = "cbType";
+            cbType.Size = new Size(383, 25);
+            cbType.TabIndex = 5;
             // 
             // tableLayoutPanel1
             // 
@@ -59,25 +72,25 @@
             tableLayoutPanel1.Controls.Add(panel1, 0, 2);
             tableLayoutPanel1.Controls.Add(panel2, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(8, 8);
+            tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(379, 372);
-            tableLayoutPanel1.TabIndex = 0;
+            tableLayoutPanel1.Size = new Size(395, 450);
+            tableLayoutPanel1.TabIndex = 1;
             // 
             // heading1
             // 
             heading1.AutoSize = true;
-            heading1.description = "Create a new category";
+            heading1.description = "Add a new expense or income";
             heading1.Dock = DockStyle.Fill;
             heading1.Location = new Point(3, 3);
             heading1.Name = "heading1";
-            heading1.Size = new Size(373, 66);
+            heading1.Size = new Size(389, 66);
             heading1.TabIndex = 0;
-            heading1.Title = "Create Category";
+            heading1.Title = "Add Transaction";
             // 
             // panel1
             // 
@@ -86,9 +99,9 @@
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panel1.Controls.Add(tableLayoutPanel2);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(3, 336);
+            panel1.Location = new Point(3, 414);
             panel1.Name = "panel1";
-            panel1.Size = new Size(373, 33);
+            panel1.Size = new Size(389, 33);
             panel1.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -105,7 +118,7 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(373, 33);
+            tableLayoutPanel2.Size = new Size(389, 33);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // btnSubmit
@@ -113,13 +126,13 @@
             btnSubmit.AutoSize = true;
             btnSubmit.Dock = DockStyle.Top;
             btnSubmit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSubmit.Location = new Point(189, 3);
+            btnSubmit.Location = new Point(197, 3);
             btnSubmit.Name = "btnSubmit";
-            btnSubmit.Size = new Size(181, 27);
+            btnSubmit.Size = new Size(189, 27);
             btnSubmit.TabIndex = 1;
             btnSubmit.Text = "Create";
             btnSubmit.UseVisualStyleBackColor = true;
-            btnSubmit.Click += button2_Click;
+            btnSubmit.Click += btnSubmit_Click;
             // 
             // btnCancel
             // 
@@ -128,11 +141,11 @@
             btnCancel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCancel.Location = new Point(3, 3);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(180, 27);
+            btnCancel.Size = new Size(188, 27);
             btnCancel.TabIndex = 0;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
-            btnCancel.Click += button1_Click;
+            btnCancel.Click += btnCancel_Click;
             // 
             // panel2
             // 
@@ -140,7 +153,7 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 75);
             panel2.Name = "panel2";
-            panel2.Size = new Size(373, 255);
+            panel2.Size = new Size(389, 333);
             panel2.TabIndex = 2;
             // 
             // tableLayoutPanel3
@@ -148,11 +161,11 @@
             tableLayoutPanel3.AutoSize = true;
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(cbCategory, 0, 1);
             tableLayoutPanel3.Controls.Add(label3, 0, 2);
             tableLayoutPanel3.Controls.Add(txtDescription, 0, 6);
             tableLayoutPanel3.Controls.Add(label2, 0, 5);
             tableLayoutPanel3.Controls.Add(label1, 0, 0);
-            tableLayoutPanel3.Controls.Add(txtCategoryName, 0, 1);
             tableLayoutPanel3.Controls.Add(cbType, 0, 4);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
@@ -165,8 +178,21 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(373, 255);
+            tableLayoutPanel3.Size = new Size(389, 333);
             tableLayoutPanel3.TabIndex = 0;
+            // 
+            // cbCategory
+            // 
+            cbCategory.Dock = DockStyle.Fill;
+            cbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbCategory.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cbCategory.FormattingEnabled = true;
+            cbCategory.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
+            cbCategory.Location = new Point(3, 21);
+            cbCategory.Name = "cbCategory";
+            cbCategory.Size = new Size(383, 25);
+            cbCategory.TabIndex = 6;
+            cbCategory.SelectedIndexChanged += cbCategory_SelectedIndexChanged;
             // 
             // label3
             // 
@@ -175,7 +201,7 @@
             label3.Location = new Point(3, 49);
             label3.Name = "label3";
             label3.Padding = new Padding(0, 3, 0, 3);
-            label3.Size = new Size(367, 21);
+            label3.Size = new Size(383, 21);
             label3.TabIndex = 4;
             label3.Text = "Type";
             // 
@@ -186,7 +212,7 @@
             txtDescription.Location = new Point(3, 125);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(367, 142);
+            txtDescription.Size = new Size(383, 205);
             txtDescription.TabIndex = 3;
             // 
             // label2
@@ -196,7 +222,7 @@
             label2.Location = new Point(3, 101);
             label2.Name = "label2";
             label2.Padding = new Padding(0, 3, 0, 3);
-            label2.Size = new Size(367, 21);
+            label2.Size = new Size(383, 21);
             label2.TabIndex = 2;
             label2.Text = "Description";
             // 
@@ -207,42 +233,21 @@
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Padding = new Padding(0, 0, 0, 3);
-            label1.Size = new Size(367, 18);
+            label1.Size = new Size(383, 18);
             label1.TabIndex = 0;
             label1.Text = "Category";
             // 
-            // txtCategoryName
-            // 
-            txtCategoryName.Dock = DockStyle.Fill;
-            txtCategoryName.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtCategoryName.Location = new Point(3, 21);
-            txtCategoryName.Name = "txtCategoryName";
-            txtCategoryName.Size = new Size(367, 25);
-            txtCategoryName.TabIndex = 1;
-            // 
-            // cbType
-            // 
-            cbType.Dock = DockStyle.Fill;
-            cbType.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cbType.FormattingEnabled = true;
-            cbType.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
-            cbType.Location = new Point(3, 73);
-            cbType.Name = "cbType";
-            cbType.Size = new Size(367, 25);
-            cbType.TabIndex = 5;
-            // 
-            // CategoryDialog
+            // TransactionDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(395, 388);
+            ClientSize = new Size(395, 450);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "CategoryDialog";
-            Padding = new Padding(8);
+            Name = "TransactionDialog";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Category Dialog";
+            Text = "TransactionDialog";
+            Load += TransactionDialog_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -259,6 +264,7 @@
 
         #endregion
 
+        private ComboBox cbType;
         private TableLayoutPanel tableLayoutPanel1;
         private Controls.Heading heading1;
         private Panel panel1;
@@ -267,11 +273,10 @@
         private Button btnCancel;
         private Panel panel2;
         private TableLayoutPanel tableLayoutPanel3;
+        private Label label3;
         private TextBox txtDescription;
         private Label label2;
         private Label label1;
-        private TextBox txtCategoryName;
-        private Label label3;
-        private ComboBox cbType;
+        private ComboBox cbCategory;
     }
 }

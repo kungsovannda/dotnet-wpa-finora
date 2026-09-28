@@ -1,4 +1,5 @@
-﻿using PersonalExpenseTracker.Dtos;
+﻿using PersonalExpenseTracker.Domains;
+using PersonalExpenseTracker.Dtos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace PersonalExpenseTracker.Views.Forms
         public CategoryDialog()
         {
             InitializeComponent();
+            cbType.SelectedIndex = 0;
         }
 
         public CategoryDialog(CategoryResponseDto categoryResponseDto)
@@ -21,6 +23,10 @@ namespace PersonalExpenseTracker.Views.Forms
             InitializeComponent();
             txtCategoryName.Text = categoryResponseDto.Name;
             txtDescription.Text = categoryResponseDto.Description;
+            cbType.SelectedItem = categoryResponseDto.Type.ToString();
+            btnSubmit.Text = "Update";
+            heading1.Title = "Update Category";
+
         }
 
         public CreateCategoryDto GetData()
@@ -28,6 +34,16 @@ namespace PersonalExpenseTracker.Views.Forms
             var categoryDto = new CreateCategoryDto();
             categoryDto.Name = txtCategoryName.Text;
             categoryDto.Description = txtDescription.Text;
+            categoryDto.Type = Enum.Parse<TransactionType>(cbType.SelectedItem.ToString().ToUpper() ?? string.Empty);
+            return categoryDto;
+        }
+
+        public UpdateCategoryDto GetUpdateData()
+        {
+            var categoryDto = new UpdateCategoryDto();
+            categoryDto.Name = txtCategoryName.Text;
+            categoryDto.Description = txtDescription.Text;
+            categoryDto.Type = Enum.Parse<TransactionType>(cbType.SelectedItem.ToString().ToUpper() ?? string.Empty);
             return categoryDto;
         }
 

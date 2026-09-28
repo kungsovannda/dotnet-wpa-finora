@@ -50,8 +50,10 @@ namespace PersonalExpenseTracker
             services.AddTransient<LoginForm>();
             services.AddTransient<MainForm>();
             services.AddTransient<DashboardControl>();
+            services.AddTransient<TransactionControl>();
             services.AddTransient<CategoryControl>();
             services.AddTransient<SettingControl>();
+            services.AddTransient<TransactionDialog>();
 
             ServiceProvider = services.BuildServiceProvider();
             ApplicationConfiguration.Initialize();

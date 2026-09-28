@@ -7,11 +7,15 @@ namespace PersonalExpenseTracker.Views.Forms
         private readonly DashboardControl _dashboard;
         private readonly SettingControl _setting;
         private readonly CategoryControl _category;
-        public MainForm(DashboardControl dashboard, SettingControl setting, CategoryControl category)
+
+        private readonly TransactionControl _transaction;
+
+        public MainForm(DashboardControl dashboard, SettingControl setting, CategoryControl category, TransactionControl transaction)
         {
             _dashboard = dashboard;
             _setting = setting;
             _category = category;
+            _transaction = transaction;
             InitializeComponent();
             Typography.Apply(this);
             sidebar.NavigationRequested += Sidebar_NavigationRequested;
@@ -35,6 +39,10 @@ namespace PersonalExpenseTracker.Views.Forms
 
                 case NavigationItem.Category:
                     ShowPage(_category);
+                    break;
+
+                case NavigationItem.Transaction:
+                    ShowPage(_transaction);
                     break;
 
                 case NavigationItem.Setting:

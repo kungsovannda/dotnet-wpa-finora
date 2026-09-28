@@ -144,6 +144,7 @@
             Controls.Add(tableLayoutPanel2);
             Name = "DashboardControl";
             Size = new Size(1097, 472);
+            Load += DashboardControl_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();

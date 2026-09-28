@@ -12,19 +12,22 @@ namespace PersonalExpenseTracker.Domains
 
         public string Description { get; set; }
 
+        public TransactionType Type { get; set; }
+
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public Category() { 
-            
+
         }
 
-        public Category(long id, string name, string description)
+        public Category(long id, string name, string description, TransactionType type)
         {
             Id = id;
             Name = name;
             Description = description;
+            Type = type;
         }
 
     }
