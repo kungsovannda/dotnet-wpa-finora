@@ -1,4 +1,5 @@
-﻿using PersonalExpenseTracker.Views.Navigations;
+﻿using PersonalExpenseTracker.Views.Data;
+using PersonalExpenseTracker.Views.Navigations;
 using PersonalExpenseTracker.Views.UI;
 namespace PersonalExpenseTracker.Views.Forms
 {
@@ -10,6 +11,8 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private readonly TransactionControl _transaction;
 
+        private UserControl? _current;
+
         public MainForm(DashboardControl dashboard, SettingControl setting, CategoryControl category, TransactionControl transaction)
         {
             _dashboard = dashboard;
@@ -19,14 +22,21 @@ namespace PersonalExpenseTracker.Views.Forms
             InitializeComponent();
             Typography.Apply(this);
             sidebar.NavigationRequested += Sidebar_NavigationRequested;
-            ShowPage(_dashboard);
+            ShowPage(_dashboard, reload: false);
         }
 
-        private void ShowPage(UserControl page)
+        private void ShowPage(UserControl page, bool reload = true)
         {
+            bool alreadyShowing = ReferenceEquals(_current, page) && ReferenceEquals(page.Parent, panel);
+
+            _current = page;
+
             panel.Controls.Clear();
             page.Dock = DockStyle.Fill;
             panel.Controls.Add(page);
+
+            if (reload && !alreadyShowing && page is IRefreshablePage refreshable)
+                refreshable.RefreshData();
         }
 
         private void Sidebar_NavigationRequested(object? sender, NavigationEventArgs e)

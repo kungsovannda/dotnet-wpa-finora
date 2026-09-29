@@ -8,6 +8,7 @@ using PersonalExpenseTracker.Features.Transactions;
 using PersonalExpenseTracker.Features.Transactions.Impls;
 using PersonalExpenseTracker.Features.Authentication;
 using PersonalExpenseTracker.Features.Authentication.Impls;
+using PersonalExpenseTracker.Views.Data;
 
 
 namespace PersonalExpenseTracker
@@ -45,6 +46,10 @@ namespace PersonalExpenseTracker
             services.AddTransient<AuthenticationController>();
             services.AddTransient<DashboardController>();
             services.AddTransient<ReportsController>();
+
+            // Shared by the pages so a write on one page reaches the others.
+            // Views-layer only: no controller, service or repository knows it exists.
+            services.AddSingleton<DataChangeNotifier>();
 
             // Register Forms
             services.AddTransient<LoginForm>();

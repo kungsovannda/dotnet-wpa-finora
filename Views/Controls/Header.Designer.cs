@@ -32,8 +32,8 @@ namespace PersonalExpenseTracker.Views.Controls
         {
             layout = new TableLayoutPanel();
             titles = new TableLayoutPanel();
+            lbQuote = new Label();
             lbContext = new Label();
-            lbGreeting = new Label();
             avatar = new PersonalExpenseTracker.Views.UI.Controls.AvatarView();
             divider = new Panel();
             layout.SuspendLayout();
@@ -42,10 +42,11 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // layout
             // 
-            layout.BackColor = Color.FromArgb(255, 255, 255);
-            layout.ColumnCount = 3;
+            layout.BackColor = Color.Transparent;
+            layout.ColumnCount = 4;
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
             layout.Controls.Add(titles, 1, 0);
             layout.Controls.Add(avatar, 2, 0);
@@ -55,67 +56,78 @@ namespace PersonalExpenseTracker.Views.Controls
             layout.Name = "layout";
             layout.RowCount = 1;
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             layout.Size = new Size(1280, 64);
             layout.TabIndex = 0;
             // 
             // titles
             // 
-            titles.BackColor = Color.FromArgb(255, 255, 255);
+            // Two 50% spacers around the two text rows, so the quote and the
+            // date form one optically centred block instead of hanging from
+            // the top. The row heights themselves are set from the fonts'
+            // preferred heights by FitTitles.
+            titles.BackColor = Color.Transparent;
             titles.ColumnCount = 1;
             titles.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            titles.Controls.Add(lbContext, 0, 1);
-            titles.Controls.Add(lbGreeting, 0, 0);
+            titles.Controls.Add(lbQuote, 0, 1);
+            titles.Controls.Add(lbContext, 0, 2);
             titles.Dock = DockStyle.Fill;
             titles.Location = new Point(28, 0);
             titles.Margin = new Padding(0);
             titles.Name = "titles";
-            titles.RowCount = 2;
-            titles.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            titles.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            titles.Size = new Size(1224, 64);
+            titles.RowCount = 4;
+            titles.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            titles.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+            titles.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
+            titles.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            titles.Size = new Size(1190, 64);
             titles.TabIndex = 0;
+            // 
+            // lbQuote
+            // 
+            lbQuote.AutoEllipsis = true;
+            lbQuote.BackColor = Color.Transparent;
+            lbQuote.Dock = DockStyle.Fill;
+            lbQuote.Font = new Font("Lexend", 13F, FontStyle.Bold);
+            lbQuote.ForeColor = Color.FromArgb(24, 24, 27);
+            lbQuote.Location = new Point(0, 12);
+            lbQuote.Margin = new Padding(0);
+            lbQuote.Name = "lbQuote";
+            lbQuote.Size = new Size(1190, 24);
+            lbQuote.TabIndex = 0;
+            lbQuote.Text = "Spend what is left after saving.";
+            lbQuote.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lbContext
             // 
-            lbContext.BackColor = Color.FromArgb(255, 255, 255);
+            lbContext.AutoEllipsis = true;
+            lbContext.BackColor = Color.Transparent;
             lbContext.Dock = DockStyle.Fill;
             lbContext.Font = new Font("Lexend", 9.5F);
             lbContext.ForeColor = Color.FromArgb(113, 113, 122);
-            lbContext.Location = new Point(0, 32);
-            lbContext.Margin = new Padding(0, 2, 0, 0);
+            lbContext.Location = new Point(0, 36);
+            lbContext.Margin = new Padding(0);
             lbContext.Name = "lbContext";
-            lbContext.Size = new Size(1224, 32);
+            lbContext.Size = new Size(1190, 15);
             lbContext.TabIndex = 1;
             lbContext.Text = "Today";
-            // 
-            // lbGreeting
-            // 
-            lbGreeting.BackColor = Color.FromArgb(255, 255, 255);
-            lbGreeting.Dock = DockStyle.Fill;
-            lbGreeting.Font = new Font("Lexend", 15F, FontStyle.Bold);
-            lbGreeting.ForeColor = Color.FromArgb(24, 24, 27);
-            lbGreeting.Location = new Point(0, 0);
-            lbGreeting.Margin = new Padding(0);
-            lbGreeting.Name = "lbGreeting";
-            lbGreeting.Size = new Size(1224, 30);
-            lbGreeting.TabIndex = 0;
-            lbGreeting.Text = "Good day";
-            lbGreeting.TextAlign = ContentAlignment.BottomLeft;
+            lbContext.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // avatar
             // 
+            // Square and self-pinned, so the circle fills the control exactly.
+            // Anchor None centres it inside its AutoSize column.
             avatar.Anchor = AnchorStyles.None;
             avatar.BackColor = Color.Transparent;
+            avatar.Diameter = 34;
             avatar.Fill = Color.FromArgb(245, 158, 11);
             avatar.Fill2 = Color.FromArgb(217, 119, 6);
-            avatar.Font = new Font("Lexend SemiBold", 9F);
+            avatar.Font = new Font("Lexend SemiBold", 10F);
             avatar.Foreground = Color.FromArgb(255, 255, 255);
             avatar.Initials = "U";
-            avatar.Location = new Point(1252, 14);
+            avatar.Location = new Point(1222, 15);
             avatar.Margin = new Padding(0);
             avatar.Name = "avatar";
-            avatar.Size = new Size(28, 36);
+            avatar.Size = new Size(34, 34);
             avatar.TabIndex = 1;
             // 
             // divider
@@ -146,7 +158,7 @@ namespace PersonalExpenseTracker.Views.Controls
 
         private TableLayoutPanel layout;
         private TableLayoutPanel titles;
-        private Label lbGreeting;
+        private Label lbQuote;
         private Label lbContext;
         private Views.UI.Controls.AvatarView avatar;
         private Panel divider;

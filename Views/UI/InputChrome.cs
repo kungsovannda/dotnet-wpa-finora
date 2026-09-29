@@ -47,20 +47,29 @@ namespace PersonalExpenseTracker.Views.UI
         /// </summary>
         public const int ArrowZone = 22;
 
-        /// <summary>Background of the field for the given state.</summary>
+        /// <summary>
+        /// Background of the field for the given state.
+        /// <para>
+        /// Dialogs sit on a pure white surface, so an idle field must be tinted
+        /// enough to read as a box. The ramp runs slightly darker when idle and
+        /// lifts to white as the field engages, which is what makes the field
+        /// visible at all on a white background.
+        /// </para>
+        /// </summary>
         public static Color Fill(InputState state)
         {
             switch (state)
             {
                 case InputState.Focus:
-                case InputState.Hover:
-                    // Lift to pure white so the active field separates from the
-                    // #FAFAF9 rest state and from the white dialog surface.
+                    // Pure white plus the orange ring: the active field reads as
+                    // lifted off the dialog rather than as a hole in it.
                     return Colors.Surface;
+                case InputState.Hover:
+                    return Colors.SurfaceSecondary;
                 case InputState.Disabled:
                     return Colors.SurfaceSunken;
                 default:
-                    return Colors.SurfaceSecondary;
+                    return Colors.SurfaceHover;
             }
         }
 
@@ -72,13 +81,20 @@ namespace PersonalExpenseTracker.Views.UI
                 case InputState.Focus:
                     return Colors.PrimaryOrange;
                 case InputState.Hover:
-                    return Colors.BorderStrong;
+                    return Colors.BorderDark;
                 case InputState.Disabled:
                     return Colors.BorderSoft;
                 default:
-                    return Colors.Border;
+                    return Colors.BorderStrong;
             }
         }
+
+        /// <summary>
+        /// Placeholder text colour. Kept at a readable grey - the lighter
+        /// FaintText tone is invisible against the field fill.
+        /// </summary>
+        public static Color PlaceholderTint(InputState state) =>
+            state == InputState.Disabled ? Colors.MutedText : Colors.SecondaryText;
 
         /// <summary>Colour of a leading adornment for the given state.</summary>
         public static Color IconTint(InputState state)

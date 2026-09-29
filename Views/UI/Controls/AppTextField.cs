@@ -49,7 +49,7 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             {
                 AutoSize = false,
                 BackColor = InputChrome.Fill(InputState.Rest),
-                ForeColor = Colors.FaintText,
+                ForeColor = InputChrome.PlaceholderTint(InputState.Rest),
                 Font = Typography.BodyLarge,
                 TextAlign = ContentAlignment.MiddleLeft,
                 Visible = false
@@ -187,7 +187,21 @@ namespace PersonalExpenseTracker.Views.UI.Controls
         public bool ReadOnly
         {
             get => _input.ReadOnly;
-            set => _input.ReadOnly = value;
+            set
+            {
+                if (_input.ReadOnly == value)
+                    return;
+
+                _input.ReadOnly = value;
+
+                // A read-only field is not an input the user is invited to use,
+                // so it must not take keyboard focus, show a caret, offer the
+                // text cursor, or sit in the tab ring.
+                _input.TabStop = !value;
+                Cursor = value ? Cursors.Default : Cursors.IBeam;
+
+                ApplyChrome();
+            }
         }
 
         [Category("Behavior")]
@@ -216,7 +230,10 @@ namespace PersonalExpenseTracker.Views.UI.Controls
         {
             get
             {
-                if (!Enabled)
+                // A read-only field is not editable, so it must not present
+                // itself as one: muted fill, no hairline darkening, and above
+                // all no orange focus ring the eye would follow.
+                if (!Enabled || ReadOnly)
                     return InputState.Disabled;
 
                 if (_focused || _input.Focused)
@@ -259,6 +276,7 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             BackColor = fill;
             _input.BackColor = fill;
             _placeholderLabel.BackColor = fill;
+            _placeholderLabel.ForeColor = InputChrome.PlaceholderTint(State);
             _input.ForeColor = InputChrome.TextTint(State);
             _input.ReadOnly = ReadOnly;
             Invalidate();
@@ -355,14 +373,14 @@ namespace PersonalExpenseTracker.Views.UI.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (e.Button == MouseButtons.Left && Enabled)
+            if (e.Button == MouseButtons.Left && Enabled && !ReadOnly)
                 _input.Focus();
         }
 
         /// <summary>Moves keyboard focus to the wrapped input.</summary>
         public bool FocusInput()
         {
-            if (IsDisposed || !Enabled)
+            if (IsDisposed || !Enabled || ReadOnly)
                 return false;
 
             return _input.Focus();

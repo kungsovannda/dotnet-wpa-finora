@@ -32,16 +32,15 @@ namespace PersonalExpenseTracker.Views.Controls
         {
             root = new TableLayoutPanel();
             brandPanel = new TableLayoutPanel();
-            brandMark = new Views.UI.Controls.AvatarView();
             lbBrand = new Label();
             navHost = new Panel();
             nav = new TableLayoutPanel();
             navSectionLabel = new Label();
+            btnDashboard = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
+            btnTransaction = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
+            btnCategory = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
+            btnSetting = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
             navSpacer = new Panel();
-            btnDashboard = new Views.UI.Controls.NavItem();
-            btnTransaction = new Views.UI.Controls.NavItem();
-            btnCategory = new Views.UI.Controls.NavItem();
-            btnSetting = new Views.UI.Controls.NavItem();
             edge = new Panel();
             root.SuspendLayout();
             brandPanel.SuspendLayout();
@@ -51,7 +50,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // root
             // 
-            root.BackColor = Colors.Surface;
+            root.BackColor = Color.FromArgb(255, 255, 255);
             root.ColumnCount = 1;
             root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             root.Controls.Add(brandPanel, 0, 0);
@@ -68,41 +67,29 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // brandPanel
             // 
-            brandPanel.BackColor = Colors.Surface;
+            brandPanel.BackColor = Color.FromArgb(255, 255, 255);
             brandPanel.ColumnCount = 3;
             brandPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             brandPanel.ColumnStyles.Add(new ColumnStyle());
             brandPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            brandPanel.Controls.Add(brandMark, 1, 0);
-            brandPanel.Controls.Add(lbBrand, 2, 0);
+            brandPanel.Controls.Add(lbBrand, 1, 0);
             brandPanel.Dock = DockStyle.Fill;
             brandPanel.Location = new Point(0, 0);
             brandPanel.Margin = new Padding(0);
             brandPanel.Name = "brandPanel";
             brandPanel.RowCount = 1;
             brandPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            brandPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            brandPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             brandPanel.Size = new Size(248, 64);
             brandPanel.TabIndex = 0;
-            // 
-            // brandMark
-            // 
-            brandMark.Anchor = AnchorStyles.None;
-            brandMark.Fill = Colors.PrimaryOrange;
-            brandMark.Fill2 = Colors.PrimaryHover;
-            brandMark.Foreground = Colors.OnPrimary;
-            brandMark.Initials = "F";
-            brandMark.Location = new Point(20, 17);
-            brandMark.Margin = new Padding(0, 0, 10, 0);
-            brandMark.Name = "brandMark";
-            brandMark.Size = new Size(30, 30);
-            brandMark.TabIndex = 0;
             // 
             // lbBrand
             // 
             lbBrand.Dock = DockStyle.Fill;
-            lbBrand.Font = Typography.HeadingSmall;
-            lbBrand.ForeColor = Colors.Foreground;
-            lbBrand.Location = new Point(60, 0);
+            lbBrand.Font = new Font("Lexend", 21.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbBrand.ForeColor = Color.FromArgb(24, 24, 27);
+            lbBrand.Location = new Point(20, 0);
             lbBrand.Margin = new Padding(0);
             lbBrand.Name = "lbBrand";
             lbBrand.Size = new Size(188, 64);
@@ -112,7 +99,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // navHost
             // 
-            navHost.BackColor = Colors.Surface;
+            navHost.BackColor = Color.FromArgb(255, 255, 255);
             navHost.Controls.Add(nav);
             navHost.Dock = DockStyle.Fill;
             navHost.Location = new Point(0, 64);
@@ -124,7 +111,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // nav
             // 
-            nav.BackColor = Colors.Surface;
+            nav.BackColor = Color.FromArgb(255, 255, 255);
             nav.ColumnCount = 1;
             nav.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             nav.Controls.Add(navSectionLabel, 0, 0);
@@ -150,9 +137,9 @@ namespace PersonalExpenseTracker.Views.Controls
             // navSectionLabel
             // 
             navSectionLabel.Dock = DockStyle.Fill;
-            navSectionLabel.Font = Typography.Overline;
-            navSectionLabel.ForeColor = Colors.FaintText;
-            navSectionLabel.Location = new Point(0, 0);
+            navSectionLabel.Font = new Font("Lexend", 8.5F, FontStyle.Bold);
+            navSectionLabel.ForeColor = Color.FromArgb(161, 161, 170);
+            navSectionLabel.Location = new Point(4, 0);
             navSectionLabel.Margin = new Padding(4, 0, 0, 0);
             navSectionLabel.Name = "navSectionLabel";
             navSectionLabel.Size = new Size(220, 32);
@@ -162,11 +149,11 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // btnDashboard
             // 
+            btnDashboard.BackColor = Color.Transparent;
             btnDashboard.Caption = "Dashboard";
             btnDashboard.Dock = DockStyle.Fill;
-            btnDashboard.Font = Typography.Label;
-            btnDashboard.Icon = Icons.Dashboard;
-            btnDashboard.Location = new Point(0, 32);
+            btnDashboard.Font = new Font("Lexend SemiBold", 10.5F);
+            btnDashboard.Location = new Point(0, 34);
             btnDashboard.Margin = new Padding(0, 2, 0, 2);
             btnDashboard.Name = "btnDashboard";
             btnDashboard.Selected = true;
@@ -176,11 +163,12 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // btnTransaction
             // 
+            btnTransaction.BackColor = Color.Transparent;
             btnTransaction.Caption = "Transactions";
             btnTransaction.Dock = DockStyle.Fill;
-            btnTransaction.Font = Typography.Label;
-            btnTransaction.Icon = Icons.Transactions;
-            btnTransaction.Location = new Point(0, 76);
+            btnTransaction.Font = new Font("Lexend SemiBold", 10.5F);
+            btnTransaction.Icon = "transactions";
+            btnTransaction.Location = new Point(0, 78);
             btnTransaction.Margin = new Padding(0, 2, 0, 2);
             btnTransaction.Name = "btnTransaction";
             btnTransaction.Size = new Size(224, 40);
@@ -189,11 +177,12 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // btnCategory
             // 
+            btnCategory.BackColor = Color.Transparent;
             btnCategory.Caption = "Categories";
             btnCategory.Dock = DockStyle.Fill;
-            btnCategory.Font = Typography.Label;
-            btnCategory.Icon = Icons.Categories;
-            btnCategory.Location = new Point(0, 120);
+            btnCategory.Font = new Font("Lexend SemiBold", 10.5F);
+            btnCategory.Icon = "categories";
+            btnCategory.Location = new Point(0, 122);
             btnCategory.Margin = new Padding(0, 2, 0, 2);
             btnCategory.Name = "btnCategory";
             btnCategory.Size = new Size(224, 40);
@@ -202,11 +191,12 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // btnSetting
             // 
+            btnSetting.BackColor = Color.Transparent;
             btnSetting.Caption = "Settings";
             btnSetting.Dock = DockStyle.Fill;
-            btnSetting.Font = Typography.Label;
-            btnSetting.Icon = Icons.Settings;
-            btnSetting.Location = new Point(0, 164);
+            btnSetting.Font = new Font("Lexend SemiBold", 10.5F);
+            btnSetting.Icon = "settings";
+            btnSetting.Location = new Point(0, 166);
             btnSetting.Margin = new Padding(0, 2, 0, 2);
             btnSetting.Name = "btnSetting";
             btnSetting.Size = new Size(224, 40);
@@ -215,7 +205,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // navSpacer
             // 
-            navSpacer.BackColor = Colors.Surface;
+            navSpacer.BackColor = Color.FromArgb(255, 255, 255);
             navSpacer.Dock = DockStyle.Fill;
             navSpacer.Location = new Point(0, 208);
             navSpacer.Margin = new Padding(0);
@@ -225,7 +215,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             // edge
             // 
-            edge.BackColor = Colors.Border;
+            edge.BackColor = Color.FromArgb(228, 228, 231);
             edge.Dock = DockStyle.Right;
             edge.Location = new Point(247, 0);
             edge.Margin = new Padding(0);
@@ -237,7 +227,7 @@ namespace PersonalExpenseTracker.Views.Controls
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Colors.Surface;
+            BackColor = Color.FromArgb(255, 255, 255);
             Controls.Add(edge);
             Controls.Add(root);
             Name = "Sidebar";
@@ -253,7 +243,6 @@ namespace PersonalExpenseTracker.Views.Controls
 
         private TableLayoutPanel root;
         private TableLayoutPanel brandPanel;
-        private Views.UI.Controls.AvatarView brandMark;
         private Label lbBrand;
         private Panel navHost;
         private TableLayoutPanel nav;

@@ -148,7 +148,8 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             if (string.IsNullOrEmpty(_glyph))
             {
                 string hint = string.IsNullOrEmpty(PlaceholderText) ? "Choose an emoji" : PlaceholderText;
-                Theme.DrawText(g, hint, Typography.Body, content, Colors.FaintText, StringAlignment.Center);
+                Theme.DrawText(g, hint, Typography.Body, content,
+                    InputChrome.PlaceholderTint(state), StringAlignment.Center);
                 return;
             }
 

@@ -3,25 +3,82 @@ using PersonalExpenseTracker.Domains;
 using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Dashboard;
 using PersonalExpenseTracker.Features.Transactions;
+using PersonalExpenseTracker.Views.Data;
 using PersonalExpenseTracker.Views.UI;
 using System;
 using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
 {
-    public partial class TransactionControl : UserControl
+    public partial class TransactionControl : UserControl, IRefreshablePage
     {
         private readonly IServiceProvider serviceProvider;
         private readonly TransactionController _controller;
         private readonly DashboardController _dashboardController;
+        private readonly DataChangeNotifier _changes;
 
-        public TransactionControl(IServiceProvider serviceProvider, TransactionController controller, DashboardController dashboardController)
+        /// <summary>Guards against a refresh that somehow triggers another one.</summary>
+        private bool _refreshing;
+
+        public TransactionControl(
+            IServiceProvider serviceProvider,
+            TransactionController controller,
+            DashboardController dashboardController,
+            DataChangeNotifier changes)
         {
             _dashboardController = dashboardController;
             _controller = controller;
+            _changes = changes;
             this.serviceProvider = serviceProvider;
             InitializeComponent();
             ApplyTheming();
+
+            // The grid shows category names, so a category rename invalidates it
+            // just as much as a new transaction does.
+            _changes.Changed += Changes_Changed;
+            Disposed += TransactionControl_Disposed;
+        }
+
+        /// <summary>
+        /// Unhooks from the shared notifier. Subscribing to Disposed rather than
+        /// overriding Dispose keeps the designer's own partial out of the way.
+        /// </summary>
+        private void TransactionControl_Disposed(object? sender, EventArgs e)
+        {
+            _changes.Changed -= Changes_Changed;
+        }
+
+        /// <summary>
+        /// Re-reads the grid and the summary cards. Single load path: the first
+        /// show, a revisit and the page's own create all come through here.
+        /// </summary>
+        public void RefreshData()
+        {
+            if (_refreshing || IsDisposed || !IsHandleCreated)
+                return;
+
+            _refreshing = true;
+            try
+            {
+                LoadTransaction();
+                LoadSummary();
+            }
+            finally
+            {
+                _refreshing = false;
+            }
+        }
+
+        private void Changes_Changed(object? sender, DataChangedEventArgs e)
+        {
+            if (IsDisposed || Disposing)
+                return;
+
+            if (!e.Includes(DataChange.Transactions) && !e.Includes(DataChange.Categories))
+                return;
+
+            if (Visible)
+                RefreshData();
         }
 
         private void ApplyTheming()
@@ -52,13 +109,25 @@ namespace PersonalExpenseTracker.Views.Forms
         private void btnAddTransaction_Click(object? sender, EventArgs e)
         {
             var dialog = serviceProvider.GetRequiredService<TransactionDialog>();
-            dialog.ShowDialog(this);
-            if (dialog.DialogResult == DialogResult.OK)
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
             {
                 _controller.CreateTransaction(dialog.GetData());
-                LoadTransaction();
-                LoadSummary();
             }
+            catch (Exception ex)
+            {
+                // The same guard the category page uses, so a rejected write
+                // reports itself instead of escaping to the message loop.
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Announce instead of reloading by hand: this repaints the page
+            // that is on screen, and any sibling page refreshes the next
+            // time it is navigated to. One path, no forgotten pages.
+            _changes.Notify(DataChange.Transactions);
         }
 
         private void LoadTransaction()
@@ -207,8 +276,9 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private void TransactionControl_Load(object sender, EventArgs e)
         {
-            LoadTransaction();
-            LoadSummary();
+            // Load fires once per instance, so this is only the first show.
+            // Every later visit goes through MainForm -> RefreshData.
+            RefreshData();
         }
     }
 }

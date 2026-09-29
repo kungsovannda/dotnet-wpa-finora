@@ -1,6 +1,7 @@
 ﻿using PersonalExpenseTracker.Domains;
 using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Categories;
+using PersonalExpenseTracker.Views.Data;
 using PersonalExpenseTracker.Views.UI;
 using PersonalExpenseTracker.Views.UI.Controls;
 using System;
@@ -10,20 +11,73 @@ using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
 {
-    public partial class CategoryControl : UserControl
+    public partial class CategoryControl : UserControl, IRefreshablePage
     {
         private readonly CategoryController _controller;
+        private readonly DataChangeNotifier _changes;
 
-        public CategoryControl(CategoryController controller)
+        /// <summary>Guards against a refresh that somehow triggers another one.</summary>
+        private bool _refreshing;
+
+        public CategoryControl(CategoryController controller, DataChangeNotifier changes)
         {
             _controller = controller;
+            _changes = changes;
             InitializeComponent();
             BackColor = Colors.Background;
+
+            _changes.Changed += Changes_Changed;
+            Disposed += CategoryControl_Disposed;
+        }
+
+        /// <summary>
+        /// Unhooks from the shared notifier. Subscribing to Disposed rather than
+        /// overriding Dispose keeps the designer's own partial out of the way.
+        /// </summary>
+        private void CategoryControl_Disposed(object? sender, EventArgs e)
+        {
+            _changes.Changed -= Changes_Changed;
+        }
+
+        private void Changes_Changed(object? sender, DataChangedEventArgs e)
+        {
+            if (IsDisposed || Disposing)
+                return;
+
+            // The cards only depend on categories, so a transaction write - which
+            // can never add or rename one - is not worth a rebuild.
+            if (!e.Includes(DataChange.Categories))
+                return;
+
+            if (Visible)
+                RefreshData();
+        }
+
+        /// <summary>
+        /// Rebuilds the card grid. Single load path: the first show, a revisit
+        /// and the page's own create/edit/delete all come through here.
+        /// </summary>
+        public void RefreshData()
+        {
+            if (_refreshing || IsDisposed || !IsHandleCreated)
+                return;
+
+            _refreshing = true;
+            try
+            {
+                LoadCategories();
+            }
+            finally
+            {
+                _refreshing = false;
+            }
         }
 
         private void CategoryControl_Load(object sender, EventArgs e)
         {
-            LoadCategories();
+            // Load fires once per instance, so this is only the first show.
+            // Every later visit goes through MainForm -> RefreshData.
+            RefreshData();
         }
 
         private void LoadCategories()
@@ -81,7 +135,7 @@ namespace PersonalExpenseTracker.Views.Forms
                 try
                 {
                     _controller.CreateCategory(categoryDialog.GetData());
-                    LoadCategories();
+                    _changes.Notify(DataChange.Categories);
                 }
                 catch (Exception ex)
                 {
@@ -118,7 +172,7 @@ namespace PersonalExpenseTracker.Views.Forms
                     var update = categoryDialog.GetUpdateData();
                     update.Id = id;
                     _controller.UpdateCategory(update);
-                    LoadCategories();
+                    _changes.Notify(DataChange.Categories);
                 }
                 catch (Exception ex)
                 {
@@ -136,7 +190,7 @@ namespace PersonalExpenseTracker.Views.Forms
                 try
                 {
                     _controller.DeleteCategory(id);
-                    LoadCategories();
+                    _changes.Notify(DataChange.Categories);
                 }
                 catch (Exception ex)
                 {

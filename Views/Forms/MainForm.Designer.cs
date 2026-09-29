@@ -59,12 +59,14 @@ namespace PersonalExpenseTracker.Views.Forms
             // header1
             // 
             header1.BackColor = Color.FromArgb(255, 255, 255);
+            header1.Context = "Tuesday, 29 September";
             header1.Dock = DockStyle.Top;
             header1.Location = new Point(3, 3);
             header1.Name = "header1";
+            header1.Quote = "Spend wiser";
             header1.Size = new Size(946, 58);
             header1.TabIndex = 2;
-            header1.UserName = "User";
+            header1.UserName = "U";
             // 
             // tableLayoutPanel1
             // 
@@ -88,9 +90,9 @@ namespace PersonalExpenseTracker.Views.Forms
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(248, 248, 247);
             ClientSize = new Size(1200, 700);
-            MinimumSize = new Size(988, 700);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(sidebar);
+            MinimumSize = new Size(988, 700);
             Name = "MainForm";
             Text = "Finora - Expense Tracker";
             WindowState = FormWindowState.Maximized;

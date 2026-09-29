@@ -32,15 +32,14 @@ namespace PersonalExpenseTracker.Views.Forms
         {
             root = new TableLayoutPanel();
             brandRow = new FlowLayoutPanel();
-            brand = new Views.UI.Controls.AvatarView();
             lbBrand = new Label();
             heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
-            fieldUsername = new Views.UI.Controls.FormField();
-            txtUsername = new Views.UI.Controls.AppTextField();
-            fieldPassword = new Views.UI.Controls.FormField();
-            txtPassword = new Views.UI.Controls.AppTextField();
-            btnLogin = new Views.UI.Controls.AppButton();
-            btnExit = new Views.UI.Controls.AppButton();
+            fieldUsername = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            txtUsername = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
+            fieldPassword = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            txtPassword = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
+            btnLogin = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
+            btnExit = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             lbFooter = new Label();
             root.SuspendLayout();
             brandRow.SuspendLayout();
@@ -48,7 +47,7 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             // root
             // 
-            root.BackColor = Colors.Surface;
+            root.BackColor = Color.FromArgb(255, 255, 255);
             root.ColumnCount = 1;
             root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             root.Controls.Add(brandRow, 0, 1);
@@ -62,16 +61,15 @@ namespace PersonalExpenseTracker.Views.Forms
             root.Location = new Point(44, 0);
             root.Margin = new Padding(0);
             root.Name = "root";
-            root.Padding = new Padding(0);
             root.RowCount = 9;
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             root.Size = new Size(332, 560);
             root.TabIndex = 0;
@@ -81,96 +79,98 @@ namespace PersonalExpenseTracker.Views.Forms
             brandRow.Anchor = AnchorStyles.None;
             brandRow.AutoSize = true;
             brandRow.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            brandRow.BackColor = Colors.Surface;
-            brandRow.Controls.Add(brand);
+            brandRow.BackColor = Color.FromArgb(255, 255, 255);
             brandRow.Controls.Add(lbBrand);
-            brandRow.Location = new Point(0, 0);
+            brandRow.Location = new Point(106, 67);
             brandRow.Margin = new Padding(0, 0, 0, 20);
             brandRow.Name = "brandRow";
-            brandRow.WrapContents = false;
-            brandRow.Size = new Size(120, 32);
+            brandRow.Size = new Size(119, 46);
             brandRow.TabIndex = 0;
-            // 
-            // brand
-            // 
-            brand.Fill = Colors.PrimaryOrange;
-            brand.Fill2 = Colors.PrimaryHover;
-            brand.Foreground = Colors.OnPrimary;
-            brand.Initials = "F";
-            brand.Location = new Point(0, 0);
-            brand.Margin = new Padding(0, 0, 10, 0);
-            brand.Name = "brand";
-            brand.Size = new Size(32, 32);
-            brand.TabIndex = 0;
+            brandRow.WrapContents = false;
             // 
             // lbBrand
             // 
             lbBrand.AutoSize = true;
-            lbBrand.BackColor = Colors.Surface;
-            lbBrand.Font = Typography.PageTitle;
-            lbBrand.ForeColor = Colors.Foreground;
-            lbBrand.Location = new Point(42, 0);
+            lbBrand.BackColor = Color.FromArgb(255, 255, 255);
+            lbBrand.Font = new Font("Lexend Black", 21.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbBrand.ForeColor = Color.FromArgb(24, 24, 27);
+            lbBrand.Location = new Point(0, 0);
             lbBrand.Margin = new Padding(0);
             lbBrand.Name = "lbBrand";
-            lbBrand.Size = new Size(78, 30);
+            lbBrand.Size = new Size(119, 46);
             lbBrand.TabIndex = 1;
             lbBrand.Text = "Finora";
             lbBrand.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // heading1
             // 
-            heading1.BackColor = Colors.Surface;
+            heading1.AutoSize = true;
+            heading1.BackColor = Color.FromArgb(255, 255, 255);
             heading1.description = "Sign in to continue to your personal finance tracker.";
             heading1.Dock = DockStyle.Top;
-            heading1.Location = new Point(0, 52);
+            heading1.Location = new Point(0, 133);
             heading1.Margin = new Padding(0, 0, 0, 20);
             heading1.Name = "heading1";
-            heading1.Size = new Size(332, 52);
+            heading1.Size = new Size(332, 54);
             heading1.TabIndex = 1;
             heading1.Title = "Welcome back";
             // 
             // fieldUsername
             // 
+            fieldUsername.AutoSize = true;
+            fieldUsername.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldUsername.BackColor = Color.Transparent;
             fieldUsername.Caption = "Username";
             fieldUsername.Dock = DockStyle.Top;
-            fieldUsername.Location = new Point(0, 124);
+            fieldUsername.Location = new Point(0, 207);
             fieldUsername.Margin = new Padding(0, 0, 0, 14);
             fieldUsername.Name = "fieldUsername";
-            fieldUsername.Size = new Size(332, 60);
+            fieldUsername.Size = new Size(332, 62);
             fieldUsername.TabIndex = 2;
             fieldUsername.Input = txtUsername;
             // 
             // txtUsername
             // 
-            txtUsername.LeadingIcon = Views.UI.Icons.User;
-            txtUsername.Location = new Point(0, 0);
+            txtUsername.Dock = DockStyle.Fill;
+            txtUsername.Font = new Font("Lexend", 12F);
+            txtUsername.LeadingIcon = "user";
+            txtUsername.Location = new Point(0, 22);
             txtUsername.Margin = new Padding(0);
+            txtUsername.MaxLength = 32767;
             txtUsername.Name = "txtUsername";
             txtUsername.Placeholder = "Enter your username";
             txtUsername.Size = new Size(332, 40);
             txtUsername.TabIndex = 0;
+            txtUsername.TabStop = false;
             // 
             // fieldPassword
             // 
+            fieldPassword.AutoSize = true;
+            fieldPassword.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldPassword.BackColor = Color.Transparent;
             fieldPassword.Caption = "Password";
             fieldPassword.Dock = DockStyle.Top;
-            fieldPassword.Location = new Point(0, 198);
+            fieldPassword.Location = new Point(0, 283);
             fieldPassword.Margin = new Padding(0, 0, 0, 20);
             fieldPassword.Name = "fieldPassword";
-            fieldPassword.Size = new Size(332, 60);
+            fieldPassword.Size = new Size(332, 62);
             fieldPassword.TabIndex = 3;
             fieldPassword.Input = txtPassword;
             // 
             // txtPassword
             // 
+            txtPassword.Dock = DockStyle.Fill;
+            txtPassword.Font = new Font("Lexend", 12F);
             txtPassword.IsPassword = true;
-            txtPassword.LeadingIcon = Views.UI.Icons.Lock;
-            txtPassword.Location = new Point(0, 0);
+            txtPassword.LeadingIcon = "lock";
+            txtPassword.Location = new Point(0, 22);
             txtPassword.Margin = new Padding(0);
+            txtPassword.MaxLength = 32767;
             txtPassword.Name = "txtPassword";
             txtPassword.Placeholder = "Enter your password";
             txtPassword.Size = new Size(332, 40);
             txtPassword.TabIndex = 0;
+            txtPassword.TabStop = false;
             // 
             // btnLogin
             // 
@@ -178,8 +178,11 @@ namespace PersonalExpenseTracker.Views.Forms
             btnLogin.BackColor = Color.Transparent;
             btnLogin.Caption = "Sign in";
             btnLogin.Dock = DockStyle.Top;
-            btnLogin.Location = new Point(0, 278);
+            btnLogin.Font = new Font("Lexend SemiBold", 10.5F);
+            btnLogin.ForeColor = Color.FromArgb(24, 24, 27);
+            btnLogin.Location = new Point(0, 365);
             btnLogin.Margin = new Padding(0, 0, 0, 10);
+            btnLogin.MinimumSize = new Size(80, 0);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(332, 42);
             btnLogin.TabIndex = 4;
@@ -192,25 +195,28 @@ namespace PersonalExpenseTracker.Views.Forms
             btnExit.BackColor = Color.Transparent;
             btnExit.Caption = "Exit";
             btnExit.Dock = DockStyle.Top;
-            btnExit.Location = new Point(0, 330);
+            btnExit.Font = new Font("Lexend SemiBold", 10.5F);
+            btnExit.ForeColor = Color.FromArgb(82, 82, 91);
+            btnExit.Location = new Point(0, 417);
             btnExit.Margin = new Padding(0, 0, 0, 18);
+            btnExit.MinimumSize = new Size(59, 0);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(332, 38);
             btnExit.TabIndex = 5;
             btnExit.Text = "Exit";
-            btnExit.Variant = Views.UI.Controls.AppButtonVariant.Ghost;
+            btnExit.Variant = UI.Controls.AppButtonVariant.Ghost;
             btnExit.Click += btnExit_Click;
             // 
             // lbFooter
             // 
             lbFooter.AutoSize = true;
             lbFooter.Dock = DockStyle.Top;
-            lbFooter.Font = Typography.Caption;
-            lbFooter.ForeColor = Colors.FaintText;
-            lbFooter.Location = new Point(0, 386);
+            lbFooter.Font = new Font("Lexend", 9F);
+            lbFooter.ForeColor = Color.FromArgb(161, 161, 170);
+            lbFooter.Location = new Point(0, 473);
             lbFooter.Margin = new Padding(0);
             lbFooter.Name = "lbFooter";
-            lbFooter.Size = new Size(332, 18);
+            lbFooter.Size = new Size(332, 19);
             lbFooter.TabIndex = 6;
             lbFooter.Text = "© 2026 Finora";
             lbFooter.TextAlign = ContentAlignment.MiddleCenter;
@@ -219,7 +225,7 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Colors.Surface;
+            BackColor = Color.FromArgb(255, 255, 255);
             ClientSize = new Size(420, 560);
             Controls.Add(root);
             FormBorderStyle = FormBorderStyle.None;
@@ -238,7 +244,6 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private TableLayoutPanel root;
         private FlowLayoutPanel brandRow;
-        private Views.UI.Controls.AvatarView brand;
         private Label lbBrand;
         private Controls.Heading heading1;
         private Views.UI.Controls.FormField fieldUsername;

@@ -1,5 +1,6 @@
 ﻿using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Dashboard;
+using PersonalExpenseTracker.Views.Data;
 using PersonalExpenseTracker.Views.UI;
 using PersonalExpenseTracker.Views.UI.Controls;
 using System;
@@ -11,17 +12,77 @@ using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
 {
-    public partial class DashboardControl : UserControl
+    public partial class DashboardControl : UserControl, IRefreshablePage
     {
         private readonly DashboardController _controller;
         private readonly ReportsController _reportsController;
+        private readonly DataChangeNotifier _changes;
 
-        public DashboardControl(DashboardController controller, ReportsController reportsController)
+        /// <summary>Guards against a refresh that somehow triggers another one.</summary>
+        private bool _refreshing;
+
+        public DashboardControl(
+            DashboardController controller,
+            ReportsController reportsController,
+            DataChangeNotifier changes)
         {
             InitializeComponent();
             _controller = controller;
             _reportsController = reportsController;
+            _changes = changes;
             recentList.ClientSizeChanged += (_, _) => ResizeRecentRows();
+
+            // The dashboard renders transactions, their categories and the
+            // monthly report, so any write can invalidate it. When it is not the
+            // page on screen it simply does not repaint; MainForm re-queries it
+            // on arrival instead.
+            _changes.Changed += Changes_Changed;
+            Disposed += DashboardControl_Disposed;
+        }
+
+        /// <summary>
+        /// Re-reads every figure on the dashboard. This is the only place the
+        /// page loads, so the first show and every later visit render from
+        /// exactly the same code.
+        /// </summary>
+        public void RefreshData()
+        {
+            if (_refreshing || IsDisposed || !IsHandleCreated)
+                return;
+
+            _refreshing = true;
+            try
+            {
+                LoadSummary();
+                LoadChart();
+                LoadRecent();
+            }
+            finally
+            {
+                _refreshing = false;
+            }
+        }
+
+        private void Changes_Changed(object? sender, DataChangedEventArgs e)
+        {
+            if (IsDisposed || Disposing)
+                return;
+
+            // Category renames show up in the recent-transaction rows too.
+            if (!e.Includes(DataChange.Transactions) && !e.Includes(DataChange.Categories))
+                return;
+
+            if (Visible)
+                RefreshData();
+        }
+
+        /// <summary>
+        /// Unhooks from the shared notifier. Subscribing to Disposed rather than
+        /// overriding Dispose keeps the designer's own partial out of the way.
+        /// </summary>
+        private void DashboardControl_Disposed(object? sender, EventArgs e)
+        {
+            _changes.Changed -= Changes_Changed;
         }
 
         private void LoadSummary()
@@ -114,9 +175,9 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private void DashboardControl_Load(object sender, EventArgs e)
         {
-            LoadSummary();
-            LoadChart();
-            LoadRecent();
+            // Load fires once per instance, so this is only the first show.
+            // Every later visit goes through MainForm -> RefreshData.
+            RefreshData();
         }
     }
 }

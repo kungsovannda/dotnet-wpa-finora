@@ -37,6 +37,7 @@ namespace PersonalExpenseTracker.Views.UI
         // Border
         public static readonly Color Border = Color.FromArgb(228, 228, 231);            // #E4E4E7
         public static readonly Color BorderStrong = Color.FromArgb(212, 212, 216);      // #D4D4D8
+        public static readonly Color BorderDark = Color.FromArgb(163, 163, 175);        // #A3A3AF
         public static readonly Color BorderSoft = Color.FromArgb(237, 237, 239);        // #EDEDEF
 
         // Semantic Colors - Success (income)

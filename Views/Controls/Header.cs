@@ -6,13 +6,12 @@ using PersonalExpenseTracker.Views.UI;
 
 namespace PersonalExpenseTracker.Views.Controls
 {
-    /// <summary>
-    /// Application bar above the content area. The brand lives in the sidebar,
-    /// so this bar only carries lightweight session context (a time-aware
-    /// greeting plus today's date) on the left and the profile circle on the right.
-    /// </summary>
+
     public partial class Header : UserControl
     {
+
+        private bool _fitting;
+
         public Header()
         {
             InitializeComponent();
@@ -20,18 +19,26 @@ namespace PersonalExpenseTracker.Views.Controls
             RefreshContext();
         }
 
-        /// <summary>
-        /// Gives the greeting row the height its font actually needs, so the
-        /// heading is never clipped by the app bar (or by a DPI change).
-        /// </summary>
         private void FitTitles()
         {
-            if (lbGreeting == null || titles == null)
+            if (lbQuote == null || lbContext == null || titles == null || _fitting)
                 return;
 
-            int needed = Math.Max(lbGreeting.PreferredHeight, 1) + 2;
-            if (titles.RowStyles[0].Height != needed)
-                titles.RowStyles[0].Height = needed;
+            _fitting = true;
+            try
+            {
+                int quote = Math.Max(lbQuote.PreferredHeight, 1);
+                int date = Math.Max(lbContext.PreferredHeight, 1);
+
+                if (titles.RowStyles[1].Height != quote)
+                    titles.RowStyles[1].Height = quote;
+                if (titles.RowStyles[2].Height != date)
+                    titles.RowStyles[2].Height = date;
+            }
+            finally
+            {
+                _fitting = false;
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -40,16 +47,22 @@ namespace PersonalExpenseTracker.Views.Controls
             FitTitles();
         }
 
-        /// <summary>Time-aware greeting shown on the leading edge.</summary>
-        [Category("Data")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string Greeting
+        protected override void OnLayout(LayoutEventArgs levent)
         {
-            get => lbGreeting.Text;
-            set => lbGreeting.Text = value ?? string.Empty;
+            base.OnLayout(levent);
+            FitTitles();
         }
 
-        /// <summary>Secondary line under the greeting (today's date by default).</summary>
+        /// <summary>Quote shown on the leading edge.</summary>
+        [Category("Data")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public string Quote
+        {
+            get => lbQuote.Text;
+            set => lbQuote.Text = value ?? string.Empty;
+        }
+
+        /// <summary>Secondary line under the quote (today's date by default).</summary>
         [Category("Data")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Context
@@ -69,38 +82,21 @@ namespace PersonalExpenseTracker.Views.Controls
                 : value.Trim().Substring(0, 1).ToUpperInvariant();
         }
 
-        /// <summary>Refreshes the greeting/date (called on load and when re-shown).</summary>
         public void RefreshContext()
         {
-            if (lbGreeting == null || lbContext == null)
+            if (lbQuote == null || lbContext == null)
                 return;
 
             DateTime now = DateTime.Now;
-            lbGreeting.Text = GreetingFor(now);
             lbContext.Text = now.ToString("dddd, d MMMM", CultureInfo.CurrentCulture);
         }
 
-        private static string GreetingFor(DateTime moment)
-        {
-            int hour = moment.Hour;
-
-            if (hour < 12)
-                return "Good morning";
-
-            if (hour < 18)
-                return "Good afternoon";
-
-            return "Good evening";
-        }
 
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
             if (Visible)
-            {
-                FitTitles();
                 RefreshContext();
-            }
         }
     }
 }

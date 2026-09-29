@@ -33,15 +33,17 @@ namespace PersonalExpenseTracker.Views.Forms
             root = new TableLayoutPanel();
             heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
             fields = new TableLayoutPanel();
-            fieldCategory = new Views.UI.Controls.FormField();
-            cbCategory = new Views.UI.Controls.AppComboField();
-            fieldType = new Views.UI.Controls.FormField();
-            cbType = new Views.UI.Controls.AppComboField();
-            fieldDescription = new Views.UI.Controls.FormField();
-            txtDescription = new Views.UI.Controls.AppTextField();
+            fieldAmount = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            txtAmount = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
+            fieldCategory = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            cbCategory = new PersonalExpenseTracker.Views.UI.Controls.AppComboField();
+            fieldType = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            txtType = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
+            fieldDescription = new PersonalExpenseTracker.Views.UI.Controls.FormField();
+            txtDescription = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
             footer = new TableLayoutPanel();
-            btnCancel = new Views.UI.Controls.AppButton();
-            btnSubmit = new Views.UI.Controls.AppButton();
+            btnCancel = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
+            btnSubmit = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             root.SuspendLayout();
             fields.SuspendLayout();
             footer.SuspendLayout();
@@ -49,7 +51,7 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             // root
             // 
-            root.BackColor = Colors.Surface;
+            root.BackColor = Color.FromArgb(255, 255, 255);
             root.ColumnCount = 1;
             root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             root.Controls.Add(heading1, 0, 0);
@@ -63,12 +65,13 @@ namespace PersonalExpenseTracker.Views.Forms
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            root.Size = new Size(372, 500);
+            root.Size = new Size(372, 576);
             root.TabIndex = 0;
             // 
             // heading1
             // 
-            heading1.BackColor = Colors.Surface;
+            heading1.AutoSize = true;
+            heading1.BackColor = Color.FromArgb(255, 255, 255);
             heading1.description = "Add a new income or expense";
             heading1.Dock = DockStyle.Fill;
             heading1.Location = new Point(0, 0);
@@ -80,96 +83,142 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             // fields
             // 
-            fields.BackColor = Colors.Surface;
+            fields.BackColor = Color.FromArgb(255, 255, 255);
             fields.ColumnCount = 1;
             fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            fields.Controls.Add(fieldCategory, 0, 0);
-            fields.Controls.Add(fieldType, 0, 1);
-            fields.Controls.Add(fieldDescription, 0, 2);
+            fields.Controls.Add(fieldAmount, 0, 0);
+            fields.Controls.Add(fieldCategory, 0, 1);
+            fields.Controls.Add(fieldType, 0, 2);
+            fields.Controls.Add(fieldDescription, 0, 3);
             fields.Dock = DockStyle.Fill;
             fields.Location = new Point(0, 64);
             fields.Margin = new Padding(0);
             fields.Name = "fields";
-            fields.RowCount = 3;
+            fields.RowCount = 4;
             fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            fields.Size = new Size(372, 386);
+            fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            fields.Size = new Size(372, 462);
             fields.TabIndex = 1;
+            // 
+            // fieldAmount
+            // 
+            fieldAmount.AutoSize = true;
+            fieldAmount.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldAmount.BackColor = Color.Transparent;
+            fieldAmount.Caption = "Amount";
+            fieldAmount.Dock = DockStyle.Top;
+            fieldAmount.Hint = "Use a positive value, e.g. 120.50";
+            fieldAmount.Location = new Point(0, 0);
+            fieldAmount.Margin = new Padding(0, 0, 0, 16);
+            fieldAmount.Name = "fieldAmount";
+            fieldAmount.Size = new Size(372, 82);
+            fieldAmount.TabIndex = 0;
+            fieldAmount.Input = txtAmount;
+            // 
+            // txtAmount
+            // 
+            txtAmount.Dock = DockStyle.Fill;
+            txtAmount.LeadingIcon = "wallet";
+            txtAmount.Location = new Point(0, 22);
+            txtAmount.Margin = new Padding(0);
+            txtAmount.MaxLength = 18;
+            txtAmount.Name = "txtAmount";
+            txtAmount.Placeholder = "0.00";
+            txtAmount.Size = new Size(372, 40);
+            txtAmount.TabIndex = 0;
+            txtAmount.TabStop = false;
             // 
             // fieldCategory
             // 
+            fieldCategory.AutoSize = true;
+            fieldCategory.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldCategory.BackColor = Color.Transparent;
             fieldCategory.Caption = "Category";
             fieldCategory.Dock = DockStyle.Top;
-            fieldCategory.Location = new Point(0, 0);
+            fieldCategory.Location = new Point(0, 98);
             fieldCategory.Margin = new Padding(0, 0, 0, 16);
             fieldCategory.Name = "fieldCategory";
-            fieldCategory.Size = new Size(372, 60);
-            fieldCategory.TabIndex = 0;
+            fieldCategory.Size = new Size(372, 62);
+            fieldCategory.TabIndex = 1;
             fieldCategory.Input = cbCategory;
             // 
             // cbCategory
             // 
-            cbCategory.Location = new Point(0, 0);
+            cbCategory.Dock = DockStyle.Fill;
+            cbCategory.Location = new Point(0, 22);
             cbCategory.Margin = new Padding(0);
             cbCategory.Name = "cbCategory";
             cbCategory.Size = new Size(372, 40);
             cbCategory.TabIndex = 0;
+            cbCategory.TabStop = false;
             cbCategory.SelectedIndexChanged += cbCategory_SelectedIndexChanged;
             // 
             // fieldType
             // 
+            fieldType.AutoSize = true;
+            fieldType.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldType.BackColor = Color.Transparent;
             fieldType.Caption = "Type";
             fieldType.Dock = DockStyle.Top;
-            fieldType.Location = new Point(0, 76);
+            fieldType.Location = new Point(0, 176);
             fieldType.Margin = new Padding(0, 0, 0, 16);
             fieldType.Name = "fieldType";
-            fieldType.Size = new Size(372, 60);
-            fieldType.TabIndex = 1;
-            fieldType.Input = cbType;
+            fieldType.Size = new Size(372, 62);
+            fieldType.TabIndex = 2;
+            fieldType.Input = txtType;
             // 
-            // cbType
+            // txtType
             // 
-            cbType.Enabled = false;
-            cbType.Location = new Point(0, 0);
-            cbType.Margin = new Padding(0);
-            cbType.Name = "cbType";
-            cbType.Size = new Size(372, 40);
-            cbType.TabIndex = 0;
-            cbType.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
+            txtType.Dock = DockStyle.Fill;
+            txtType.LeadingIcon = "trending-up";
+            txtType.Location = new Point(0, 22);
+            txtType.Margin = new Padding(0);
+            txtType.Name = "txtType";
+            txtType.Placeholder = "Taken from the category";
+            txtType.ReadOnly = true;
+            txtType.Size = new Size(372, 40);
+            txtType.TabIndex = 0;
+            txtType.TabStop = false;
             // 
             // fieldDescription
             // 
+            fieldDescription.AutoSize = true;
+            fieldDescription.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fieldDescription.BackColor = Color.Transparent;
             fieldDescription.Caption = "Description";
             fieldDescription.Dock = DockStyle.Top;
-            fieldDescription.Location = new Point(0, 152);
-            fieldDescription.Margin = new Padding(0);
+            fieldDescription.Location = new Point(0, 254);
+            fieldDescription.Margin = new Padding(0, 0, 0, 16);
             fieldDescription.Name = "fieldDescription";
-            fieldDescription.Size = new Size(372, 140);
-            fieldDescription.TabIndex = 2;
+            fieldDescription.Size = new Size(372, 118);
+            fieldDescription.TabIndex = 3;
             fieldDescription.Input = txtDescription;
-            txtDescription.Height = 120;
-            fieldDescription.SyncInputHeight();
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(0, 0);
+            txtDescription.Dock = DockStyle.Fill;
+            txtDescription.Location = new Point(0, 22);
             txtDescription.Margin = new Padding(0);
             txtDescription.Multiline = true;
+            txtDescription.Name = "txtDescription";
             txtDescription.Placeholder = "Notes (optional)";
-            txtDescription.Size = new Size(372, 120);
+            txtDescription.Size = new Size(372, 96);
             txtDescription.TabIndex = 0;
+            txtDescription.TabStop = false;
+            fieldDescription.SyncInputHeight();
             // 
             // footer
             // 
             footer.ColumnCount = 3;
             footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            footer.ColumnStyles.Add(new ColumnStyle());
+            footer.ColumnStyles.Add(new ColumnStyle());
             footer.Controls.Add(btnCancel, 1, 0);
             footer.Controls.Add(btnSubmit, 2, 0);
             footer.Dock = DockStyle.Fill;
-            footer.Location = new Point(0, 450);
+            footer.Location = new Point(0, 526);
             footer.Margin = new Padding(0);
             footer.Name = "footer";
             footer.RowCount = 1;
@@ -182,13 +231,16 @@ namespace PersonalExpenseTracker.Views.Forms
             btnCancel.Anchor = AnchorStyles.Right;
             btnCancel.BackColor = Color.Transparent;
             btnCancel.Caption = "Cancel";
-            btnCancel.Location = new Point(152, 6);
+            btnCancel.Font = new Font("Lexend SemiBold", 10.5F);
+            btnCancel.ForeColor = Color.FromArgb(24, 24, 27);
+            btnCancel.Location = new Point(214, 6);
             btnCancel.Margin = new Padding(0, 0, 12, 0);
+            btnCancel.MinimumSize = new Size(80, 0);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(96, 38);
+            btnCancel.Size = new Size(80, 38);
             btnCancel.TabIndex = 0;
             btnCancel.Text = "Cancel";
-            btnCancel.Variant = Views.UI.Controls.AppButtonVariant.Secondary;
+            btnCancel.Variant = UI.Controls.AppButtonVariant.Secondary;
             btnCancel.Click += btnCancel_Click;
             // 
             // btnSubmit
@@ -196,10 +248,13 @@ namespace PersonalExpenseTracker.Views.Forms
             btnSubmit.Anchor = AnchorStyles.Right;
             btnSubmit.BackColor = Color.Transparent;
             btnSubmit.Caption = "Save";
-            btnSubmit.Location = new Point(260, 6);
+            btnSubmit.Font = new Font("Lexend SemiBold", 10.5F);
+            btnSubmit.ForeColor = Color.FromArgb(24, 24, 27);
+            btnSubmit.Location = new Point(306, 6);
             btnSubmit.Margin = new Padding(0);
+            btnSubmit.MinimumSize = new Size(66, 0);
             btnSubmit.Name = "btnSubmit";
-            btnSubmit.Size = new Size(112, 38);
+            btnSubmit.Size = new Size(66, 38);
             btnSubmit.TabIndex = 1;
             btnSubmit.Text = "Save";
             btnSubmit.Click += btnSubmit_Click;
@@ -208,8 +263,8 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Colors.Surface;
-            ClientSize = new Size(420, 548);
+            BackColor = Color.FromArgb(255, 255, 255);
+            ClientSize = new Size(420, 624);
             Controls.Add(root);
             FormBorderStyle = FormBorderStyle.None;
             Name = "TransactionDialog";
@@ -218,7 +273,9 @@ namespace PersonalExpenseTracker.Views.Forms
             Text = "TransactionDialog";
             Load += TransactionDialog_Load;
             root.ResumeLayout(false);
+            root.PerformLayout();
             fields.ResumeLayout(false);
+            fields.PerformLayout();
             footer.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -228,10 +285,12 @@ namespace PersonalExpenseTracker.Views.Forms
         private TableLayoutPanel root;
         private Controls.Heading heading1;
         private TableLayoutPanel fields;
+        private Views.UI.Controls.FormField fieldAmount;
+        private Views.UI.Controls.AppTextField txtAmount;
         private Views.UI.Controls.FormField fieldCategory;
         private Views.UI.Controls.AppComboField cbCategory;
         private Views.UI.Controls.FormField fieldType;
-        private Views.UI.Controls.AppComboField cbType;
+        private Views.UI.Controls.AppTextField txtType;
         private Views.UI.Controls.FormField fieldDescription;
         private Views.UI.Controls.AppTextField txtDescription;
         private TableLayoutPanel footer;
