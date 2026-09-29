@@ -14,6 +14,9 @@ namespace PersonalExpenseTracker.Domains
 
         public TransactionType Type { get; set; }
 
+        /// <summary>Emoji shown on the category card (presentation value).</summary>
+        public string Emoji { get; set; }
+
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -29,6 +32,5 @@ namespace PersonalExpenseTracker.Domains
             Description = description;
             Type = type;
         }
-
     }
 }

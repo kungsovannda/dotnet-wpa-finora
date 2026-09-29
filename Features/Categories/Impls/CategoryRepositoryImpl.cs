@@ -36,6 +36,7 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
 
             existingCategory.Name = category.Name;
             existingCategory.Description = category.Description;
+            existingCategory.Emoji = category.Emoji;
             return existingCategory;
         }
 

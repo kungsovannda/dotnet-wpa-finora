@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Forms
+﻿using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Forms
 {
     partial class LoginForm
     {
@@ -28,224 +30,223 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            btnExit = new Button();
-            btnLogin = new Button();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            label4 = new Label();
-            panel2 = new Panel();
-            txtPassword = new TextBox();
-            splitter3 = new Splitter();
-            label3 = new Label();
-            splitter1 = new Splitter();
-            txtUsername = new TextBox();
-            splitter2 = new Splitter();
-            label2 = new Label();
-            panel1 = new Panel();
-            tableLayoutPanel1.SuspendLayout();
-            panel2.SuspendLayout();
-            panel1.SuspendLayout();
+            root = new TableLayoutPanel();
+            brandRow = new FlowLayoutPanel();
+            brand = new Views.UI.Controls.AvatarView();
+            lbBrand = new Label();
+            heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
+            fieldUsername = new Views.UI.Controls.FormField();
+            txtUsername = new Views.UI.Controls.AppTextField();
+            fieldPassword = new Views.UI.Controls.FormField();
+            txtPassword = new Views.UI.Controls.AppTextField();
+            btnLogin = new Views.UI.Controls.AppButton();
+            btnExit = new Views.UI.Controls.AppButton();
+            lbFooter = new Label();
+            root.SuspendLayout();
+            brandRow.SuspendLayout();
             SuspendLayout();
             // 
-            // label1
+            // root
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Font = new Font("Franklin Gothic Medium", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(43, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(314, 138);
-            label1.TabIndex = 0;
-            label1.Text = "Login";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            root.BackColor = Colors.Surface;
+            root.ColumnCount = 1;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.Controls.Add(brandRow, 0, 1);
+            root.Controls.Add(heading1, 0, 2);
+            root.Controls.Add(fieldUsername, 0, 3);
+            root.Controls.Add(fieldPassword, 0, 4);
+            root.Controls.Add(btnLogin, 0, 5);
+            root.Controls.Add(btnExit, 0, 6);
+            root.Controls.Add(lbFooter, 0, 7);
+            root.Dock = DockStyle.Fill;
+            root.Location = new Point(44, 0);
+            root.Margin = new Padding(0);
+            root.Name = "root";
+            root.Padding = new Padding(0);
+            root.RowCount = 9;
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            root.Size = new Size(332, 560);
+            root.TabIndex = 0;
             // 
-            // btnExit
+            // brandRow
             // 
-            btnExit.Dock = DockStyle.Top;
-            btnExit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnExit.Location = new Point(0, 30);
-            btnExit.Name = "btnExit";
-            btnExit.Size = new Size(314, 30);
-            btnExit.TabIndex = 4;
-            btnExit.Text = "Exit";
-            btnExit.Click += btnExit_Click;
+            brandRow.Anchor = AnchorStyles.None;
+            brandRow.AutoSize = true;
+            brandRow.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            brandRow.BackColor = Colors.Surface;
+            brandRow.Controls.Add(brand);
+            brandRow.Controls.Add(lbBrand);
+            brandRow.Location = new Point(0, 0);
+            brandRow.Margin = new Padding(0, 0, 0, 20);
+            brandRow.Name = "brandRow";
+            brandRow.WrapContents = false;
+            brandRow.Size = new Size(120, 32);
+            brandRow.TabIndex = 0;
             // 
-            // btnLogin
+            // brand
             // 
-            btnLogin.BackColor = SystemColors.Window;
-            btnLogin.Dock = DockStyle.Top;
-            btnLogin.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnLogin.Location = new Point(0, 0);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(314, 30);
-            btnLogin.TabIndex = 3;
-            btnLogin.Text = "Login";
-            btnLogin.UseVisualStyleBackColor = false;
-            btnLogin.Click += btnLogin_Click;
+            brand.Fill = Colors.PrimaryOrange;
+            brand.Fill2 = Colors.PrimaryHover;
+            brand.Foreground = Colors.OnPrimary;
+            brand.Initials = "F";
+            brand.Location = new Point(0, 0);
+            brand.Margin = new Padding(0, 0, 10, 0);
+            brand.Name = "brand";
+            brand.Size = new Size(32, 32);
+            brand.TabIndex = 0;
             // 
-            // tableLayoutPanel1
+            // lbBrand
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(label4, 0, 3);
-            tableLayoutPanel1.Controls.Add(panel2, 0, 1);
-            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(40, 0, 40, 0);
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 39.48438F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 43.6261024F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.8895149F));
-            tableLayoutPanel1.Size = new Size(400, 500);
-            tableLayoutPanel1.TabIndex = 3;
+            lbBrand.AutoSize = true;
+            lbBrand.BackColor = Colors.Surface;
+            lbBrand.Font = Typography.PageTitle;
+            lbBrand.ForeColor = Colors.Foreground;
+            lbBrand.Location = new Point(42, 0);
+            lbBrand.Margin = new Padding(0);
+            lbBrand.Name = "lbBrand";
+            lbBrand.Size = new Size(78, 30);
+            lbBrand.TabIndex = 1;
+            lbBrand.Text = "Finora";
+            lbBrand.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label4
+            // heading1
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Top;
-            label4.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.ForeColor = Color.Silver;
-            label4.Location = new Point(43, 440);
-            label4.Name = "label4";
-            label4.Size = new Size(314, 17);
-            label4.TabIndex = 6;
-            label4.Text = "@ 2026 - Finora";
-            label4.TextAlign = ContentAlignment.MiddleCenter;
+            heading1.BackColor = Colors.Surface;
+            heading1.description = "Sign in to continue to your personal finance tracker.";
+            heading1.Dock = DockStyle.Top;
+            heading1.Location = new Point(0, 52);
+            heading1.Margin = new Padding(0, 0, 0, 20);
+            heading1.Name = "heading1";
+            heading1.Size = new Size(332, 52);
+            heading1.TabIndex = 1;
+            heading1.Title = "Welcome back";
             // 
-            // panel2
+            // fieldUsername
             // 
-            panel2.Controls.Add(txtPassword);
-            panel2.Controls.Add(splitter3);
-            panel2.Controls.Add(label3);
-            panel2.Controls.Add(splitter1);
-            panel2.Controls.Add(txtUsername);
-            panel2.Controls.Add(splitter2);
-            panel2.Controls.Add(label2);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(43, 141);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(314, 144);
-            panel2.TabIndex = 5;
-            // 
-            // txtPassword
-            // 
-            txtPassword.Dock = DockStyle.Top;
-            txtPassword.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPassword.Location = new Point(0, 95);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(314, 33);
-            txtPassword.TabIndex = 2;
-            txtPassword.UseSystemPasswordChar = true;
-            // 
-            // splitter3
-            // 
-            splitter3.Dock = DockStyle.Top;
-            splitter3.Enabled = false;
-            splitter3.Location = new Point(0, 90);
-            splitter3.Name = "splitter3";
-            splitter3.Size = new Size(314, 5);
-            splitter3.TabIndex = 6;
-            splitter3.TabStop = false;
-            // 
-            // label3
-            // 
-            label3.Dock = DockStyle.Top;
-            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(0, 69);
-            label3.Name = "label3";
-            label3.Size = new Size(314, 21);
-            label3.TabIndex = 3;
-            label3.Text = "Password";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // splitter1
-            // 
-            splitter1.Dock = DockStyle.Top;
-            splitter1.Enabled = false;
-            splitter1.Location = new Point(0, 59);
-            splitter1.Name = "splitter1";
-            splitter1.Size = new Size(314, 10);
-            splitter1.TabIndex = 4;
-            splitter1.TabStop = false;
+            fieldUsername.Caption = "Username";
+            fieldUsername.Dock = DockStyle.Top;
+            fieldUsername.Location = new Point(0, 124);
+            fieldUsername.Margin = new Padding(0, 0, 0, 14);
+            fieldUsername.Name = "fieldUsername";
+            fieldUsername.Size = new Size(332, 60);
+            fieldUsername.TabIndex = 2;
+            fieldUsername.Input = txtUsername;
             // 
             // txtUsername
             // 
-            txtUsername.Dock = DockStyle.Top;
-            txtUsername.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtUsername.Location = new Point(0, 26);
+            txtUsername.LeadingIcon = Views.UI.Icons.User;
+            txtUsername.Location = new Point(0, 0);
+            txtUsername.Margin = new Padding(0);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(314, 33);
-            txtUsername.TabIndex = 1;
+            txtUsername.Placeholder = "Enter your username";
+            txtUsername.Size = new Size(332, 40);
+            txtUsername.TabIndex = 0;
             // 
-            // splitter2
+            // fieldPassword
             // 
-            splitter2.Dock = DockStyle.Top;
-            splitter2.Enabled = false;
-            splitter2.Location = new Point(0, 21);
-            splitter2.Name = "splitter2";
-            splitter2.Size = new Size(314, 5);
-            splitter2.TabIndex = 5;
-            splitter2.TabStop = false;
+            fieldPassword.Caption = "Password";
+            fieldPassword.Dock = DockStyle.Top;
+            fieldPassword.Location = new Point(0, 198);
+            fieldPassword.Margin = new Padding(0, 0, 0, 20);
+            fieldPassword.Name = "fieldPassword";
+            fieldPassword.Size = new Size(332, 60);
+            fieldPassword.TabIndex = 3;
+            fieldPassword.Input = txtPassword;
             // 
-            // label2
+            // txtPassword
             // 
-            label2.Dock = DockStyle.Top;
-            label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(0, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(314, 21);
-            label2.TabIndex = 2;
-            label2.Text = "Username";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            txtPassword.IsPassword = true;
+            txtPassword.LeadingIcon = Views.UI.Icons.Lock;
+            txtPassword.Location = new Point(0, 0);
+            txtPassword.Margin = new Padding(0);
+            txtPassword.Name = "txtPassword";
+            txtPassword.Placeholder = "Enter your password";
+            txtPassword.Size = new Size(332, 40);
+            txtPassword.TabIndex = 0;
             // 
-            // panel1
+            // btnLogin
             // 
-            panel1.Controls.Add(btnExit);
-            panel1.Controls.Add(btnLogin);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(43, 291);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(314, 146);
-            panel1.TabIndex = 0;
+            btnLogin.AutoWidth = false;
+            btnLogin.BackColor = Color.Transparent;
+            btnLogin.Caption = "Sign in";
+            btnLogin.Dock = DockStyle.Top;
+            btnLogin.Location = new Point(0, 278);
+            btnLogin.Margin = new Padding(0, 0, 0, 10);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(332, 42);
+            btnLogin.TabIndex = 4;
+            btnLogin.Text = "Sign in";
+            btnLogin.Click += btnLogin_Click;
+            // 
+            // btnExit
+            // 
+            btnExit.AutoWidth = false;
+            btnExit.BackColor = Color.Transparent;
+            btnExit.Caption = "Exit";
+            btnExit.Dock = DockStyle.Top;
+            btnExit.Location = new Point(0, 330);
+            btnExit.Margin = new Padding(0, 0, 0, 18);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(332, 38);
+            btnExit.TabIndex = 5;
+            btnExit.Text = "Exit";
+            btnExit.Variant = Views.UI.Controls.AppButtonVariant.Ghost;
+            btnExit.Click += btnExit_Click;
+            // 
+            // lbFooter
+            // 
+            lbFooter.AutoSize = true;
+            lbFooter.Dock = DockStyle.Top;
+            lbFooter.Font = Typography.Caption;
+            lbFooter.ForeColor = Colors.FaintText;
+            lbFooter.Location = new Point(0, 386);
+            lbFooter.Margin = new Padding(0);
+            lbFooter.Name = "lbFooter";
+            lbFooter.Size = new Size(332, 18);
+            lbFooter.TabIndex = 6;
+            lbFooter.Text = "© 2026 Finora";
+            lbFooter.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 500);
-            Controls.Add(tableLayoutPanel1);
+            BackColor = Colors.Surface;
+            ClientSize = new Size(420, 560);
+            Controls.Add(root);
             FormBorderStyle = FormBorderStyle.None;
             Name = "LoginForm";
+            Padding = new Padding(44, 0, 44, 0);
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
-            panel1.ResumeLayout(false);
+            Text = "Finora";
+            root.ResumeLayout(false);
+            root.PerformLayout();
+            brandRow.ResumeLayout(false);
+            brandRow.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Label label1;
-        private Button btnExit;
-        private Button btnLogin;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Panel panel1;
-        private Label label4;
-        private Panel panel2;
-        private TextBox txtPassword;
-        private Label label3;
-        private TextBox txtUsername;
-        private Label label2;
-        private Splitter splitter3;
-        private Splitter splitter1;
-        private Splitter splitter2;
+        private TableLayoutPanel root;
+        private FlowLayoutPanel brandRow;
+        private Views.UI.Controls.AvatarView brand;
+        private Label lbBrand;
+        private Controls.Heading heading1;
+        private Views.UI.Controls.FormField fieldUsername;
+        private Views.UI.Controls.AppTextField txtUsername;
+        private Views.UI.Controls.FormField fieldPassword;
+        private Views.UI.Controls.AppTextField txtPassword;
+        private Views.UI.Controls.AppButton btnLogin;
+        private Views.UI.Controls.AppButton btnExit;
+        private Label lbFooter;
     }
 }

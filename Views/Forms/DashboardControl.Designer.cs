@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Forms
+using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Forms
 {
     partial class DashboardControl
     {
@@ -28,137 +30,331 @@
         /// </summary>
         private void InitializeComponent()
         {
-            tableLayoutPanel1 = new TableLayoutPanel();
+            root = new TableLayoutPanel();
+            heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
+            statRow = new TableLayoutPanel();
+            cardBalance = new PersonalExpenseTracker.Views.Controls.StatCard();
+            cardIncome = new PersonalExpenseTracker.Views.Controls.StatCard();
             cardExpense = new PersonalExpenseTracker.Views.Controls.StatCard();
             cardTransaction = new PersonalExpenseTracker.Views.Controls.StatCard();
-            cardIncome = new PersonalExpenseTracker.Views.Controls.StatCard();
-            cardBalance = new PersonalExpenseTracker.Views.Controls.StatCard();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
-            tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
+            body = new TableLayoutPanel();
+            overviewCard = new PersonalExpenseTracker.Views.UI.Controls.SectionCard();
+            chart = new PersonalExpenseTracker.Views.UI.Controls.MiniBarChart();
+            chartHeader = new TableLayoutPanel();
+            lbChartTitle = new Label();
+            recentCard = new PersonalExpenseTracker.Views.UI.Controls.SectionCard();
+            recentEmpty = new PersonalExpenseTracker.Views.UI.Controls.EmptyState();
+            recentList = new FlowLayoutPanel();
+            recentHeader = new TableLayoutPanel();
+            lbRecentTitle = new Label();
+            root.SuspendLayout();
+            statRow.SuspendLayout();
+            body.SuspendLayout();
+            overviewCard.SuspendLayout();
+            chartHeader.SuspendLayout();
+            recentCard.SuspendLayout();
+            recentHeader.SuspendLayout();
             SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // root
             // 
-            tableLayoutPanel1.ColumnCount = 4;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.Controls.Add(cardExpense, 2, 0);
-            tableLayoutPanel1.Controls.Add(cardTransaction, 3, 0);
-            tableLayoutPanel1.Controls.Add(cardIncome, 1, 0);
-            tableLayoutPanel1.Controls.Add(cardBalance, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(3, 83);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1091, 100);
-            tableLayoutPanel1.TabIndex = 0;
-            // 
-            // cardExpense
-            // 
-            cardExpense.BorderStyle = BorderStyle.FixedSingle;
-            cardExpense.Dock = DockStyle.Fill;
-            cardExpense.Location = new Point(547, 3);
-            cardExpense.MinimumSize = new Size(200, 90);
-            cardExpense.Name = "cardExpense";
-            cardExpense.Padding = new Padding(8);
-            cardExpense.Size = new Size(266, 94);
-            cardExpense.TabIndex = 2;
-            cardExpense.Title = "Expense";
-            cardExpense.Value = "$750.00";
-            // 
-            // cardTransaction
-            // 
-            cardTransaction.BorderStyle = BorderStyle.FixedSingle;
-            cardTransaction.Dock = DockStyle.Fill;
-            cardTransaction.Location = new Point(819, 3);
-            cardTransaction.MinimumSize = new Size(200, 90);
-            cardTransaction.Name = "cardTransaction";
-            cardTransaction.Padding = new Padding(8);
-            cardTransaction.Size = new Size(269, 94);
-            cardTransaction.TabIndex = 3;
-            cardTransaction.Title = "Transaction";
-            cardTransaction.Value = "$420.00";
-            // 
-            // cardIncome
-            // 
-            cardIncome.BorderStyle = BorderStyle.FixedSingle;
-            cardIncome.Dock = DockStyle.Fill;
-            cardIncome.Location = new Point(275, 3);
-            cardIncome.MinimumSize = new Size(200, 90);
-            cardIncome.Name = "cardIncome";
-            cardIncome.Padding = new Padding(8);
-            cardIncome.Size = new Size(266, 94);
-            cardIncome.TabIndex = 1;
-            cardIncome.Title = "Income";
-            cardIncome.Value = "$3,200.00";
-            // 
-            // cardBalance
-            // 
-            cardBalance.BorderStyle = BorderStyle.FixedSingle;
-            cardBalance.Dock = DockStyle.Fill;
-            cardBalance.Location = new Point(3, 3);
-            cardBalance.MinimumSize = new Size(200, 90);
-            cardBalance.Name = "cardBalance";
-            cardBalance.Padding = new Padding(8);
-            cardBalance.Size = new Size(266, 94);
-            cardBalance.TabIndex = 0;
-            cardBalance.Title = "Balance";
-            cardBalance.Value = "$2,450.00";
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel1, 0, 1);
-            tableLayoutPanel2.Controls.Add(heading1, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 3;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(1097, 472);
-            tableLayoutPanel2.TabIndex = 2;
+            root.BackColor = Color.FromArgb(248, 248, 247);
+            root.ColumnCount = 1;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.Controls.Add(heading1, 0, 0);
+            root.Controls.Add(statRow, 0, 1);
+            root.Controls.Add(body, 0, 2);
+            root.Dock = DockStyle.Fill;
+            root.Location = new Point(0, 0);
+            root.Margin = new Padding(0);
+            root.Name = "root";
+            root.RowCount = 3;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 136F));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            root.Size = new Size(900, 620);
+            root.TabIndex = 0;
             // 
             // heading1
             // 
             heading1.AutoSize = true;
-            heading1.description = "This is the dashboard where you can see all your income";
+            heading1.BackColor = Color.FromArgb(248, 248, 247);
+            heading1.description = "Here is what is happening with your money today.";
             heading1.Dock = DockStyle.Fill;
-            heading1.Location = new Point(3, 3);
+            heading1.Location = new Point(0, 0);
+            heading1.Margin = new Padding(0);
             heading1.Name = "heading1";
-            heading1.Size = new Size(1091, 74);
-            heading1.TabIndex = 1;
-            heading1.Title = "Dashboard";
+            heading1.Size = new Size(900, 68);
+            heading1.TabIndex = 0;
+            heading1.Title = "Overview";
+            // 
+            // statRow
+            // 
+            statRow.BackColor = Color.FromArgb(248, 248, 247);
+            statRow.ColumnCount = 4;
+            statRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            statRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            statRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            statRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            statRow.Controls.Add(cardBalance, 0, 0);
+            statRow.Controls.Add(cardIncome, 1, 0);
+            statRow.Controls.Add(cardExpense, 2, 0);
+            statRow.Controls.Add(cardTransaction, 3, 0);
+            statRow.Dock = DockStyle.Fill;
+            statRow.Location = new Point(0, 68);
+            statRow.Margin = new Padding(0);
+            statRow.Name = "statRow";
+            statRow.RowCount = 1;
+            statRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            statRow.Size = new Size(900, 136);
+            statRow.TabIndex = 1;
+            // 
+            // cardBalance
+            // 
+            cardBalance.BackColor = Color.FromArgb(248, 248, 247);
+            cardBalance.Dock = DockStyle.Fill;
+            cardBalance.Location = new Point(0, 4);
+            cardBalance.Margin = new Padding(0, 4, 16, 12);
+            cardBalance.MinimumSize = new Size(150, 99);
+            cardBalance.Name = "cardBalance";
+            cardBalance.Padding = new Padding(16, 14, 16, 14);
+            cardBalance.Size = new Size(209, 120);
+            cardBalance.Support = "";
+            cardBalance.TabIndex = 0;
+            cardBalance.Title = "Total Balance";
+            cardBalance.Value = "$0.00";
+            // 
+            // cardIncome
+            // 
+            cardIncome.BackColor = Color.FromArgb(248, 248, 247);
+            cardIncome.Dock = DockStyle.Fill;
+            cardIncome.Icon = "trending-up";
+            cardIncome.Location = new Point(225, 4);
+            cardIncome.Margin = new Padding(0, 4, 16, 12);
+            cardIncome.MinimumSize = new Size(150, 99);
+            cardIncome.Name = "cardIncome";
+            cardIncome.Padding = new Padding(16, 14, 16, 14);
+            cardIncome.Size = new Size(209, 120);
+            cardIncome.Support = "";
+            cardIncome.TabIndex = 1;
+            cardIncome.Title = "Total Income";
+            cardIncome.Tone = Views.Controls.StatTone.Income;
+            cardIncome.Value = "$0.00";
+            // 
+            // cardExpense
+            // 
+            cardExpense.BackColor = Color.FromArgb(248, 248, 247);
+            cardExpense.Dock = DockStyle.Fill;
+            cardExpense.Icon = "trending-down";
+            cardExpense.Location = new Point(450, 4);
+            cardExpense.Margin = new Padding(0, 4, 16, 12);
+            cardExpense.MinimumSize = new Size(150, 99);
+            cardExpense.Name = "cardExpense";
+            cardExpense.Padding = new Padding(16, 14, 16, 14);
+            cardExpense.Size = new Size(209, 120);
+            cardExpense.Support = "";
+            cardExpense.TabIndex = 2;
+            cardExpense.Title = "Total Expenses";
+            cardExpense.Tone = Views.Controls.StatTone.Expense;
+            cardExpense.Value = "$0.00";
+            // 
+            // cardTransaction
+            // 
+            cardTransaction.BackColor = Color.FromArgb(248, 248, 247);
+            cardTransaction.Dock = DockStyle.Fill;
+            cardTransaction.Icon = "receipt";
+            cardTransaction.Location = new Point(675, 4);
+            cardTransaction.Margin = new Padding(0, 4, 0, 12);
+            cardTransaction.MinimumSize = new Size(150, 99);
+            cardTransaction.Name = "cardTransaction";
+            cardTransaction.Padding = new Padding(16, 14, 16, 14);
+            cardTransaction.Size = new Size(225, 120);
+            cardTransaction.Support = "";
+            cardTransaction.TabIndex = 3;
+            cardTransaction.Title = "Transactions";
+            cardTransaction.Value = "0";
+            // 
+            // body
+            // 
+            body.BackColor = Color.FromArgb(248, 248, 247);
+            body.ColumnCount = 2;
+            body.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            body.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            body.Controls.Add(overviewCard, 0, 0);
+            body.Controls.Add(recentCard, 1, 0);
+            body.Dock = DockStyle.Fill;
+            body.Location = new Point(0, 204);
+            body.Margin = new Padding(0);
+            body.Name = "body";
+            body.RowCount = 1;
+            body.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            body.Size = new Size(900, 416);
+            body.TabIndex = 2;
+            // 
+            // overviewCard
+            // 
+            overviewCard.BackColor = Color.FromArgb(248, 248, 247);
+            overviewCard.Border = Color.FromArgb(228, 228, 231);
+            overviewCard.Controls.Add(chart);
+            overviewCard.Controls.Add(chartHeader);
+            overviewCard.Dock = DockStyle.Fill;
+            overviewCard.Location = new Point(0, 4);
+            overviewCard.Margin = new Padding(0, 4, 16, 0);
+            overviewCard.Name = "overviewCard";
+            overviewCard.Padding = new Padding(20, 18, 20, 18);
+            overviewCard.Size = new Size(524, 412);
+            overviewCard.Surface = Color.FromArgb(255, 255, 255);
+            overviewCard.TabIndex = 0;
+            // 
+            // chart
+            // 
+            chart.BackColor = Color.Transparent;
+            chart.Dock = DockStyle.Fill;
+            chart.Location = new Point(20, 46);
+            chart.Margin = new Padding(0);
+            chart.Name = "chart";
+            chart.Size = new Size(484, 348);
+            chart.TabIndex = 0;
+            // 
+            // chartHeader
+            // 
+            chartHeader.ColumnCount = 1;
+            chartHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            chartHeader.Controls.Add(lbChartTitle, 0, 0);
+            chartHeader.Dock = DockStyle.Top;
+            chartHeader.Location = new Point(20, 18);
+            chartHeader.Margin = new Padding(0);
+            chartHeader.Name = "chartHeader";
+            chartHeader.RowCount = 1;
+            chartHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            chartHeader.Size = new Size(484, 28);
+            chartHeader.TabIndex = 1;
+            // 
+            // lbChartTitle
+            // 
+            lbChartTitle.BackColor = Color.White;
+            lbChartTitle.Dock = DockStyle.Fill;
+            lbChartTitle.Font = new Font("Lexend", 15F, FontStyle.Bold);
+            lbChartTitle.ForeColor = Color.FromArgb(24, 24, 27);
+            lbChartTitle.Location = new Point(0, 0);
+            lbChartTitle.Margin = new Padding(0);
+            lbChartTitle.Name = "lbChartTitle";
+            lbChartTitle.Size = new Size(484, 28);
+            lbChartTitle.TabIndex = 0;
+            lbChartTitle.Text = "Spending Overview";
+            lbChartTitle.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // recentCard
+            // 
+            recentCard.BackColor = Color.FromArgb(248, 248, 247);
+            recentCard.Border = Color.FromArgb(228, 228, 231);
+            recentCard.Controls.Add(recentEmpty);
+            recentCard.Controls.Add(recentList);
+            recentCard.Controls.Add(recentHeader);
+            recentCard.Dock = DockStyle.Fill;
+            recentCard.Location = new Point(540, 4);
+            recentCard.Margin = new Padding(0, 4, 0, 0);
+            recentCard.Name = "recentCard";
+            recentCard.Padding = new Padding(20, 18, 20, 18);
+            recentCard.Size = new Size(360, 412);
+            recentCard.Surface = Color.FromArgb(255, 255, 255);
+            recentCard.TabIndex = 1;
+            // 
+            // recentEmpty
+            // 
+            recentEmpty.BackColor = Color.Transparent;
+            recentEmpty.Description = "New transactions will appear here as soon as you add them.";
+            recentEmpty.Dock = DockStyle.Fill;
+            recentEmpty.Font = new Font("Lexend", 10.5F);
+            recentEmpty.Icon = "receipt";
+            recentEmpty.Location = new Point(20, 46);
+            recentEmpty.Margin = new Padding(0);
+            recentEmpty.Name = "recentEmpty";
+            recentEmpty.Size = new Size(320, 348);
+            recentEmpty.TabIndex = 0;
+            recentEmpty.Title = "No transactions yet";
+            recentEmpty.Visible = false;
+            // 
+            // recentList
+            // 
+            recentList.AutoScroll = true;
+            recentList.BackColor = Color.FromArgb(255, 255, 255);
+            recentList.Dock = DockStyle.Fill;
+            recentList.FlowDirection = FlowDirection.TopDown;
+            recentList.Location = new Point(20, 46);
+            recentList.Margin = new Padding(0);
+            recentList.Name = "recentList";
+            recentList.Size = new Size(320, 348);
+            recentList.TabIndex = 1;
+            recentList.WrapContents = false;
+            // 
+            // recentHeader
+            // 
+            recentHeader.ColumnCount = 2;
+            recentHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            recentHeader.ColumnStyles.Add(new ColumnStyle());
+            recentHeader.Controls.Add(lbRecentTitle, 0, 0);
+            recentHeader.Dock = DockStyle.Top;
+            recentHeader.Location = new Point(20, 18);
+            recentHeader.Margin = new Padding(0);
+            recentHeader.Name = "recentHeader";
+            recentHeader.RowCount = 1;
+            recentHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            recentHeader.Size = new Size(320, 28);
+            recentHeader.TabIndex = 2;
+            // 
+            // lbRecentTitle
+            // 
+            lbRecentTitle.BackColor = Color.White;
+            lbRecentTitle.Dock = DockStyle.Fill;
+            lbRecentTitle.Font = new Font("Lexend", 15F, FontStyle.Bold);
+            lbRecentTitle.ForeColor = Color.FromArgb(24, 24, 27);
+            lbRecentTitle.Location = new Point(0, 0);
+            lbRecentTitle.Margin = new Padding(0);
+            lbRecentTitle.Name = "lbRecentTitle";
+            lbRecentTitle.Size = new Size(320, 28);
+            lbRecentTitle.TabIndex = 0;
+            lbRecentTitle.Text = "Recent Transactions";
+            lbRecentTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // DashboardControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(tableLayoutPanel2);
+            BackColor = Color.FromArgb(248, 248, 247);
+            Controls.Add(root);
             Name = "DashboardControl";
-            Size = new Size(1097, 472);
+            Size = new Size(900, 620);
             Load += DashboardControl_Load;
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
+            root.ResumeLayout(false);
+            root.PerformLayout();
+            statRow.ResumeLayout(false);
+            body.ResumeLayout(false);
+            overviewCard.ResumeLayout(false);
+            chartHeader.ResumeLayout(false);
+            recentCard.ResumeLayout(false);
+            recentHeader.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private TableLayoutPanel tableLayoutPanel1;
-        private Controls.StatCard cardBalance;
-        private Controls.StatCard cardTransaction;
-        private Controls.StatCard cardExpense;
-        private Controls.StatCard cardIncome;
-        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel root;
         private Controls.Heading heading1;
+        private TableLayoutPanel statRow;
+        private Controls.StatCard cardBalance;
+        private Controls.StatCard cardIncome;
+        private Controls.StatCard cardExpense;
+        private Controls.StatCard cardTransaction;
+        private TableLayoutPanel body;
+        private Views.UI.Controls.SectionCard overviewCard;
+        private Views.UI.Controls.MiniBarChart chart;
+        private TableLayoutPanel chartHeader;
+        private Label lbChartTitle;
+        private Views.UI.Controls.SectionCard recentCard;
+        private Views.UI.Controls.EmptyState recentEmpty;
+        private FlowLayoutPanel recentList;
+        private TableLayoutPanel recentHeader;
+        private Label lbRecentTitle;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Forms
+﻿using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Forms
 {
     partial class CategoryControl
     {
@@ -28,128 +30,144 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            dgv = new DataGridView();
-            panel1 = new Panel();
-            tableLayoutPanel2 = new TableLayoutPanel();
+            root = new TableLayoutPanel();
+            header = new TableLayoutPanel();
             heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
-            button1 = new Button();
-            tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
-            panel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
+            btnAdd = new Views.UI.Controls.AppButton();
+            contentHost = new Panel();
+            empty = new Views.UI.Controls.EmptyState();
+            flow = new FlowLayoutPanel();
+            root.SuspendLayout();
+            header.SuspendLayout();
+            contentHost.SuspendLayout();
             SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // root
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(dgv, 0, 2);
-            tableLayoutPanel1.Controls.Add(panel1, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1089, 530);
-            tableLayoutPanel1.TabIndex = 0;
+            root.BackColor = Colors.Background;
+            root.ColumnCount = 1;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.Controls.Add(header, 0, 0);
+            root.Controls.Add(contentHost, 0, 1);
+            root.Dock = DockStyle.Fill;
+            root.Location = new Point(0, 0);
+            root.Margin = new Padding(0);
+            root.Name = "root";
+            root.RowCount = 2;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            root.Size = new Size(900, 620);
+            root.TabIndex = 0;
             // 
-            // dgv
+            // header
             // 
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgv.BackgroundColor = Color.Gainsboro;
-            dgv.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.NullValue = "N/A";
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv.Dock = DockStyle.Fill;
-            dgv.Location = new Point(3, 83);
-            dgv.Name = "dgv";
-            dgv.Size = new Size(1083, 444);
-            dgv.TabIndex = 1;
-            dgv.CellContentClick += dataGridView1_CellContentClick;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(tableLayoutPanel2);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1083, 74);
-            panel1.TabIndex = 2;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.Controls.Add(heading1, 0, 0);
-            tableLayoutPanel2.Controls.Add(button1, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(1083, 74);
-            tableLayoutPanel2.TabIndex = 0;
+            header.BackColor = Colors.Background;
+            header.ColumnCount = 2;
+            header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            // AutoSize lets the column follow the button's caption instead of
+            // clipping it; the heading keeps whatever space is left.
+            header.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            header.Controls.Add(heading1, 0, 0);
+            header.Controls.Add(btnAdd, 1, 0);
+            header.Dock = DockStyle.Fill;
+            header.Location = new Point(0, 0);
+            header.Margin = new Padding(0);
+            header.Name = "header";
+            header.RowCount = 1;
+            header.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            header.Size = new Size(900, 68);
+            header.TabIndex = 0;
             // 
             // heading1
             // 
-            heading1.AutoSize = true;
-            heading1.description = "Manage the categories for your transaction.";
+            heading1.BackColor = Colors.Background;
+            heading1.description = "Organise your income and expenses with a little colour.";
             heading1.Dock = DockStyle.Fill;
-            heading1.Location = new Point(3, 3);
+            heading1.Location = new Point(0, 0);
+            heading1.Margin = new Padding(0);
             heading1.Name = "heading1";
-            heading1.Size = new Size(972, 68);
+            heading1.Size = new Size(772, 68);
             heading1.TabIndex = 0;
             heading1.Title = "Categories";
             // 
-            // button1
+            // btnAdd
             // 
-            button1.Anchor = AnchorStyles.None;
-            button1.AutoSize = true;
-            button1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Location = new Point(981, 23);
-            button1.Name = "button1";
-            button1.Size = new Size(99, 27);
-            button1.TabIndex = 1;
-            button1.Text = "Add Category";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnAdd.Anchor = AnchorStyles.Right;
+            btnAdd.BackColor = Color.Transparent;
+            btnAdd.Caption = "Add Category";
+            btnAdd.Icon = Icons.Plus;
+            btnAdd.Location = new Point(772, 15);
+            btnAdd.Margin = new Padding(0);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(128, 38);
+            btnAdd.TabIndex = 1;
+            btnAdd.Text = "Add Category";
+            btnAdd.Click += button1_Click;
+            // 
+            // contentHost
+            // 
+            contentHost.BackColor = Colors.Background;
+            contentHost.Controls.Add(empty);
+            contentHost.Controls.Add(flow);
+            contentHost.Dock = DockStyle.Fill;
+            contentHost.Location = new Point(0, 68);
+            contentHost.Margin = new Padding(0);
+            contentHost.Name = "contentHost";
+            contentHost.Size = new Size(900, 552);
+            contentHost.TabIndex = 1;
+            // 
+            // empty
+            // 
+            empty.ActionText = "Add Category";
+            empty.BackColor = Colors.Background;
+            empty.Description = "Create your first category to start grouping your transactions.";
+            empty.Dock = DockStyle.Fill;
+            empty.Icon = Icons.Categories;
+            empty.Location = new Point(0, 0);
+            empty.Margin = new Padding(0);
+            empty.Name = "empty";
+            empty.Size = new Size(900, 552);
+            empty.TabIndex = 1;
+            empty.Text = "No categories yet";
+            empty.Visible = false;
+            empty.Click += button1_Click;
+            // 
+            // flow
+            // 
+            flow.AutoScroll = true;
+            flow.BackColor = Colors.Background;
+            flow.Dock = DockStyle.Fill;
+            flow.Location = new Point(0, 0);
+            flow.Margin = new Padding(0);
+            flow.Name = "flow";
+            flow.Padding = new Padding(0, 4, 0, 0);
+            flow.Size = new Size(900, 552);
+            flow.TabIndex = 0;
+            flow.WrapContents = true;
             // 
             // CategoryControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(tableLayoutPanel1);
+            BackColor = Colors.Background;
+            Controls.Add(root);
             Name = "CategoryControl";
-            Size = new Size(1089, 530);
+            Size = new Size(900, 620);
             Load += CategoryControl_Load;
-            tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgv).EndInit();
-            panel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
+            root.ResumeLayout(false);
+            header.ResumeLayout(false);
+            contentHost.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private TableLayoutPanel tableLayoutPanel1;
-        private DataGridView dgv;
-        private Panel panel1;
-        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel root;
+        private TableLayoutPanel header;
         private Controls.Heading heading1;
-        private Button button1;
+        private Views.UI.Controls.AppButton btnAdd;
+        private Panel contentHost;
+        private FlowLayoutPanel flow;
+        private Views.UI.Controls.EmptyState empty;
     }
 }

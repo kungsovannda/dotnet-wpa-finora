@@ -13,6 +13,8 @@ namespace PersonalExpenseTracker.Dtos
 
         public TransactionType Type { get; set; }
 
+        public string Emoji { get; set; }
+
         public DateTime CreatedAt { get; set; }
     }
 }

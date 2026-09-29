@@ -1,12 +1,7 @@
 ﻿using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Categories;
-using PersonalExpenseTracker.Domains;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
@@ -14,7 +9,7 @@ namespace PersonalExpenseTracker.Views.Forms
     public partial class TransactionDialog : Form
     {
         private readonly CategoryController _categoryController;
-        private List<CategoryResponseDto> _categories;
+        private List<CategoryResponseDto> _categories = new List<CategoryResponseDto>();
 
         public TransactionDialog(CategoryController categoryController)
         {
@@ -42,7 +37,7 @@ namespace PersonalExpenseTracker.Views.Forms
         {
             _categories = _categoryController.GetAllCategories();
 
-            var bindingSource = new BindingSource(_categories, null);
+            var bindingSource = new BindingSource(_categories, string.Empty);
             cbCategory.DataSource = bindingSource;
             cbCategory.DisplayMember = "Name";
             cbCategory.ValueMember = "Id";
@@ -53,19 +48,19 @@ namespace PersonalExpenseTracker.Views.Forms
             }
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        private void btnSubmit_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        private void cbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbCategory_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cbCategory.SelectedItem is CategoryResponseDto selectedCategory)
             {

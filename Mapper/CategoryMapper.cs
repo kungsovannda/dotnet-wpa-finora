@@ -11,7 +11,8 @@ namespace PersonalExpenseTracker.Mapper
             {
                 Name = dto.Name,
                 Description = dto.Description,
-                Type = dto.Type
+                Type = dto.Type,
+                Emoji = dto.Emoji
             };
         }
 
@@ -20,6 +21,7 @@ namespace PersonalExpenseTracker.Mapper
             existingCategory.Name = dto.Name;
             existingCategory.Description = dto.Description;
             existingCategory.Type = dto.Type;
+            existingCategory.Emoji = dto.Emoji;
             return existingCategory;
         }
 
@@ -31,6 +33,7 @@ namespace PersonalExpenseTracker.Mapper
                 Name = category.Name,
                 Description = category.Description,
                 Type = category.Type,
+                Emoji = category.Emoji,
                 CreatedAt = category.CreatedAt
             };
         }

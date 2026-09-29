@@ -1,10 +1,11 @@
-﻿using PersonalExpenseTracker.Features.Categories;
+﻿using PersonalExpenseTracker.Domains;
+using PersonalExpenseTracker.Dtos;
+using PersonalExpenseTracker.Features.Categories;
+using PersonalExpenseTracker.Views.UI;
+using PersonalExpenseTracker.Views.UI.Controls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
@@ -12,53 +13,67 @@ namespace PersonalExpenseTracker.Views.Forms
     public partial class CategoryControl : UserControl
     {
         private readonly CategoryController _controller;
+
         public CategoryControl(CategoryController controller)
         {
             _controller = controller;
             InitializeComponent();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0)
-                return;
-
-            if (dgv.Columns[e.ColumnIndex].Name != "Actions")
-                return;
-
-            var id = (long) dgv.Rows[e.RowIndex].Cells["Id"].Value;
-
-            ShowActionsMenu(id, e.RowIndex);
-        }
-        
-
-        private void LoadCategories()
-        {
-            var categories = _controller.GetAllCategories();
-            dgv.DataSource = categories;
-            dgv.Columns["Id"].DisplayIndex = 0;
-            dgv.Columns["Name"].DisplayIndex = 1;
-            dgv.Columns["Type"].DisplayIndex = 2;
-            dgv.Columns["Description"].DisplayIndex = 3;
-            dgv.Columns["CreatedAt"].DisplayIndex = 4;
-            dgv.Columns["Actions"].DisplayIndex = 5;
+            BackColor = Colors.Background;
         }
 
         private void CategoryControl_Load(object sender, EventArgs e)
         {
-            var actionsColumn = new DataGridViewButtonColumn
-            {
-                Name = "Actions",
-                HeaderText = "Actions",
-                Text = "⋮",
-                UseColumnTextForButtonValue = true
-            };
-
-            dgv.Columns.Add(actionsColumn);
             LoadCategories();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void LoadCategories()
+        {
+            List<CategoryResponseDto> categories;
+            try
+            {
+                categories = _controller.GetAllCategories();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            flow.SuspendLayout();
+
+            // Rebuild the card grid. Disposing removes each card from the panel.
+            while (flow.Controls.Count > 0)
+                flow.Controls[0].Dispose();
+
+            foreach (var category in categories)
+            {
+                var card = new CategoryCard
+                {
+                    Id = category.Id,
+                    CategoryName = category.Name,
+                    DescriptionText = category.Description,
+                    EmojiGlyph = category.Emoji,
+                    IsIncome = category.Type == TransactionType.INCOME
+                };
+
+                card.MenuRequested += Card_MenuRequested;
+                flow.Controls.Add(card);
+            }
+
+            flow.ResumeLayout();
+
+            bool hasItems = categories.Count > 0;
+            flow.Visible = hasItems;
+            empty.Visible = !hasItems;
+        }
+
+        private void Card_MenuRequested(object? sender, CategoryActionEventArgs e)
+        {
+            if (sender is CategoryCard card)
+                ShowActionsMenu(card, e.Id);
+        }
+
+        private void button1_Click(object? sender, EventArgs e)
         {
             var categoryDialog = new CategoryDialog();
             if (categoryDialog.ShowDialog() == DialogResult.OK)
@@ -72,11 +87,10 @@ namespace PersonalExpenseTracker.Views.Forms
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                ;
             }
         }
 
-        private void ShowActionsMenu(long id, int rowIndex)
+        private void ShowActionsMenu(CategoryCard card, long id)
         {
             var menu = new ContextMenuStrip();
 
@@ -89,18 +103,8 @@ namespace PersonalExpenseTracker.Views.Forms
             menu.Items.Add(editItem);
             menu.Items.Add(deleteItem);
 
-            var cellRect = dgv.GetCellDisplayRectangle(
-                dgv.Columns["Actions"].Index,
-                rowIndex,
-                true
-            );
-
-            var location = new Point(
-                cellRect.Right,
-                cellRect.Bottom
-            );
-
-            menu.Show(dgv, location);
+            var location = new Point(card.Width - Theme.Space2, card.Height - Theme.Space2);
+            menu.Show(card, location);
         }
 
         private void EditCategory(long id)
@@ -122,8 +126,9 @@ namespace PersonalExpenseTracker.Views.Forms
                 }
             }
         }
-        
-        private void DeleteCategory(long id) {
+
+        private void DeleteCategory(long id)
+        {
             var category = _controller.GetCategory(id);
             DialogResult result = MessageBox.Show($"Are you sure you want to delete the category '{category.Name}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)

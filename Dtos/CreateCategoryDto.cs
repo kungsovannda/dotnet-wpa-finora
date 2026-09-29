@@ -9,5 +9,7 @@ namespace PersonalExpenseTracker.Dtos
         public string Description { get; set; }
 
         public TransactionType Type { get; set; }
+
+        public string Emoji { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Forms
+﻿using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Forms
 {
     partial class MainForm
     {
@@ -37,53 +39,56 @@
             // 
             // sidebar
             // 
-            sidebar.BackColor = SystemColors.Control;
+            sidebar.BackColor = Color.FromArgb(255, 255, 255);
             sidebar.Dock = DockStyle.Left;
             sidebar.Location = new Point(0, 0);
             sidebar.Name = "sidebar";
-            sidebar.Size = new Size(240, 613);
+            sidebar.Size = new Size(248, 700);
             sidebar.TabIndex = 0;
             // 
             // panel
             // 
-            panel.BackColor = Color.WhiteSmoke;
+            panel.BackColor = Color.FromArgb(248, 248, 247);
             panel.Dock = DockStyle.Fill;
-            panel.Location = new Point(5, 67);
+            panel.Location = new Point(3, 67);
             panel.Name = "panel";
-            panel.Padding = new Padding(8);
-            panel.Size = new Size(550, 541);
+            panel.Padding = new Padding(24, 20, 24, 24);
+            panel.Size = new Size(946, 630);
             panel.TabIndex = 1;
             // 
             // header1
             // 
-            header1.BackColor = Color.WhiteSmoke;
-            header1.Location = new Point(5, 5);
+            header1.BackColor = Color.FromArgb(255, 255, 255);
+            header1.Dock = DockStyle.Top;
+            header1.Location = new Point(3, 3);
             header1.Name = "header1";
-            header1.Size = new Size(550, 54);
+            header1.Size = new Size(946, 58);
             header1.TabIndex = 2;
+            header1.UserName = "User";
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.BackColor = Color.WhiteSmoke;
-            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset;
+            tableLayoutPanel1.BackColor = Color.FromArgb(248, 248, 247);
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(panel, 0, 1);
             tableLayoutPanel1.Controls.Add(header1, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(240, 0);
+            tableLayoutPanel1.Location = new Point(248, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(560, 613);
+            tableLayoutPanel1.Size = new Size(952, 700);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 613);
+            BackColor = Color.FromArgb(248, 248, 247);
+            ClientSize = new Size(1200, 700);
+            MinimumSize = new Size(988, 700);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(sidebar);
             Name = "MainForm";

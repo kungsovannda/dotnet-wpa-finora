@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Controls
+﻿using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Controls
 {
     partial class Sidebar
     {
@@ -28,115 +30,239 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnDashboard = new Button();
-            btnSetting = new Button();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            panel1 = new Panel();
-            btnCategory = new Button();
-            btnTransaction = new Button();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
+            root = new TableLayoutPanel();
+            brandPanel = new TableLayoutPanel();
+            brandMark = new Views.UI.Controls.AvatarView();
+            lbBrand = new Label();
+            navHost = new Panel();
+            nav = new TableLayoutPanel();
+            navSectionLabel = new Label();
+            navSpacer = new Panel();
+            btnDashboard = new Views.UI.Controls.NavItem();
+            btnTransaction = new Views.UI.Controls.NavItem();
+            btnCategory = new Views.UI.Controls.NavItem();
+            btnSetting = new Views.UI.Controls.NavItem();
+            edge = new Panel();
+            root.SuspendLayout();
+            brandPanel.SuspendLayout();
+            navHost.SuspendLayout();
+            nav.SuspendLayout();
             SuspendLayout();
+            // 
+            // root
+            // 
+            root.BackColor = Colors.Surface;
+            root.ColumnCount = 1;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.Controls.Add(brandPanel, 0, 0);
+            root.Controls.Add(navHost, 0, 1);
+            root.Dock = DockStyle.Fill;
+            root.Location = new Point(0, 0);
+            root.Margin = new Padding(0);
+            root.Name = "root";
+            root.RowCount = 2;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            root.Size = new Size(248, 700);
+            root.TabIndex = 0;
+            // 
+            // brandPanel
+            // 
+            brandPanel.BackColor = Colors.Surface;
+            brandPanel.ColumnCount = 3;
+            brandPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            brandPanel.ColumnStyles.Add(new ColumnStyle());
+            brandPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            brandPanel.Controls.Add(brandMark, 1, 0);
+            brandPanel.Controls.Add(lbBrand, 2, 0);
+            brandPanel.Dock = DockStyle.Fill;
+            brandPanel.Location = new Point(0, 0);
+            brandPanel.Margin = new Padding(0);
+            brandPanel.Name = "brandPanel";
+            brandPanel.RowCount = 1;
+            brandPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            brandPanel.Size = new Size(248, 64);
+            brandPanel.TabIndex = 0;
+            // 
+            // brandMark
+            // 
+            brandMark.Anchor = AnchorStyles.None;
+            brandMark.Fill = Colors.PrimaryOrange;
+            brandMark.Fill2 = Colors.PrimaryHover;
+            brandMark.Foreground = Colors.OnPrimary;
+            brandMark.Initials = "F";
+            brandMark.Location = new Point(20, 17);
+            brandMark.Margin = new Padding(0, 0, 10, 0);
+            brandMark.Name = "brandMark";
+            brandMark.Size = new Size(30, 30);
+            brandMark.TabIndex = 0;
+            // 
+            // lbBrand
+            // 
+            lbBrand.Dock = DockStyle.Fill;
+            lbBrand.Font = Typography.HeadingSmall;
+            lbBrand.ForeColor = Colors.Foreground;
+            lbBrand.Location = new Point(60, 0);
+            lbBrand.Margin = new Padding(0);
+            lbBrand.Name = "lbBrand";
+            lbBrand.Size = new Size(188, 64);
+            lbBrand.TabIndex = 1;
+            lbBrand.Text = "Finora";
+            lbBrand.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // navHost
+            // 
+            navHost.BackColor = Colors.Surface;
+            navHost.Controls.Add(nav);
+            navHost.Dock = DockStyle.Fill;
+            navHost.Location = new Point(0, 64);
+            navHost.Margin = new Padding(0);
+            navHost.Name = "navHost";
+            navHost.Padding = new Padding(12, 4, 12, 12);
+            navHost.Size = new Size(248, 636);
+            navHost.TabIndex = 1;
+            // 
+            // nav
+            // 
+            nav.BackColor = Colors.Surface;
+            nav.ColumnCount = 1;
+            nav.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            nav.Controls.Add(navSectionLabel, 0, 0);
+            nav.Controls.Add(btnDashboard, 0, 1);
+            nav.Controls.Add(btnTransaction, 0, 2);
+            nav.Controls.Add(btnCategory, 0, 3);
+            nav.Controls.Add(btnSetting, 0, 4);
+            nav.Controls.Add(navSpacer, 0, 5);
+            nav.Dock = DockStyle.Fill;
+            nav.Location = new Point(12, 4);
+            nav.Margin = new Padding(0);
+            nav.Name = "nav";
+            nav.RowCount = 6;
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            nav.Size = new Size(224, 620);
+            nav.TabIndex = 0;
+            // 
+            // navSectionLabel
+            // 
+            navSectionLabel.Dock = DockStyle.Fill;
+            navSectionLabel.Font = Typography.Overline;
+            navSectionLabel.ForeColor = Colors.FaintText;
+            navSectionLabel.Location = new Point(0, 0);
+            navSectionLabel.Margin = new Padding(4, 0, 0, 0);
+            navSectionLabel.Name = "navSectionLabel";
+            navSectionLabel.Size = new Size(220, 32);
+            navSectionLabel.TabIndex = 0;
+            navSectionLabel.Text = "MENU";
+            navSectionLabel.TextAlign = ContentAlignment.BottomLeft;
             // 
             // btnDashboard
             // 
-            btnDashboard.Dock = DockStyle.Top;
-            btnDashboard.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnDashboard.Location = new Point(0, 0);
+            btnDashboard.Caption = "Dashboard";
+            btnDashboard.Dock = DockStyle.Fill;
+            btnDashboard.Font = Typography.Label;
+            btnDashboard.Icon = Icons.Dashboard;
+            btnDashboard.Location = new Point(0, 32);
+            btnDashboard.Margin = new Padding(0, 2, 0, 2);
             btnDashboard.Name = "btnDashboard";
-            btnDashboard.Size = new Size(140, 30);
-            btnDashboard.TabIndex = 0;
-            btnDashboard.Text = "Dashboard";
-            btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
-            btnDashboard.UseVisualStyleBackColor = true;
+            btnDashboard.Selected = true;
+            btnDashboard.Size = new Size(224, 40);
+            btnDashboard.TabIndex = 1;
             btnDashboard.Click += btnDashboard_Click;
-            // 
-            // btnSetting
-            // 
-            btnSetting.Dock = DockStyle.Top;
-            btnSetting.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSetting.Location = new Point(0, 90);
-            btnSetting.Name = "btnSetting";
-            btnSetting.Size = new Size(140, 30);
-            btnSetting.TabIndex = 1;
-            btnSetting.Text = "Setting";
-            btnSetting.TextAlign = ContentAlignment.MiddleLeft;
-            btnSetting.UseVisualStyleBackColor = true;
-            btnSetting.Click += btnSetting_Click;
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset;
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(panel1, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(150, 395);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(btnSetting);
-            panel1.Controls.Add(btnCategory);
-            panel1.Controls.Add(btnTransaction);
-            panel1.Controls.Add(btnDashboard);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(5, 67);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(140, 323);
-            panel1.TabIndex = 0;
-            // 
-            // btnCategory
-            // 
-            btnCategory.Dock = DockStyle.Top;
-            btnCategory.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnCategory.Location = new Point(0, 60);
-            btnCategory.Name = "btnCategory";
-            btnCategory.Size = new Size(140, 30);
-            btnCategory.TabIndex = 2;
-            btnCategory.Text = "Category";
-            btnCategory.TextAlign = ContentAlignment.MiddleLeft;
-            btnCategory.UseVisualStyleBackColor = true;
-            btnCategory.Click += btnCategory_Click;
             // 
             // btnTransaction
             // 
-            btnTransaction.Dock = DockStyle.Top;
-            btnTransaction.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnTransaction.Location = new Point(0, 30);
+            btnTransaction.Caption = "Transactions";
+            btnTransaction.Dock = DockStyle.Fill;
+            btnTransaction.Font = Typography.Label;
+            btnTransaction.Icon = Icons.Transactions;
+            btnTransaction.Location = new Point(0, 76);
+            btnTransaction.Margin = new Padding(0, 2, 0, 2);
             btnTransaction.Name = "btnTransaction";
-            btnTransaction.Size = new Size(140, 30);
-            btnTransaction.TabIndex = 3;
-            btnTransaction.Text = "Transaction";
-            btnTransaction.TextAlign = ContentAlignment.MiddleLeft;
-            btnTransaction.UseVisualStyleBackColor = true;
+            btnTransaction.Size = new Size(224, 40);
+            btnTransaction.TabIndex = 2;
             btnTransaction.Click += btnTransaction_Click;
+            // 
+            // btnCategory
+            // 
+            btnCategory.Caption = "Categories";
+            btnCategory.Dock = DockStyle.Fill;
+            btnCategory.Font = Typography.Label;
+            btnCategory.Icon = Icons.Categories;
+            btnCategory.Location = new Point(0, 120);
+            btnCategory.Margin = new Padding(0, 2, 0, 2);
+            btnCategory.Name = "btnCategory";
+            btnCategory.Size = new Size(224, 40);
+            btnCategory.TabIndex = 3;
+            btnCategory.Click += btnCategory_Click;
+            // 
+            // btnSetting
+            // 
+            btnSetting.Caption = "Settings";
+            btnSetting.Dock = DockStyle.Fill;
+            btnSetting.Font = Typography.Label;
+            btnSetting.Icon = Icons.Settings;
+            btnSetting.Location = new Point(0, 164);
+            btnSetting.Margin = new Padding(0, 2, 0, 2);
+            btnSetting.Name = "btnSetting";
+            btnSetting.Size = new Size(224, 40);
+            btnSetting.TabIndex = 4;
+            btnSetting.Click += btnSetting_Click;
+            // 
+            // navSpacer
+            // 
+            navSpacer.BackColor = Colors.Surface;
+            navSpacer.Dock = DockStyle.Fill;
+            navSpacer.Location = new Point(0, 208);
+            navSpacer.Margin = new Padding(0);
+            navSpacer.Name = "navSpacer";
+            navSpacer.Size = new Size(224, 412);
+            navSpacer.TabIndex = 5;
+            // 
+            // edge
+            // 
+            edge.BackColor = Colors.Border;
+            edge.Dock = DockStyle.Right;
+            edge.Location = new Point(247, 0);
+            edge.Margin = new Padding(0);
+            edge.Name = "edge";
+            edge.Size = new Size(1, 700);
+            edge.TabIndex = 1;
             // 
             // Sidebar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.WhiteSmoke;
-            Controls.Add(tableLayoutPanel1);
+            BackColor = Colors.Surface;
+            Controls.Add(edge);
+            Controls.Add(root);
             Name = "Sidebar";
-            Size = new Size(150, 395);
-            tableLayoutPanel1.ResumeLayout(false);
-            panel1.ResumeLayout(false);
+            Size = new Size(248, 700);
+            root.ResumeLayout(false);
+            brandPanel.ResumeLayout(false);
+            navHost.ResumeLayout(false);
+            nav.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Button btnDashboard;
-        private Button btnSetting;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Panel panel1;
-        private Button btnCategory;
-        private Button btnTransaction;
+        private TableLayoutPanel root;
+        private TableLayoutPanel brandPanel;
+        private Views.UI.Controls.AvatarView brandMark;
+        private Label lbBrand;
+        private Panel navHost;
+        private TableLayoutPanel nav;
+        private Label navSectionLabel;
+        private Panel navSpacer;
+        private Views.UI.Controls.NavItem btnDashboard;
+        private Views.UI.Controls.NavItem btnTransaction;
+        private Views.UI.Controls.NavItem btnCategory;
+        private Views.UI.Controls.NavItem btnSetting;
+        private Panel edge;
     }
 }

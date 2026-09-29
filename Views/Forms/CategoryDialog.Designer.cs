@@ -1,4 +1,6 @@
-﻿namespace PersonalExpenseTracker.Views.Forms
+﻿using PersonalExpenseTracker.Views.UI;
+
+namespace PersonalExpenseTracker.Views.Forms
 {
     partial class CategoryDialog
     {
@@ -28,250 +30,239 @@
         /// </summary>
         private void InitializeComponent()
         {
-            tableLayoutPanel1 = new TableLayoutPanel();
+            root = new TableLayoutPanel();
             heading1 = new PersonalExpenseTracker.Views.Controls.Heading();
-            panel1 = new Panel();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            btnSubmit = new Button();
-            btnCancel = new Button();
-            panel2 = new Panel();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            label3 = new Label();
-            txtDescription = new TextBox();
-            label2 = new Label();
-            label1 = new Label();
-            txtCategoryName = new TextBox();
-            cbType = new ComboBox();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            panel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            fields = new TableLayoutPanel();
+            fieldName = new Views.UI.Controls.FormField();
+            txtCategoryName = new Views.UI.Controls.AppTextField();
+            fieldType = new Views.UI.Controls.FormField();
+            cbType = new Views.UI.Controls.AppComboField();
+            fieldEmoji = new Views.UI.Controls.FormField();
+            txtEmoji = new Views.UI.Controls.EmojiInput();
+            fieldDescription = new Views.UI.Controls.FormField();
+            txtDescription = new Views.UI.Controls.AppTextField();
+            footer = new TableLayoutPanel();
+            btnCancel = new Views.UI.Controls.AppButton();
+            btnSubmit = new Views.UI.Controls.AppButton();
+            root.SuspendLayout();
+            fields.SuspendLayout();
+            footer.SuspendLayout();
             SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // root
             // 
-            tableLayoutPanel1.AutoSize = true;
-            tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(heading1, 0, 0);
-            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
-            tableLayoutPanel1.Controls.Add(panel2, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(8, 8);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(379, 372);
-            tableLayoutPanel1.TabIndex = 0;
+            root.BackColor = Colors.Surface;
+            root.ColumnCount = 1;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.Controls.Add(heading1, 0, 0);
+            root.Controls.Add(fields, 0, 1);
+            root.Controls.Add(footer, 0, 2);
+            root.Dock = DockStyle.Fill;
+            root.Location = new Point(24, 24);
+            root.Margin = new Padding(0);
+            root.Name = "root";
+            root.RowCount = 3;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            root.Size = new Size(372, 500);
+            root.TabIndex = 0;
             // 
             // heading1
             // 
-            heading1.AutoSize = true;
+            heading1.BackColor = Colors.Surface;
             heading1.description = "Create a new category";
             heading1.Dock = DockStyle.Fill;
-            heading1.Location = new Point(3, 3);
+            heading1.Location = new Point(0, 0);
+            heading1.Margin = new Padding(0);
             heading1.Name = "heading1";
-            heading1.Size = new Size(373, 66);
+            heading1.Size = new Size(372, 64);
             heading1.TabIndex = 0;
             heading1.Title = "Create Category";
             // 
-            // panel1
+            // fields
             // 
-            panel1.AutoScroll = true;
-            panel1.AutoSize = true;
-            panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel1.Controls.Add(tableLayoutPanel2);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(3, 336);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(373, 33);
-            panel1.TabIndex = 1;
+            fields.BackColor = Colors.Surface;
+            fields.ColumnCount = 1;
+            fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            fields.Controls.Add(fieldName, 0, 0);
+            fields.Controls.Add(fieldType, 0, 1);
+            fields.Controls.Add(fieldEmoji, 0, 2);
+            fields.Controls.Add(fieldDescription, 0, 3);
+            fields.Dock = DockStyle.Fill;
+            fields.Location = new Point(0, 64);
+            fields.Margin = new Padding(0);
+            fields.Name = "fields";
+            fields.RowCount = 4;
+            fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            fields.Size = new Size(372, 386);
+            fields.TabIndex = 1;
             // 
-            // tableLayoutPanel2
+            // fieldName
             // 
-            tableLayoutPanel2.AutoSize = true;
-            tableLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(btnSubmit, 1, 0);
-            tableLayoutPanel2.Controls.Add(btnCancel, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(373, 33);
-            tableLayoutPanel2.TabIndex = 0;
-            // 
-            // btnSubmit
-            // 
-            btnSubmit.AutoSize = true;
-            btnSubmit.Dock = DockStyle.Top;
-            btnSubmit.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSubmit.Location = new Point(189, 3);
-            btnSubmit.Name = "btnSubmit";
-            btnSubmit.Size = new Size(181, 27);
-            btnSubmit.TabIndex = 1;
-            btnSubmit.Text = "Create";
-            btnSubmit.UseVisualStyleBackColor = true;
-            btnSubmit.Click += button2_Click;
-            // 
-            // btnCancel
-            // 
-            btnCancel.AutoSize = true;
-            btnCancel.Dock = DockStyle.Top;
-            btnCancel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnCancel.Location = new Point(3, 3);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(180, 27);
-            btnCancel.TabIndex = 0;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
-            btnCancel.Click += button1_Click;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(tableLayoutPanel3);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(3, 75);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(373, 255);
-            panel2.TabIndex = 2;
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.AutoSize = true;
-            tableLayoutPanel3.ColumnCount = 1;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Controls.Add(label3, 0, 2);
-            tableLayoutPanel3.Controls.Add(txtDescription, 0, 6);
-            tableLayoutPanel3.Controls.Add(label2, 0, 5);
-            tableLayoutPanel3.Controls.Add(label1, 0, 0);
-            tableLayoutPanel3.Controls.Add(txtCategoryName, 0, 1);
-            tableLayoutPanel3.Controls.Add(cbType, 0, 4);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(0, 0);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 6;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(373, 255);
-            tableLayoutPanel3.TabIndex = 0;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Fill;
-            label3.Location = new Point(3, 49);
-            label3.Name = "label3";
-            label3.Padding = new Padding(0, 3, 0, 3);
-            label3.Size = new Size(367, 21);
-            label3.TabIndex = 4;
-            label3.Text = "Type";
-            // 
-            // txtDescription
-            // 
-            txtDescription.Dock = DockStyle.Fill;
-            txtDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtDescription.Location = new Point(3, 125);
-            txtDescription.Multiline = true;
-            txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(367, 142);
-            txtDescription.TabIndex = 3;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Location = new Point(3, 101);
-            label2.Name = "label2";
-            label2.Padding = new Padding(0, 3, 0, 3);
-            label2.Size = new Size(367, 21);
-            label2.TabIndex = 2;
-            label2.Text = "Description";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Location = new Point(3, 0);
-            label1.Name = "label1";
-            label1.Padding = new Padding(0, 0, 0, 3);
-            label1.Size = new Size(367, 18);
-            label1.TabIndex = 0;
-            label1.Text = "Category";
+            fieldName.Caption = "Category name";
+            fieldName.Dock = DockStyle.Top;
+            fieldName.Location = new Point(0, 0);
+            fieldName.Margin = new Padding(0, 0, 0, 16);
+            fieldName.Name = "fieldName";
+            fieldName.Size = new Size(372, 60);
+            fieldName.TabIndex = 0;
+            fieldName.Input = txtCategoryName;
             // 
             // txtCategoryName
             // 
-            txtCategoryName.Dock = DockStyle.Fill;
-            txtCategoryName.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtCategoryName.Location = new Point(3, 21);
+            txtCategoryName.LeadingIcon = Views.UI.Icons.Tag;
+            txtCategoryName.Location = new Point(0, 0);
+            txtCategoryName.Margin = new Padding(0);
             txtCategoryName.Name = "txtCategoryName";
-            txtCategoryName.Size = new Size(367, 25);
-            txtCategoryName.TabIndex = 1;
+            txtCategoryName.Placeholder = "e.g. Groceries";
+            txtCategoryName.Size = new Size(372, 40);
+            txtCategoryName.TabIndex = 0;
+            // 
+            // fieldType
+            // 
+            fieldType.Caption = "Type";
+            fieldType.Dock = DockStyle.Top;
+            fieldType.Location = new Point(0, 76);
+            fieldType.Margin = new Padding(0, 0, 0, 16);
+            fieldType.Name = "fieldType";
+            fieldType.Size = new Size(372, 60);
+            fieldType.TabIndex = 1;
+            fieldType.Input = cbType;
             // 
             // cbType
             // 
-            cbType.Dock = DockStyle.Fill;
-            cbType.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cbType.FormattingEnabled = true;
-            cbType.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
-            cbType.Location = new Point(3, 73);
+            cbType.Location = new Point(0, 0);
+            cbType.Margin = new Padding(0);
             cbType.Name = "cbType";
-            cbType.Size = new Size(367, 25);
-            cbType.TabIndex = 5;
+            cbType.Size = new Size(372, 40);
+            cbType.TabIndex = 0;
+            cbType.Items.AddRange(new object[] { "INCOME", "EXPENSE" });
+            // 
+            // fieldEmoji
+            // 
+            fieldEmoji.Caption = "Emoji";
+            fieldEmoji.Dock = DockStyle.Top;
+            fieldEmoji.Hint = "Click to browse or type an emoji.";
+            fieldEmoji.Location = new Point(0, 152);
+            fieldEmoji.Margin = new Padding(0, 0, 0, 16);
+            fieldEmoji.Name = "fieldEmoji";
+            fieldEmoji.Size = new Size(372, 80);
+            fieldEmoji.TabIndex = 2;
+            fieldEmoji.Input = txtEmoji;
+            // 
+            // txtEmoji
+            // 
+            txtEmoji.Location = new Point(0, 0);
+            txtEmoji.Margin = new Padding(0);
+            txtEmoji.Name = "txtEmoji";
+            txtEmoji.Placeholder = "Click to choose an emoji";
+            txtEmoji.Size = new Size(372, 40);
+            txtEmoji.TabIndex = 0;
+            txtEmoji.Click += txtEmoji_Click;
+            // 
+            // fieldDescription
+            // 
+            fieldDescription.Caption = "Description";
+            fieldDescription.Dock = DockStyle.Top;
+            fieldDescription.Location = new Point(0, 248);
+            fieldDescription.Margin = new Padding(0);
+            fieldDescription.Name = "fieldDescription";
+            fieldDescription.Size = new Size(372, 116);
+            fieldDescription.TabIndex = 3;
+            fieldDescription.Input = txtDescription;
+            txtDescription.Height = 96;
+            fieldDescription.SyncInputHeight();
+            // 
+            // txtDescription
+            // 
+            txtDescription.Location = new Point(0, 0);
+            txtDescription.Margin = new Padding(0);
+            txtDescription.Multiline = true;
+            txtDescription.Placeholder = "Optional notes";
+            txtDescription.Size = new Size(372, 96);
+            txtDescription.TabIndex = 0;
+            // 
+            // footer
+            // 
+            footer.ColumnCount = 3;
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            footer.Controls.Add(btnCancel, 1, 0);
+            footer.Controls.Add(btnSubmit, 2, 0);
+            footer.Dock = DockStyle.Fill;
+            footer.Location = new Point(0, 450);
+            footer.Margin = new Padding(0);
+            footer.Name = "footer";
+            footer.RowCount = 1;
+            footer.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            footer.Size = new Size(372, 50);
+            footer.TabIndex = 2;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Anchor = AnchorStyles.Right;
+            btnCancel.BackColor = Color.Transparent;
+            btnCancel.Caption = "Cancel";
+            btnCancel.Location = new Point(152, 6);
+            btnCancel.Margin = new Padding(0, 0, 12, 0);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(96, 38);
+            btnCancel.TabIndex = 0;
+            btnCancel.Text = "Cancel";
+            btnCancel.Variant = Views.UI.Controls.AppButtonVariant.Secondary;
+            btnCancel.Click += button1_Click;
+            // 
+            // btnSubmit
+            // 
+            btnSubmit.Anchor = AnchorStyles.Right;
+            btnSubmit.BackColor = Color.Transparent;
+            btnSubmit.Caption = "Create";
+            btnSubmit.Location = new Point(260, 6);
+            btnSubmit.Margin = new Padding(0);
+            btnSubmit.Name = "btnSubmit";
+            btnSubmit.Size = new Size(112, 38);
+            btnSubmit.TabIndex = 1;
+            btnSubmit.Text = "Create";
+            btnSubmit.Click += button2_Click;
             // 
             // CategoryDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(395, 388);
-            Controls.Add(tableLayoutPanel1);
+            BackColor = Colors.Surface;
+            ClientSize = new Size(420, 548);
+            Controls.Add(root);
             FormBorderStyle = FormBorderStyle.None;
             Name = "CategoryDialog";
-            Padding = new Padding(8);
+            Padding = new Padding(24);
             StartPosition = FormStartPosition.CenterParent;
             Text = "Category Dialog";
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
+            root.ResumeLayout(false);
+            fields.ResumeLayout(false);
+            footer.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel root;
         private Controls.Heading heading1;
-        private Panel panel1;
-        private TableLayoutPanel tableLayoutPanel2;
-        private Button btnSubmit;
-        private Button btnCancel;
-        private Panel panel2;
-        private TableLayoutPanel tableLayoutPanel3;
-        private TextBox txtDescription;
-        private Label label2;
-        private Label label1;
-        private TextBox txtCategoryName;
-        private Label label3;
-        private ComboBox cbType;
+        private TableLayoutPanel fields;
+        private Views.UI.Controls.FormField fieldName;
+        private Views.UI.Controls.AppTextField txtCategoryName;
+        private Views.UI.Controls.FormField fieldType;
+        private Views.UI.Controls.AppComboField cbType;
+        private Views.UI.Controls.FormField fieldEmoji;
+        private Views.UI.Controls.EmojiInput txtEmoji;
+        private Views.UI.Controls.FormField fieldDescription;
+        private Views.UI.Controls.AppTextField txtDescription;
+        private TableLayoutPanel footer;
+        private Views.UI.Controls.AppButton btnCancel;
+        private Views.UI.Controls.AppButton btnSubmit;
     }
 }
