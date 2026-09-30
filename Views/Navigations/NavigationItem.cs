@@ -9,6 +9,8 @@ namespace PersonalExpenseTracker.Views.Navigations
         Dashboard,
         Setting,
         Category,
-        Transaction
+        Transaction,
+        SavingGoal,
+        Report
     }
 }

@@ -10,18 +10,18 @@ namespace PersonalExpenseTracker.Mapper
             return new Category
             {
                 Name = dto.Name,
-                Description = dto.Description,
+                Description = dto.Description ?? string.Empty,
                 Type = dto.Type,
-                Emoji = dto.Emoji
+                Emoji = dto.Emoji ?? string.Empty
             };
         }
 
         public static Category ToCategory(UpdateCategoryDto dto, Category existingCategory)
         {
             existingCategory.Name = dto.Name;
-            existingCategory.Description = dto.Description;
+            existingCategory.Description = dto.Description ?? string.Empty;
             existingCategory.Type = dto.Type;
-            existingCategory.Emoji = dto.Emoji;
+            existingCategory.Emoji = dto.Emoji ?? string.Empty;
             return existingCategory;
         }
 
@@ -31,9 +31,9 @@ namespace PersonalExpenseTracker.Mapper
             {
                 Id = category.Id,
                 Name = category.Name,
-                Description = category.Description,
+                Description = category.Description ?? string.Empty,
                 Type = category.Type,
-                Emoji = category.Emoji,
+                Emoji = category.Emoji ?? string.Empty,
                 CreatedAt = category.CreatedAt
             };
         }

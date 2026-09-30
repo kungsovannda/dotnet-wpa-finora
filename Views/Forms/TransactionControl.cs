@@ -3,9 +3,11 @@ using PersonalExpenseTracker.Domains;
 using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Dashboard;
 using PersonalExpenseTracker.Features.Transactions;
+using PersonalExpenseTracker.Utils;
 using PersonalExpenseTracker.Views.Data;
 using PersonalExpenseTracker.Views.UI;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace PersonalExpenseTracker.Views.Forms
@@ -20,6 +22,21 @@ namespace PersonalExpenseTracker.Views.Forms
         /// <summary>Guards against a refresh that somehow triggers another one.</summary>
         private bool _refreshing;
 
+        /// <summary>
+        /// Set while the filter bar is being populated, so filling a combo in
+        /// code is not mistaken for the user changing it.
+        /// </summary>
+        private bool _populatingFilters;
+
+        /// <summary>Suppressed while a debounce timer is pending.</summary>
+        private bool _filtering;
+
+        /// <summary>
+        /// Typing is debounced so a search does not fire a query per keystroke.
+        /// Created on first use and disposed with the page.
+        /// </summary>
+        private System.Windows.Forms.Timer? SearchDebounce;
+
         public TransactionControl(
             IServiceProvider serviceProvider,
             TransactionController controller,
@@ -32,6 +49,7 @@ namespace PersonalExpenseTracker.Views.Forms
             this.serviceProvider = serviceProvider;
             InitializeComponent();
             ApplyTheming();
+            PopulateFilters();
 
             // The grid shows category names, so a category rename invalidates it
             // just as much as a new transaction does.
@@ -46,6 +64,16 @@ namespace PersonalExpenseTracker.Views.Forms
         private void TransactionControl_Disposed(object? sender, EventArgs e)
         {
             _changes.Changed -= Changes_Changed;
+
+            // The timer outlives the page unless it is stopped and disposed, and
+            // it holds a reference back to this control.
+            if (SearchDebounce == null)
+                return;
+
+            SearchDebounce.Stop();
+            SearchDebounce.Tick -= SearchDebounce_Tick;
+            SearchDebounce.Dispose();
+            SearchDebounce = null;
         }
 
         /// <summary>
@@ -132,10 +160,144 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private void LoadTransaction()
         {
-            var transactions = _controller.GetAllTransactions();
+            var filter = BuildFilter();
+
+            // Only pay for a query when something is actually filtered: the
+            // unfiltered path stays a single fast read of every transaction.
+            var transactions = HasActiveFilter(filter)
+                ? _controller.SearchTransactions(filter)
+                : _controller.GetAllTransactions();
+
             dgv.DataSource = transactions;
             StyleDataGridView();
             UpdateEmptyState();
+        }
+
+        private void PopulateFilters()
+        {
+            _populatingFilters = true;
+            try
+            {
+                cbType.Items.Clear();
+                cbType.Items.Add("All types");
+                cbType.Items.Add(TransactionType.INCOME.ToString());
+                cbType.Items.Add(TransactionType.EXPENSE.ToString());
+                cbType.SelectedIndex = 0;
+
+                cbMethod.Items.Clear();
+                cbMethod.Items.Add("All methods");
+                foreach (var option in PaymentMethods.Options)
+                    cbMethod.Items.Add(option.Label);
+                cbMethod.SelectedIndex = 0;
+            }
+            finally
+            {
+                _populatingFilters = false;
+            }
+
+            txtSearch.TextChanged += TxtSearch_TextChanged;
+        }
+
+        private TransactionFilter BuildFilter()
+        {
+            var filter = new TransactionFilter();
+
+            string search = (txtSearch.Text ?? string.Empty).Trim();
+            if (search.Length > 0)
+                filter.Search = search;
+
+            if (cbType.SelectedIndex == 1)
+                filter.Type = TransactionType.INCOME;
+            else if (cbType.SelectedIndex == 2)
+                filter.Type = TransactionType.EXPENSE;
+
+            // Index 0 is the "All methods" placeholder, so the option at index
+            // n is the enum at index n - 1.
+            if (cbMethod.SelectedIndex > 0)
+                filter.PaymentMethod = PaymentMethods.Options[cbMethod.SelectedIndex - 1].Method;
+
+            filter.From = dtFrom.Value;
+            filter.To = dtTo.Value;
+
+            return filter;
+        }
+
+        private static bool HasActiveFilter(TransactionFilter filter)
+        {
+            return !string.IsNullOrEmpty(filter.Search)
+                || filter.Type.HasValue
+                || filter.PaymentMethod.HasValue
+                || filter.From.HasValue
+                || filter.To.HasValue;
+        }
+
+        private void ApplyFilter()
+        {
+            if (_populatingFilters || _refreshing || IsDisposed)
+                return;
+
+            _filtering = true;
+            try
+            {
+                LoadTransaction();
+            }
+            finally
+            {
+                _filtering = false;
+            }
+        }
+
+        private void TxtSearch_TextChanged(object? sender, EventArgs e)
+        {
+            if (_populatingFilters)
+                return;
+
+            SearchDebounce?.Stop();
+            SearchDebounce ??= new System.Windows.Forms.Timer { Interval = 250 };
+            SearchDebounce.Tick -= SearchDebounce_Tick;
+            SearchDebounce.Tick += SearchDebounce_Tick;
+            SearchDebounce.Start();
+        }
+
+        private void SearchDebounce_Tick(object? sender, EventArgs e)
+        {
+            SearchDebounce?.Stop();
+            ApplyFilter();
+        }
+
+        private void CbFilter_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_filtering)
+                return;
+
+            ApplyFilter();
+        }
+
+        private void DtFilter_ValueChanged(object? sender, EventArgs e)
+        {
+            if (_filtering)
+                return;
+
+            ApplyFilter();
+        }
+
+        private void btnClearFilters_Click(object? sender, EventArgs e)
+        {
+            _populatingFilters = true;
+            try
+            {
+                txtSearch.Text = string.Empty;
+                cbType.SelectedIndex = 0;
+                cbMethod.SelectedIndex = 0;
+                dtFrom.Clear();
+                dtTo.Clear();
+            }
+            finally
+            {
+                _populatingFilters = false;
+            }
+
+            ApplyFilter();
         }
 
         private void Dgv_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
@@ -167,25 +329,27 @@ namespace PersonalExpenseTracker.Views.Forms
             Hide("Id");
             Hide("CategoryId");
             Hide("CreatedAt");
+            Hide("UpdatedAt");
+            Hide("Reference");
 
             if (Column("CategoryName") is { } category)
             {
                 category.HeaderText = "Category";
-                category.FillWeight = 26;
+                category.FillWeight = 24;
                 category.DisplayIndex = 0;
             }
 
             if (Column("Type") is { } type)
             {
                 type.HeaderText = "Type";
-                type.FillWeight = 14;
+                type.FillWeight = 12;
                 type.DisplayIndex = 1;
             }
 
             if (Column("Amount") is { } amount)
             {
                 amount.HeaderText = "Amount";
-                amount.FillWeight = 18;
+                amount.FillWeight = 16;
                 amount.DisplayIndex = 2;
                 amount.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 amount.DefaultCellStyle.Font = Typography.BodyMedium;
@@ -194,15 +358,29 @@ namespace PersonalExpenseTracker.Views.Forms
             if (Column("Date") is { } date)
             {
                 date.HeaderText = "Date";
-                date.FillWeight = 18;
+                date.FillWeight = 16;
                 date.DisplayIndex = 3;
             }
 
             if (Column("Description") is { } description)
             {
                 description.HeaderText = "Description";
-                description.FillWeight = 24;
+                description.FillWeight = 22;
                 description.DisplayIndex = 4;
+            }
+
+            if (Column("PaymentMethod") is { } method)
+            {
+                method.HeaderText = "Method";
+                method.FillWeight = 14;
+                method.DisplayIndex = 5;
+            }
+
+            if (Column("Merchant") is { } merchant)
+            {
+                merchant.HeaderText = "Merchant";
+                merchant.FillWeight = 16;
+                merchant.DisplayIndex = 6;
             }
         }
 
@@ -250,6 +428,19 @@ namespace PersonalExpenseTracker.Views.Forms
                 case "Description":
                     e.CellStyle.ForeColor = Colors.MutedText;
                     break;
+
+                case "PaymentMethod":
+                    e.Value = PaymentMethods.Label(item.PaymentMethod);
+                    e.CellStyle.ForeColor = Colors.SecondaryText;
+                    e.FormattingApplied = true;
+                    break;
+
+                case "Merchant":
+                    // An unnamed merchant is normal, not a gap in the data.
+                    e.Value = string.IsNullOrWhiteSpace(item.Merchant) ? "-" : item.Merchant;
+                    e.CellStyle.ForeColor = Colors.SecondaryText;
+                    e.FormattingApplied = true;
+                    break;
             }
         }
 
@@ -258,6 +449,19 @@ namespace PersonalExpenseTracker.Views.Forms
             bool hasItems = dgv.Rows.Count > 0;
             dgv.Visible = hasItems;
             empty.Visible = !hasItems;
+
+            if (hasItems)
+                return;
+
+            // "Nothing recorded" and "nothing matched" need different wording,
+            // otherwise a filter that excluded everything reads like data loss.
+            bool filtered = HasActiveFilter(BuildFilter());
+
+            empty.Title = filtered ? "No matching transactions" : "No transactions yet";
+            empty.Description = filtered
+                ? "No transaction matches the current search and filters."
+                : "Record your first income or expense and it will show up here.";
+            empty.ActionText = filtered ? string.Empty : "Add Transaction";
         }
 
         private void LoadSummary()

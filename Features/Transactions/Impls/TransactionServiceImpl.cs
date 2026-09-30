@@ -63,6 +63,12 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
             return transactions.Select(t => TransactionMapper.ToTransactionResponseDto(t)).ToList();
         }
 
+        public List<TransactionResponseDto> SearchTransactions(TransactionFilter filter)
+        {
+            var transactions = _transactionRepository.Find(filter ?? new TransactionFilter());
+            return transactions.Select(t => TransactionMapper.ToTransactionResponseDto(t)).ToList();
+        }
+
         public TransactionResponseDto UpdateTransaction(UpdateTransactionDto dto)
         {
             ValidateUpdateTransactionDto(dto);
@@ -79,6 +85,11 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
             }
 
             var existingTransaction = _transactionRepository.FindById(dto.Id);
+            if (existingTransaction == null)
+            {
+                throw new TransactionNotFoundException(dto.Id);
+            }
+
             var updatedTransaction = TransactionMapper.ToTransaction(dto, existingTransaction, category);
             _transactionRepository.Update(updatedTransaction);
 
@@ -106,6 +117,16 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
             {
                 throw new ValidationException("Transaction description must be provided and not exceed 255 characters.");
             }
+
+            if (!string.IsNullOrWhiteSpace(dto.Merchant) && dto.Merchant.Length > 120)
+            {
+                throw new ValidationException("Merchant cannot exceed 120 characters.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Reference) && dto.Reference.Length > 64)
+            {
+                throw new ValidationException("Reference cannot exceed 64 characters.");
+            }
         }
 
         private void ValidateUpdateTransactionDto(UpdateTransactionDto dto)
@@ -118,6 +139,16 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
             if (string.IsNullOrWhiteSpace(dto.Description) || dto.Description.Length > 255)
             {
                 throw new ValidationException("Transaction description must be provided and not exceed 255 characters.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Merchant) && dto.Merchant.Length > 120)
+            {
+                throw new ValidationException("Merchant cannot exceed 120 characters.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Reference) && dto.Reference.Length > 64)
+            {
+                throw new ValidationException("Reference cannot exceed 64 characters.");
             }
         }
     }

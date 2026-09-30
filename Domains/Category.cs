@@ -8,14 +8,17 @@ namespace PersonalExpenseTracker.Domains
     {
         public long Id { get; set; }
 
-        public string Name { get; set; }
+        /// <summary>Owning account, stamped on create and cleared with the user.</summary>
+        public long? UserId { get; set; }
 
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
 
         public TransactionType Type { get; set; }
 
         /// <summary>Emoji shown on the category card (presentation value).</summary>
-        public string Emoji { get; set; }
+        public string Emoji { get; set; } = string.Empty;
 
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 

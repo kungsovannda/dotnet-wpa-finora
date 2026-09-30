@@ -9,5 +9,8 @@ namespace PersonalExpenseTracker.Features.Dashboard
         DashboardSummaryDto GetDashboardSummary();
 
         List<TransactionResponseDto> GetRecentTransactions(int limit = 10);
+
+        /// <summary>Headline saving-goal figures, reused from the goals service.</summary>
+        SavingGoalOverviewDto GetSavingsOverview();
     }
 }

@@ -67,6 +67,11 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
                 throw new DuplicateCategoryException(dto.Name);
             }
 
+            if (existingCategory == null)
+            {
+                throw new CategoryNotFoundException(dto.Id);
+            }
+
             var updatedCategory = CategoryMapper.ToCategory(dto, existingCategory);
             _repository.Update(updatedCategory);
 
@@ -78,6 +83,18 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
             if (!_repository.ExistsById(id))
             {
                 throw new CategoryNotFoundException(id);
+            }
+
+            // Deleting a category that still has transactions would take real
+            // financial history with it, so the category is kept until it is
+            // empty. The user is told how many records are in the way rather
+            // than being offered a silent cascade.
+            int inUse = _repository.CountTransactions(id);
+            if (inUse > 0)
+            {
+                throw new ValidationException(inUse == 1
+                    ? "This category still has 1 transaction. Move or delete it before removing the category."
+                    : $"This category still has {inUse} transactions. Move or delete them before removing the category.");
             }
 
             _repository.Delete(id);

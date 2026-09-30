@@ -14,6 +14,9 @@ namespace PersonalExpenseTracker.Features.Transactions
 
         List<TransactionResponseDto> GetTransactionsByCategory(long categoryId);
 
+        /// <summary>Search, filter and sort, evaluated in the database.</summary>
+        List<TransactionResponseDto> SearchTransactions(TransactionFilter filter);
+
         TransactionResponseDto UpdateTransaction(UpdateTransactionDto dto);
 
         void DeleteTransaction(long id);
