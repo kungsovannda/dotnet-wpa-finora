@@ -102,18 +102,31 @@ namespace PersonalExpenseTracker.Views.Forms
             while (list.Controls.Count > 0)
                 list.Controls[0].Dispose();
 
+            // The rows are rebuilt from scratch, otherwise every refresh would
+            // leave the empty rows of the previous list behind.
+            list.RowStyles.Clear();
+
             // One row per goal, in a single percent column so every card takes the
             // full width of the page.
+            int pitch = Theme.Scaled(SavingGoalCard.RowPitch, Theme.ScaleOf(this));
             for (int i = 0; i < goals.Count; i++)
             {
                 var card = new SavingGoalCard();
                 card.Bind(goals[i]);
                 card.ActionRequested += Card_ActionRequested;
-                list.RowStyles.Add(new RowStyle(SizeType.Absolute, Theme.Scaled(SavingGoalCard.CardHeight, 1f)));
+                list.RowStyles.Add(new RowStyle(SizeType.Absolute, pitch));
                 list.Controls.Add(card, 0, i);
             }
 
-            list.ResumeLayout();
+            // The list is exactly as tall as its rows, so the page - which is the
+            // scrolling host - decides whether a scrollbar is needed. A list that
+            // scrolled itself would hand every card a width taken from a stale
+            // scroll extent, and the row would end past the edge of the page.
+            int height = goals.Count * pitch;
+            if (list.Height != height)
+                list.Height = height;
+
+            list.ResumeLayout(true);
 
             bool hasItems = goals.Count > 0;
             list.Visible = hasItems;

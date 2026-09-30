@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using PersonalExpenseTracker.Domains;
 using PersonalExpenseTracker.Dtos;
@@ -30,38 +31,56 @@ namespace PersonalExpenseTracker.Views.UI.Controls
     }
 
     /// <summary>
-    /// Presentation-only card for the Saving Goals page: one goal per full-width
-    /// row, with the identity on the left, the money in the middle and the
-    /// progress bar taking whatever room is left. Everything it shows is pushed
-    /// in from the response DTO, and the only thing it emits is which affordance
-    /// the user activated. All decisions - progress, remaining amount, whether a
-    /// goal is overdue - arrive already made by the domain.
+    /// Presentation-only card for the Saving Goals page. One goal per full-width
+    /// row, sized to read as a line in a list rather than a panel.
+    /// <para>
+    /// The row is three blocks on one optical centre line: a small identity block
+    /// on the left (emoji, name, one quiet line of metadata), a thin progress line
+    /// that fills the width that is left, and the actions at the right. Every
+    /// block is placed by hand in <see cref="OnLayout"/> rather than by a
+    /// TableLayoutPanel, because every layout engine stretches a child to fill
+    /// its cell - and a stretched progress bar is a panel, not a line.
+    /// </para>
+    /// <para>
+    /// Everything it shows is pushed in from the response DTO, and the only thing
+    /// it emits is which affordance the user activated. All decisions - progress,
+    /// remaining amount, whether a goal is overdue - arrive already made by the
+    /// domain.
+    /// </para>
     /// </summary>
     public class SavingGoalCard : UserControl
     {
-        /// <summary>Row height in design pixels; the width comes from the host.</summary>
-        public const int CardHeight = 104;
+        /// <summary>Height of the painted card, in design pixels.</summary>
+        public const int CardHeight = 76;
 
-        private const int IdentityColumn = 320;
-        private const int AmountsColumn = 250;
-        private const int TrackThickness = 10;
-        private const int EmojiSize = 44;
+        /// <summary>Height the host gives a row: the card plus the gap below it.</summary>
+        public const int RowPitch = CardHeight + Theme.Space2;
 
-        private readonly TableLayoutPanel _layout;
-        private readonly Panel _identityText;
+        /// <summary>Width of the left-hand identity block, in design pixels.</summary>
+        public const int IdentityColumn = 268;
+
+        /// <summary>Gap between the identity block, the progress line and the actions.</summary>
+        public const int ColumnGap = Theme.Space4;
+
+        private const int TrackThickness = 6;
+        private const int EmojiSize = 34;
+        private const int MenuSize = 28;
+        private const int ActionGap = Theme.Space2;
+        private const int PadX = Theme.Space4;
+        private const int PadY = Theme.Space3;
+
         private readonly EmojiTile _emoji;
         private readonly IconButton _menu;
         private readonly Label _nameLabel;
-        private readonly Label _amountsLabel;
-        private readonly ProgressTrack _progress;
+        private readonly Label _metaLine;
         private readonly Label _percentLabel;
         private readonly Label _remainingLabel;
-        private readonly Label _targetLabel;
+        private readonly ProgressTrack _progress;
         private readonly TypeBadge _status;
         private readonly AppButton _contribute;
 
         private long _id;
-        private string _remainingText = string.Empty;
+        private string _amountsText = string.Empty;
         private string _targetText = string.Empty;
         private float _scale = 1f;
         private bool _hover;
@@ -80,7 +99,8 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             {
                 Glyph = Emoji.DefaultCategory,
                 EmojiSize = 21F,
-                Size = new Size(Theme.Scaled(EmojiSize, 1f), Theme.Scaled(EmojiSize, 1f))
+                Anchor = AnchorStyles.None,
+                BackColor = Color.Transparent
             };
             _emoji.MouseEnter += (_, _) => SetHover(true);
             _emoji.MouseLeave += (_, _) => SetHover(false);
@@ -89,7 +109,7 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             {
                 Icon = Icons.More,
                 IconSize = Theme.IconSize,
-                Size = new Size(Theme.Scaled(28, 1f), Theme.Scaled(28, 1f)),
+                Anchor = AnchorStyles.None,
                 BackColor = Color.Transparent
             };
             _menu.Click += (_, _) => Raise(GoalAction.Menu);
@@ -98,81 +118,74 @@ namespace PersonalExpenseTracker.Views.UI.Controls
 
             _nameLabel = new Label
             {
-                Dock = DockStyle.Fill,
                 AutoEllipsis = true,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Font = Typography.HeadingSmall,
+                Font = Typography.BodyLarge,
                 ForeColor = Colors.Foreground,
                 BackColor = Color.Transparent,
                 Text = "Saving goal",
+                Anchor = AnchorStyles.None,
+                Margin = Padding.Empty
+            };
+
+            // "$1,200 of $3,000  ·  Target 12 Mar 2027" - the one quiet line of
+            // metadata under the name. Both halves are optional, so the line drops
+            // whatever the goal does not have.
+            _metaLine = new Label
+            {
+                AutoEllipsis = true,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = Typography.Caption,
+                ForeColor = Colors.MutedText,
+                BackColor = Color.Transparent,
+                Text = string.Empty,
+                Anchor = AnchorStyles.None,
                 Margin = Padding.Empty
             };
 
             _status = new TypeBadge
             {
                 Text = "In Progress",
-                // Sized by hand in OnLayout: the badge text changes width with the
-                // status, and a docked or auto-sized badge inside a percent cell
-                // would drift to the top instead of staying on the text baseline.
+                // Placed by hand in OnLayout: the badge text changes width with
+                // the status, and only the name knows how much room the pill can
+                // have without pushing the metadata out of the column.
                 AutoSize = false,
+                Anchor = AnchorStyles.None,
                 Margin = Padding.Empty
-            };
-
-            _amountsLabel = new Label
-            {
-                Dock = DockStyle.Fill,
-                AutoEllipsis = true,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Font = Typography.Amount,
-                ForeColor = Colors.Foreground,
-                BackColor = Color.Transparent,
-                Text = "$0 of $0",
-                Margin = Padding.Empty
-            };
-
-            _targetLabel = new Label
-            {
-                Dock = DockStyle.Fill,
-                AutoEllipsis = true,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Font = Typography.BodySmall,
-                ForeColor = Colors.MutedText,
-                BackColor = Color.Transparent,
-                Text = string.Empty,
-                Margin = new Padding(0, 0, 0, 0)
             };
 
             _progress = new ProgressTrack
             {
-                // Anchored rather than docked: the track spans the column but keeps
-                // a bar's proportions instead of stretching the full half-row.
-                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom,
-                Size = new Size(200, Theme.Scaled(TrackThickness, 1f)),
+                Anchor = AnchorStyles.None,
                 Margin = Padding.Empty
             };
 
+            // "42%" - flush with the end of the line, so the figure reads as the
+            // reading of the bar rather than as a caption floating mid-row.
             _percentLabel = new Label
             {
-                Dock = DockStyle.Fill,
                 AutoSize = false,
                 AutoEllipsis = true,
-                TextAlign = ContentAlignment.MiddleLeft,
+                TextAlign = ContentAlignment.MiddleRight,
                 Font = Typography.CaptionMedium,
                 ForeColor = Colors.MutedText,
                 BackColor = Color.Transparent,
                 Text = "0%",
+                Anchor = AnchorStyles.None,
                 Margin = Padding.Empty
             };
 
+            // "$1,800 to go" - kept on the same baseline as the percentage, at the
+            // far end of the line it belongs to.
             _remainingLabel = new Label
             {
-                Dock = DockStyle.Fill,
                 AutoEllipsis = true,
-                TextAlign = ContentAlignment.MiddleRight,
-                Font = Typography.BodySmall,
-                ForeColor = Colors.SecondaryText,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = Typography.Caption,
+                ForeColor = Colors.MutedText,
                 BackColor = Color.Transparent,
                 Text = string.Empty,
+                Anchor = AnchorStyles.None,
                 Margin = Padding.Empty
             };
 
@@ -182,6 +195,7 @@ namespace PersonalExpenseTracker.Views.UI.Controls
                 Variant = AppButtonVariant.Secondary,
                 Icon = Icons.Plus,
                 AutoWidth = true,
+                Anchor = AnchorStyles.None,
                 BackColor = Color.Transparent,
                 Margin = Padding.Empty
             };
@@ -189,121 +203,28 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             _contribute.MouseEnter += (_, _) => SetHover(true);
             _contribute.MouseLeave += (_, _) => SetHover(false);
 
-            // Identity: emoji on the left, then the name stacked over the status
-            // pill. The stack is laid out by hand in OnLayout so the name and the
-            // pill stay as a single centred block against the emoji.
-            _identityText = new Panel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Margin = Padding.Empty
-            };
+            Controls.Add(_emoji);
+            Controls.Add(_nameLabel);
+            Controls.Add(_metaLine);
+            Controls.Add(_status);
+            Controls.Add(_progress);
+            Controls.Add(_remainingLabel);
+            Controls.Add(_percentLabel);
+            Controls.Add(_contribute);
+            Controls.Add(_menu);
 
-            var identity = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 1,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, Theme.Space5, 0)
-            };
-            identity.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, EmojiSize + Theme.Space3));
-            identity.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            identity.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            identity.Controls.Add(_emoji, 0, 0);
-            identity.Controls.Add(_identityText, 1, 0);
-
-            // Money: the running total over the deadline.
-            var amounts = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 2,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, Theme.Space5, 0)
-            };
-            amounts.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            amounts.RowStyles.Add(new RowStyle(SizeType.Percent, 55F));
-            amounts.RowStyles.Add(new RowStyle(SizeType.Percent, 45F));
-            amounts.Controls.Add(_amountsLabel, 0, 0);
-            amounts.Controls.Add(_targetLabel, 0, 1);
-
-            // Progress: the track sits on the vertical centre of the row, with
-            // the percentage and the shortfall beneath it.
-            var progressLabels = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 1,
-                BackColor = Color.Transparent,
-                Margin = Padding.Empty
-            };
-            progressLabels.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            progressLabels.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            progressLabels.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            progressLabels.Controls.Add(_percentLabel, 0, 0);
-            progressLabels.Controls.Add(_remainingLabel, 1, 0);
-
-            var progress = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 2,
-                BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, Theme.Space5, 0)
-            };
-            progress.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            progress.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            progress.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            progress.Controls.Add(_progress, 0, 0);
-            progress.Controls.Add(progressLabels, 0, 1);
-
-            // Actions: a single right-aligned cluster, vertically centred.
-            var actions = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 1,
-                BackColor = Color.Transparent,
-                Margin = Padding.Empty
-            };
-            actions.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            actions.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            actions.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            actions.Controls.Add(_contribute, 0, 0);
-            actions.Controls.Add(_menu, 1, 0);
-
-            // Vertically centred in the row without giving up the caption-driven
-            // width the button sizes itself to.
-            _contribute.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            _menu.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-
-            _layout = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 4,
-                RowCount = 1,
-                BackColor = Color.Transparent,
-                Padding = new Padding(Theme.Space4, Theme.Space3, Theme.Space3, Theme.Space3),
-                Margin = new Padding(0, 0, 0, Theme.Space3)
-            };
-            _layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, IdentityColumn));
-            _layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, AmountsColumn));
-            _layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            _layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            _layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            _layout.Controls.Add(identity, 0, 0);
-            _layout.Controls.Add(amounts, 1, 0);
-            _layout.Controls.Add(progress, 2, 0);
-            _layout.Controls.Add(actions, 3, 0);
+            // A row, so it fills the list cell it is placed in. The margin is the
+            // gap between rows - the list owns the pitch, not the card.
+            Dock = DockStyle.Fill;
+            Margin = new Padding(0, 0, 0, Theme.Space2);
 
             // Applied after the children exist: it triggers OnLayout, which
             // positions them.
-            Size = new Size(Theme.Scaled(880, 1f), Theme.Scaled(CardHeight, 1f));
+            Size = new Size(880, CardHeight);
             Font = Typography.Body;
             Cursor = Cursors.Default;
 
-            Controls.Add(_layout);
+            PerformLayout();
         }
 
         public event EventHandler<GoalActionEventArgs>? ActionRequested;
@@ -356,20 +277,20 @@ namespace PersonalExpenseTracker.Views.UI.Controls
         [DefaultValue("")]
         public string AmountSummary
         {
-            get => _amountsLabel.Text;
-            set => _amountsLabel.Text = value ?? string.Empty;
+            get => _amountsText;
+            set
+            {
+                _amountsText = value ?? string.Empty;
+                RefreshMetaLine();
+            }
         }
 
         [Category("Appearance")]
         [DefaultValue("")]
         public string RemainingText
         {
-            get => _remainingText;
-            set
-            {
-                _remainingText = value ?? string.Empty;
-                _remainingLabel.Text = _remainingText;
-            }
+            get => _remainingLabel.Text;
+            set => _remainingLabel.Text = value ?? string.Empty;
         }
 
         [Category("Appearance")]
@@ -380,8 +301,26 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             set
             {
                 _targetText = value ?? string.Empty;
-                _targetLabel.Text = _targetText;
+                RefreshMetaLine();
             }
+        }
+
+        /// <summary>
+        /// Joins the money and the deadline into the single quiet line under the
+        /// name. Both halves are optional, so the line drops whatever the goal does
+        /// not have rather than leaving a dangling separator.
+        /// </summary>
+        private void RefreshMetaLine()
+        {
+            if (_metaLine == null)
+                return;
+
+            string[] parts = new[] { _amountsText, _targetText }
+                .Where(part => !string.IsNullOrWhiteSpace(part))
+                .ToArray();
+
+            _metaLine.Text = string.Join("  \u00b7  ", parts);
+            _metaLine.Visible = _metaLine.Text.Length > 0;
         }
 
         [Category("Appearance")]
@@ -432,7 +371,6 @@ namespace PersonalExpenseTracker.Views.UI.Controls
                 // A retired goal takes no more deposits.
                 _contribute.Visible = value != SavingGoalStatus.ARCHIVED;
                 PerformLayout();
-                _identityText?.PerformLayout();
             }
         }
 
@@ -460,56 +398,170 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             TargetText = goal.TargetDate.HasValue
                 ? "Target " + goal.TargetDate.Value.ToString("d MMM yyyy", CultureInfo.CurrentCulture)
                 : "No target date";
+
+            // The name, the pill and the percentage all changed width, so the
+            // hand-placed row has to be measured again.
+            PerformLayout();
         }
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
             _scale = Theme.ScaleOf(this);
-            ApplyTrackThickness();
         }
 
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            _layout?.PerformLayout();
-        }
-
-        private void ApplyTrackThickness()
-        {
-            if (_progress == null)
-                return;
-
-            float scale = _scale <= 0 ? Theme.ScaleOf(this) : _scale;
-            int thickness = Theme.Scaled(TrackThickness, scale);
-            if (_progress.Height == thickness)
-                return;
-
-            _progress.Height = thickness;
-            _progress.Invalidate();
+            PerformLayout();
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
         {
             base.OnLayout(levent);
-            if (_identityText == null || _nameLabel == null || _status == null)
+            if (_emoji == null || _contribute == null || _progress == null)
                 return;
 
             float scale = _scale <= 0 ? Theme.ScaleOf(this) : _scale;
-            int gap = Theme.Scaled(Theme.Space1, scale);
 
-            int nameHeight = Math.Max(_nameLabel.PreferredHeight, Theme.Scaled(20, scale));
-            var badge = _status.GetPreferredSize(Size.Empty);
-            int badgeHeight = Math.Max(badge.Height, Theme.Scaled(20, scale));
-            int badgeWidth = Math.Min(badge.Width, Math.Max(0, _identityText.ClientSize.Width));
+            int left = Theme.Scaled(PadX, scale);
+            int top = Theme.Scaled(PadY, scale);
+            int width = Math.Max(0, ClientSize.Width - left * 2);
+            int height = Math.Max(0, ClientSize.Height - top * 2);
 
-            // One centred block: name, gap, pill. Everything else in the row is
-            // anchored to the same optical middle.
-            int block = nameHeight + gap + badgeHeight;
-            int top = Math.Max(0, (_identityText.ClientSize.Height - block) / 2);
+            // The identity column is a fixed slice so the progress line always
+            // starts at the same place down the list and every bar is comparable;
+            // the line takes the room that is left over.
+            int identity = Math.Min(Theme.Scaled(IdentityColumn, scale), width);
+            int gap = Theme.Scaled(ColumnGap, scale);
+            int menu = Theme.Scaled(MenuSize, scale);
 
-            _nameLabel.SetBounds(0, top, _identityText.ClientSize.Width, nameHeight);
-            _status.SetBounds(0, top + nameHeight + gap, badgeWidth, badgeHeight);
+            // The button's slot is reserved whether or not the goal still takes
+            // contributions: a list whose bars start in one place but end in
+            // another reads as ragged, and an archived goal should not be the row
+            // that breaks the rhythm.
+            int actions = menu + _contribute.Width + Theme.Scaled(ActionGap, scale);
+
+            int lineLeft = left + identity + gap;
+            int lineWidth = Math.Max(0, left + width - actions - gap - lineLeft);
+
+            LayoutIdentity(left, top, identity, height, scale);
+            LayoutProgress(lineLeft, top, lineWidth, height, scale);
+            LayoutActions(left + width - actions, top, actions, height, menu, scale);
+        }
+
+        /// <summary>
+        /// The emoji tile and the two lines of text, centred on the row as one
+        /// block. The tile keeps its square: a stretched tile stops being a tile.
+        /// </summary>
+        private void LayoutIdentity(int left, int top, int width, int height, float scale)
+        {
+            int tile = Math.Min(Theme.Scaled(EmojiSize, scale), height);
+            _emoji.SetBounds(left, top + (height - tile) / 2, tile, tile);
+
+            int textLeft = left + tile + Theme.Scaled(Theme.Space3, scale);
+            int box = Math.Max(0, left + width - textLeft);
+
+            int nameHeight = Math.Max(_nameLabel.PreferredHeight, Theme.Scaled(18, scale));
+            int metaHeight = _metaLine.Visible
+                ? Math.Max(_metaLine.PreferredHeight, Theme.Scaled(14, scale))
+                : 0;
+            int metaGap = Theme.Scaled(Theme.Space1, scale);
+
+            // Measured with the metadata line and then without: a goal with no
+            // target date centres on its name alone instead of leaving a hole.
+            int block = nameHeight + (metaHeight > 0 ? metaGap + metaHeight : 0);
+            int blockTop = top + Math.Max(0, (height - block) / 2);
+
+            var pill = _status.GetPreferredSize(Size.Empty);
+            int pillGap = Theme.Scaled(Theme.Space2, scale);
+            int nameText = TextRenderer.MeasureText(
+                _nameLabel.Text, _nameLabel.Font, Size.Empty, TextFormatFlags.NoPadding).Width;
+
+            // The pill sits on the name's baseline, just past the end of the text.
+            // It only appears when the name keeps a readable length of its own, and
+            // the name gives up the room it needs so the two can never collide.
+            bool showPill = box > pill.Width + pillGap + Theme.Scaled(56, scale);
+            int nameWidth = showPill
+                ? Math.Max(0, Math.Min(nameText, box - pill.Width - pillGap))
+                : box;
+
+            _nameLabel.SetBounds(textLeft, blockTop, nameWidth, nameHeight);
+
+            if (metaHeight > 0)
+                _metaLine.SetBounds(textLeft, blockTop + nameHeight + metaGap, box, metaHeight);
+            else
+                _metaLine.SetBounds(textLeft, blockTop + nameHeight, box, 0);
+
+            _status.Visible = showPill;
+            if (showPill)
+            {
+                _status.SetBounds(
+                    textLeft + nameWidth + pillGap,
+                    blockTop + (nameHeight - pill.Height) / 2,
+                    pill.Width,
+                    pill.Height);
+            }
+        }
+
+        /// <summary>
+        /// The line spans the column at a fixed thickness with the shortfall and
+        /// the percentage on one caption row beneath it - the percentage flush
+        /// with the end of the line, the shortfall taking what is left. The stack
+        /// sits on the optical middle of the row, which is why it is placed by
+        /// hand: a table cell would grow the bar to fill whatever height it was
+        /// given, and a bar that stretches is not a line.
+        /// </summary>
+        private void LayoutProgress(int left, int top, int width, int height, float scale)
+        {
+            if (width <= 0)
+            {
+                _progress.SetBounds(left, top, 0, 0);
+                _percentLabel.SetBounds(left, top, 0, 0);
+                _remainingLabel.SetBounds(left, top, 0, 0);
+                return;
+            }
+
+            int thickness = Theme.Scaled(TrackThickness, scale);
+            int gap = Theme.Scaled(Theme.Space2, scale);
+            int captionHeight = Math.Max(
+                _percentLabel.PreferredHeight,
+                Theme.Scaled(14, scale));
+
+            int stack = thickness + gap + captionHeight;
+            int barTop = top + Math.Max(0, (height - stack) / 2);
+
+            _progress.SetBounds(left, barTop, width, thickness);
+
+            int captionTop = barTop + thickness + gap;
+            int percentWidth = Math.Min(_percentLabel.PreferredSize.Width, width);
+            _percentLabel.SetBounds(left + width - percentWidth, captionTop, percentWidth, captionHeight);
+
+            // The shortfall only earns its place once the column is wide enough to
+            // hold it without crowding the percentage.
+            int shortfall = Math.Max(0, width - percentWidth - Theme.Scaled(Theme.Space3, scale));
+            _remainingLabel.Visible = shortfall >= Theme.Scaled(48, scale);
+            _remainingLabel.SetBounds(left, captionTop, shortfall, captionHeight);
+        }
+
+        /// <summary>
+        /// The actions, vertically centred and pinned to the right edge. The slot
+        /// is laid out even when the button is hidden, so the row keeps its
+        /// rhythm.
+        /// </summary>
+        private void LayoutActions(int left, int top, int width, int height, int menu, float scale)
+        {
+            if (_contribute.Visible)
+            {
+                int button = Math.Min(_contribute.Height, height);
+                _contribute.SetBounds(
+                    left,
+                    top + (height - button) / 2,
+                    _contribute.Width,
+                    button);
+            }
+
+            _menu.SetBounds(left + width - menu, top + (height - menu) / 2, menu, menu);
         }
 
         private void SetHover(bool hover)

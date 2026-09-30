@@ -36,10 +36,11 @@ namespace PersonalExpenseTracker.Views.Forms
             btnAdd = new Views.UI.Controls.AppButton();
             contentHost = new Panel();
             empty = new Views.UI.Controls.EmptyState();
-            flow = new FlowLayoutPanel();
+            grid = new TableLayoutPanel();
             root.SuspendLayout();
             header.SuspendLayout();
             contentHost.SuspendLayout();
+            grid.SuspendLayout();
             SuspendLayout();
             // 
             // root
@@ -106,9 +107,13 @@ namespace PersonalExpenseTracker.Views.Forms
             // 
             // contentHost
             // 
+            // The host, not the grid, does the scrolling: the grid is exactly as
+            // tall as its cards, so a scrollbar appearing can never feed back into
+            // the column count and leave the grid in a layout that never settles.
+            contentHost.AutoScroll = true;
             contentHost.BackColor = Colors.Background;
             contentHost.Controls.Add(empty);
-            contentHost.Controls.Add(flow);
+            contentHost.Controls.Add(grid);
             contentHost.Dock = DockStyle.Fill;
             contentHost.Location = new Point(0, 68);
             contentHost.Margin = new Padding(0);
@@ -132,18 +137,21 @@ namespace PersonalExpenseTracker.Views.Forms
             empty.Visible = false;
             empty.Click += button1_Click;
             // 
-            // flow
+            // grid
             // 
-            flow.AutoScroll = true;
-            flow.BackColor = Colors.Background;
-            flow.Dock = DockStyle.Fill;
-            flow.Location = new Point(0, 0);
-            flow.Margin = new Padding(0);
-            flow.Name = "flow";
-            flow.Padding = new Padding(0, 4, 0, 0);
-            flow.Size = new Size(900, 552);
-            flow.TabIndex = 0;
-            flow.WrapContents = true;
+            // A responsive grid rather than a wrapping flow: the page decides how
+            // many columns fit and the cards take an exact share of the width, so
+            // the last column ends flush with the edge instead of leaving a gap.
+            grid.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grid.BackColor = Colors.Background;
+            grid.ColumnCount = 1;
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            grid.Location = new Point(0, 0);
+            grid.Margin = new Padding(0);
+            grid.Name = "grid";
+            grid.RowCount = 0;
+            grid.Size = new Size(900, 156);
+            grid.TabIndex = 0;
             // 
             // CategoryControl
             // 
@@ -157,6 +165,7 @@ namespace PersonalExpenseTracker.Views.Forms
             root.ResumeLayout(false);
             header.ResumeLayout(false);
             contentHost.ResumeLayout(false);
+            grid.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -167,7 +176,7 @@ namespace PersonalExpenseTracker.Views.Forms
         private Controls.Heading heading1;
         private Views.UI.Controls.AppButton btnAdd;
         private Panel contentHost;
-        private FlowLayoutPanel flow;
+        private TableLayoutPanel grid;
         private Views.UI.Controls.EmptyState empty;
     }
 }

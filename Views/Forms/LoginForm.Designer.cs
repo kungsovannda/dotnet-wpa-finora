@@ -39,6 +39,7 @@ namespace PersonalExpenseTracker.Views.Forms
             fieldPassword = new PersonalExpenseTracker.Views.UI.Controls.FormField();
             txtPassword = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
             btnLogin = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
+            btnSwitch = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             btnExit = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             lbError = new Label();
             lbFooter = new Label();
@@ -57,7 +58,7 @@ namespace PersonalExpenseTracker.Views.Forms
             root.Controls.Add(fieldPassword, 0, 4);
             root.Controls.Add(lbError, 0, 5);
             root.Controls.Add(btnLogin, 0, 6);
-            //root.Controls.Add(btnSwitch, 0, 7);
+            root.Controls.Add(btnSwitch, 0, 7);
             root.Controls.Add(btnExit, 0, 8);
             root.Controls.Add(lbFooter, 0, 9);
             root.Dock = DockStyle.Fill;
@@ -208,6 +209,24 @@ namespace PersonalExpenseTracker.Views.Forms
             btnLogin.Text = "Sign in";
             btnLogin.Click += btnLogin_Click;
             // 
+            // btnSwitch
+            // 
+            btnSwitch.AutoWidth = false;
+            btnSwitch.BackColor = Color.Transparent;
+            btnSwitch.Caption = "Create an account";
+            btnSwitch.Dock = DockStyle.Top;
+            btnSwitch.Font = new Font("Lexend SemiBold", 9.5F);
+            btnSwitch.ForeColor = Color.FromArgb(245, 158, 11);
+            btnSwitch.Location = new Point(0, 447);
+            btnSwitch.Margin = new Padding(0, 0, 0, 6);
+            btnSwitch.MinimumSize = new Size(80, 0);
+            btnSwitch.Name = "btnSwitch";
+            btnSwitch.Size = new Size(332, 32);
+            btnSwitch.TabIndex = 6;
+            btnSwitch.Text = "Create an account";
+            btnSwitch.Variant = UI.Controls.AppButtonVariant.Ghost;
+            btnSwitch.Click += btnSwitch_Click;
+            // 
             // btnExit
             // 
             btnExit.AutoWidth = false;
@@ -216,7 +235,7 @@ namespace PersonalExpenseTracker.Views.Forms
             btnExit.Dock = DockStyle.Top;
             btnExit.Font = new Font("Lexend SemiBold", 10.5F);
             btnExit.ForeColor = Color.FromArgb(82, 82, 91);
-            btnExit.Location = new Point(0, 489);
+            btnExit.Location = new Point(0, 485);
             btnExit.Margin = new Padding(0, 0, 0, 18);
             btnExit.MinimumSize = new Size(59, 0);
             btnExit.Name = "btnExit";

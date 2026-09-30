@@ -176,9 +176,13 @@ namespace PersonalExpenseTracker.Views.Forms
             cardActive.TabIndex = 2;
             cardActive.Title = "Active Goals";
             cardActive.Value = "0";
-            //
+            // 
             // contentHost
-            //
+            // 
+            // The host, not the list, does the scrolling: the list is exactly as
+            // tall as its rows, so a scrollbar appearing can never feed back into
+            // the column width and leave every card wider than the page.
+            contentHost.AutoScroll = true;
             contentHost.BackColor = Colors.Background;
             contentHost.Controls.Add(empty);
             contentHost.Controls.Add(list);
@@ -188,9 +192,9 @@ namespace PersonalExpenseTracker.Views.Forms
             contentHost.Name = "contentHost";
             contentHost.Size = new Size(900, 432);
             contentHost.TabIndex = 2;
-            //
+            // 
             // empty
-            //
+            // 
             empty.ActionText = "Add Goal";
             empty.BackColor = Colors.Background;
             empty.Description = "Create a goal for something you are saving towards and track it here.";
@@ -204,21 +208,20 @@ namespace PersonalExpenseTracker.Views.Forms
             empty.Text = "No saving goals yet";
             empty.Visible = false;
             empty.Click += btnAdd_Click;
-            //
+            // 
             // list
-            //
+            // 
             // One goal per full-width row: a single percent column lets each card
             // fill the width instead of being wrapped into a grid.
-            list.AutoScroll = true;
+            list.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             list.BackColor = Colors.Background;
             list.ColumnCount = 1;
             list.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            list.Dock = DockStyle.Fill;
             list.Location = new Point(0, 0);
             list.Margin = new Padding(0);
             list.Name = "list";
-            list.Padding = new Padding(0, 4, 0, 0);
-            list.Size = new Size(900, 432);
+            list.RowCount = 0;
+            list.Size = new Size(900, 84);
             list.TabIndex = 0;
             //
             // SavingGoalControl
