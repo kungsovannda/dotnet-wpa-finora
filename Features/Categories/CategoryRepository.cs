@@ -8,16 +8,22 @@ namespace PersonalExpenseTracker.Features.Categories
     {
         Category Save(Category category);
 
-        Category FindById(long id);
+        Category? FindById(long id);
 
         List<Category> FindAll();
 
-        Category Update(Category category);
+        Category? Update(Category category);
 
         void Delete(long id);
 
         bool ExistsByName(string name);
 
         bool ExistsById(long id);
+
+        /// <summary>
+        /// Transactions still filed under a category. A category that is in use
+        /// cannot be removed without taking financial history with it.
+        /// </summary>
+        int CountTransactions(long categoryId);
     }
 }

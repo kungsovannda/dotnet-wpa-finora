@@ -8,13 +8,13 @@ namespace PersonalExpenseTracker.Features.Authentication
     {
         User Save(User user);
 
-        User FindById(long id);
+        User? FindById(long id);
 
-        User FindByUsername(string username);
+        User? FindByUsername(string username);
 
         List<User> FindAll();
 
-        User Update(User user);
+        User? Update(User user);
 
         void Delete(long id);
 

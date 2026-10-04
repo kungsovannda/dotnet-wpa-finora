@@ -40,12 +40,20 @@ namespace PersonalExpenseTracker.Views.Forms
             cardIncome = new PersonalExpenseTracker.Views.Controls.StatCard();
             cardExpense = new PersonalExpenseTracker.Views.Controls.StatCard();
             cardTransaction = new PersonalExpenseTracker.Views.Controls.StatCard();
+            filterBar = new TableLayoutPanel();
+            txtSearch = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
+            cbType = new PersonalExpenseTracker.Views.UI.Controls.AppComboField();
+            cbMethod = new PersonalExpenseTracker.Views.UI.Controls.AppComboField();
+            dtFrom = new PersonalExpenseTracker.Views.UI.Controls.DateField();
+            dtTo = new PersonalExpenseTracker.Views.UI.Controls.DateField();
+            btnClearFilters = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             gridCard = new PersonalExpenseTracker.Views.UI.Controls.SectionCard();
             empty = new PersonalExpenseTracker.Views.UI.Controls.EmptyState();
             dgv = new DataGridView();
             root.SuspendLayout();
             header.SuspendLayout();
             statRow.SuspendLayout();
+            filterBar.SuspendLayout();
             gridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
             SuspendLayout();
@@ -57,14 +65,16 @@ namespace PersonalExpenseTracker.Views.Forms
             root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             root.Controls.Add(header, 0, 0);
             root.Controls.Add(statRow, 0, 1);
-            root.Controls.Add(gridCard, 0, 2);
+            root.Controls.Add(filterBar, 0, 2);
+            root.Controls.Add(gridCard, 0, 3);
             root.Dock = DockStyle.Fill;
             root.Location = new Point(0, 0);
             root.Margin = new Padding(0);
             root.Name = "root";
-            root.RowCount = 3;
+            root.RowCount = 4;
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 136F));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             root.Size = new Size(900, 620);
             root.TabIndex = 0;
@@ -189,11 +199,106 @@ namespace PersonalExpenseTracker.Views.Forms
             cardTransaction.Margin = new Padding(0, 4, 0, 12);
             cardTransaction.MinimumSize = new Size(150, 96);
             cardTransaction.Name = "cardTransaction";
-            cardTransaction.Size = new Size(225, 104);
+            cardTransaction.Size = new Size(209, 104);
             cardTransaction.Support = "";
             cardTransaction.TabIndex = 3;
             cardTransaction.Title = "Transactions";
             cardTransaction.Value = "0";
+            // 
+            // filterBar
+            // 
+            filterBar.BackColor = Color.FromArgb(248, 248, 247);
+            filterBar.ColumnCount = 6;
+            // The search box takes whatever is left; every other control is
+            // fixed, so a narrow window squeezes the search rather than
+            // dropping a filter on the floor.
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 132F));
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+            filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            filterBar.Controls.Add(txtSearch, 0, 0);
+            filterBar.Controls.Add(cbType, 1, 0);
+            filterBar.Controls.Add(cbMethod, 2, 0);
+            filterBar.Controls.Add(dtFrom, 3, 0);
+            filterBar.Controls.Add(dtTo, 4, 0);
+            filterBar.Controls.Add(btnClearFilters, 5, 0);
+            filterBar.Dock = DockStyle.Fill;
+            filterBar.Location = new Point(0, 204);
+            filterBar.Margin = new Padding(0);
+            filterBar.Name = "filterBar";
+            filterBar.RowCount = 1;
+            filterBar.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            filterBar.Size = new Size(900, 48);
+            filterBar.TabIndex = 2;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtSearch.LeadingIcon = "search";
+            txtSearch.Location = new Point(0, 4);
+            txtSearch.Margin = new Padding(0, 4, 12, 4);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Placeholder = "Search description, merchant or reference";
+            txtSearch.Size = new Size(282, 40);
+            txtSearch.TabIndex = 0;
+            // 
+            // cbType
+            // 
+            cbType.Dock = DockStyle.Fill;
+            cbType.Location = new Point(294, 4);
+            cbType.Margin = new Padding(0, 4, 12, 4);
+            cbType.Name = "cbType";
+            cbType.Size = new Size(120, 40);
+            cbType.TabIndex = 1;
+            cbType.SelectedIndexChanged += CbFilter_SelectedIndexChanged;
+            // 
+            // cbMethod
+            // 
+            cbMethod.Dock = DockStyle.Fill;
+            cbMethod.Location = new Point(426, 4);
+            cbMethod.Margin = new Padding(0, 4, 12, 4);
+            cbMethod.Name = "cbMethod";
+            cbMethod.Size = new Size(148, 40);
+            cbMethod.TabIndex = 2;
+            cbMethod.SelectedIndexChanged += CbFilter_SelectedIndexChanged;
+            // 
+            // dtFrom
+            // 
+            dtFrom.Dock = DockStyle.Fill;
+            dtFrom.Location = new Point(586, 4);
+            dtFrom.Margin = new Padding(0, 4, 12, 4);
+            dtFrom.Name = "dtFrom";
+            dtFrom.Placeholder = "From date";
+            dtFrom.Size = new Size(138, 40);
+            dtFrom.TabIndex = 3;
+            dtFrom.ValueChanged += DtFilter_ValueChanged;
+            // 
+            // dtTo
+            // 
+            dtTo.Dock = DockStyle.Fill;
+            dtTo.Location = new Point(736, 4);
+            dtTo.Margin = new Padding(0, 4, 12, 4);
+            dtTo.Name = "dtTo";
+            dtTo.Placeholder = "To date";
+            dtTo.Size = new Size(138, 40);
+            dtTo.TabIndex = 4;
+            dtTo.ValueChanged += DtFilter_ValueChanged;
+            // 
+            // btnClearFilters
+            // 
+            btnClearFilters.Anchor = AnchorStyles.Right;
+            btnClearFilters.BackColor = Color.Transparent;
+            btnClearFilters.Caption = "Clear";
+            btnClearFilters.Location = new Point(886, 6);
+            btnClearFilters.Margin = new Padding(0);
+            btnClearFilters.Name = "btnClearFilters";
+            btnClearFilters.Size = new Size(78, 38);
+            btnClearFilters.TabIndex = 5;
+            btnClearFilters.Text = "Clear";
+            btnClearFilters.Variant = Views.UI.Controls.AppButtonVariant.Secondary;
+            btnClearFilters.Click += btnClearFilters_Click;
             // 
             // gridCard
             // 
@@ -202,13 +307,13 @@ namespace PersonalExpenseTracker.Views.Forms
             gridCard.Controls.Add(empty);
             gridCard.Controls.Add(dgv);
             gridCard.Dock = DockStyle.Fill;
-            gridCard.Location = new Point(0, 192);
+            gridCard.Location = new Point(0, 256);
             gridCard.Margin = new Padding(0, 4, 0, 0);
             gridCard.Name = "gridCard";
             gridCard.Padding = new Padding(16);
-            gridCard.Size = new Size(900, 428);
+            gridCard.Size = new Size(900, 364);
             gridCard.Surface = Color.FromArgb(255, 255, 255);
-            gridCard.TabIndex = 2;
+            gridCard.TabIndex = 3;
             // 
             // empty
             // 
@@ -221,7 +326,7 @@ namespace PersonalExpenseTracker.Views.Forms
             empty.Location = new Point(16, 16);
             empty.Margin = new Padding(0);
             empty.Name = "empty";
-            empty.Size = new Size(868, 396);
+            empty.Size = new Size(868, 332);
             empty.TabIndex = 1;
             empty.Title = "No transactions yet";
             empty.Visible = false;
@@ -253,7 +358,7 @@ namespace PersonalExpenseTracker.Views.Forms
             dgv.RowHeadersVisible = false;
             dgv.RowTemplate.Height = 44;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv.Size = new Size(868, 396);
+            dgv.Size = new Size(868, 332);
             dgv.TabIndex = 0;
             // 
             // TransactionControl
@@ -269,6 +374,8 @@ namespace PersonalExpenseTracker.Views.Forms
             header.ResumeLayout(false);
             header.PerformLayout();
             statRow.ResumeLayout(false);
+            filterBar.ResumeLayout(false);
+            filterBar.PerformLayout();
             gridCard.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgv).EndInit();
             ResumeLayout(false);
@@ -285,6 +392,13 @@ namespace PersonalExpenseTracker.Views.Forms
         private Controls.StatCard cardIncome;
         private Controls.StatCard cardExpense;
         private Controls.StatCard cardTransaction;
+        private TableLayoutPanel filterBar;
+        private Views.UI.Controls.AppTextField txtSearch;
+        private Views.UI.Controls.AppComboField cbType;
+        private Views.UI.Controls.AppComboField cbMethod;
+        private Views.UI.Controls.DateField dtFrom;
+        private Views.UI.Controls.DateField dtTo;
+        private Views.UI.Controls.AppButton btnClearFilters;
         private Views.UI.Controls.SectionCard gridCard;
         private DataGridView dgv;
         private Views.UI.Controls.EmptyState empty;

@@ -26,6 +26,18 @@ namespace PersonalExpenseTracker.Views.UI.Controls
     /// </summary>
     public class CategoryCard : UserControl
     {
+        /// <summary>Card height in design pixels; the width comes from the grid.</summary>
+        public const int CardHeight = 156;
+
+        /// <summary>Narrowest a card is allowed to get before the grid drops a column.</summary>
+        public const int MinWidth = 232;
+
+        /// <summary>Widest a card is allowed to get before the grid adds a column.</summary>
+        public const int MaxWidth = 360;
+
+        /// <summary>Gap between two cards, horizontally and vertically.</summary>
+        public const int Gap = 8;
+
         private readonly TableLayoutPanel _layout;
         private readonly Panel _header;
         private readonly EmojiTile _emoji;
@@ -128,9 +140,12 @@ namespace PersonalExpenseTracker.Views.UI.Controls
             _layout.Controls.Add(_badge, 0, 3);
 
             // Apply sizing only after the children exist: it triggers OnLayout,
-            // which positions them.
-            Size = new Size(Theme.Scaled(236, 1f), Theme.Scaled(146, 1f));
-            Margin = new Padding(Theme.Space1);
+            // which positions them. The grid gives the card its real width and
+            // height; this is only the size it is born with, and Dock is what
+            // makes the grid's cell the size that counts.
+            Dock = DockStyle.Fill;
+            Size = new Size(MinWidth, CardHeight);
+            Margin = Padding.Empty;
             Font = Typography.Body;
             Cursor = Cursors.Default;
 

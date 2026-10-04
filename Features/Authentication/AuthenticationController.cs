@@ -25,5 +25,10 @@ namespace PersonalExpenseTracker.Features.Authentication
         {
             return _authenticationService.ValidateCredentials(username, password);
         }
+
+        public void ChangePassword(string username, string currentPassword, string newPassword)
+        {
+            _authenticationService.ChangePassword(username, currentPassword, newPassword);
+        }
     }
 }

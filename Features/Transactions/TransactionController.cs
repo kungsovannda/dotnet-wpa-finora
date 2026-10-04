@@ -33,6 +33,11 @@ namespace PersonalExpenseTracker.Features.Transactions
             return _transactionService.GetTransactionsByCategory(categoryId);
         }
 
+        public List<TransactionResponseDto> SearchTransactions(TransactionFilter filter)
+        {
+            return _transactionService.SearchTransactions(filter);
+        }
+
         public TransactionResponseDto UpdateTransaction(UpdateTransactionDto dto)
         {
             return _transactionService.UpdateTransaction(dto);

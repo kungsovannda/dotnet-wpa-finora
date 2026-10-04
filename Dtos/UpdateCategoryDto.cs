@@ -6,12 +6,14 @@ namespace PersonalExpenseTracker.Dtos
     {
         public long Id { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        public string Description { get; set; }
+        /// <summary>Optional. A blank description is stored as an empty string.</summary>
+        public string? Description { get; set; }
 
         public TransactionType Type { get; set; }
 
-        public string Emoji { get; set; }
+        /// <summary>Optional emoji shown on the category.</summary>
+        public string? Emoji { get; set; }
     }
 }

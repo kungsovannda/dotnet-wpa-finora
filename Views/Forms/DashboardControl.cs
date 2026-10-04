@@ -1,5 +1,6 @@
 ﻿using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Dashboard;
+using PersonalExpenseTracker.Features.SavingGoals;
 using PersonalExpenseTracker.Views.Data;
 using PersonalExpenseTracker.Views.UI;
 using PersonalExpenseTracker.Views.UI.Controls;
@@ -16,6 +17,7 @@ namespace PersonalExpenseTracker.Views.Forms
     {
         private readonly DashboardController _controller;
         private readonly ReportsController _reportsController;
+        private readonly SavingGoalController _savingGoalController;
         private readonly DataChangeNotifier _changes;
 
         /// <summary>Guards against a refresh that somehow triggers another one.</summary>
@@ -24,18 +26,21 @@ namespace PersonalExpenseTracker.Views.Forms
         public DashboardControl(
             DashboardController controller,
             ReportsController reportsController,
+            SavingGoalController savingGoalController,
             DataChangeNotifier changes)
         {
             InitializeComponent();
             _controller = controller;
             _reportsController = reportsController;
+            _savingGoalController = savingGoalController;
             _changes = changes;
-            recentList.ClientSizeChanged += (_, _) => ResizeRecentRows();
+            recentList.ClientSizeChanged += (_, _) => ResizeRows(recentList);
+            goalList.ClientSizeChanged += (_, _) => ResizeRows(goalList);
 
-            // The dashboard renders transactions, their categories and the
-            // monthly report, so any write can invalidate it. When it is not the
-            // page on screen it simply does not repaint; MainForm re-queries it
-            // on arrival instead.
+            // The dashboard renders transactions, their categories, the monthly
+            // report and the saving goals, so any write can invalidate it. When it
+            // is not the page on screen it simply does not repaint; MainForm
+            // re-queries it on arrival instead.
             _changes.Changed += Changes_Changed;
             Disposed += DashboardControl_Disposed;
         }
@@ -56,6 +61,7 @@ namespace PersonalExpenseTracker.Views.Forms
                 LoadSummary();
                 LoadChart();
                 LoadRecent();
+                LoadGoals();
             }
             finally
             {
@@ -68,8 +74,9 @@ namespace PersonalExpenseTracker.Views.Forms
             if (IsDisposed || Disposing)
                 return;
 
-            // Category renames show up in the recent-transaction rows too.
-            if (!e.Includes(DataChange.Transactions) && !e.Includes(DataChange.Categories))
+            // Category renames show up in the recent-transaction rows too, and a
+            // contribution moves the savings figures.
+            if (e.Change == DataChange.None)
                 return;
 
             if (Visible)
@@ -100,8 +107,16 @@ namespace PersonalExpenseTracker.Views.Forms
             cardExpense.Value = summary.TotalExpense.ToString("C");
             cardExpense.Support = "Money spent";
 
-            cardTransaction.Value = summary.TransactionCount.ToString(CultureInfo.CurrentCulture);
-            cardTransaction.Support = "Activity entries";
+            cardSavings.Value = string.Format(CultureInfo.CurrentCulture, "{0:0.#}%", summary.SavingsProgressPercentage);
+            cardSavings.Support = summary.ActiveGoalCount + summary.CompletedGoalCount == 0
+                ? "No goals set yet"
+                : string.Format(
+                    CultureInfo.CurrentCulture,
+                    "{0} of {1} across {2} goal{3}",
+                    summary.SavingsSavedTotal.ToString("C", CultureInfo.CurrentCulture),
+                    summary.SavingsTargetTotal.ToString("C", CultureInfo.CurrentCulture),
+                    summary.ActiveGoalCount + summary.CompletedGoalCount,
+                    summary.ActiveGoalCount + summary.CompletedGoalCount == 1 ? string.Empty : "s");
         }
 
         private void LoadChart()
@@ -153,7 +168,7 @@ namespace PersonalExpenseTracker.Views.Forms
                 recentList.Controls.Add(new TransactionRow
                 {
                     Item = item,
-                    Width = Math.Max(80, recentList.ClientSize.Width - 4)
+                    Width = RowWidth(recentList)
                 });
             }
             recentList.ResumeLayout();
@@ -163,10 +178,50 @@ namespace PersonalExpenseTracker.Views.Forms
             recentEmpty.Visible = !hasItems;
         }
 
-        private void ResizeRecentRows()
+        private void LoadGoals()
         {
-            int width = Math.Max(80, recentList.ClientSize.Width - 4);
-            foreach (Control child in recentList.Controls)
+            List<SavingGoalResponseDto> goals;
+            try
+            {
+                goals = _savingGoalController.GetAllSavingGoals();
+            }
+            catch
+            {
+                goals = new List<SavingGoalResponseDto>();
+            }
+
+            // Only the goals that are still being funded earn a bar; a finished
+            // goal is in the list already and saying so twice is noise.
+            var funded = goals
+                .Where(g => g.Status != Domains.SavingGoalStatus.ARCHIVED && g.Status != Domains.SavingGoalStatus.COMPLETED)
+                .OrderByDescending(g => g.ProgressPercentage)
+                .ToList();
+
+            goalList.SuspendLayout();
+            goalList.Controls.Clear();
+            foreach (var goal in funded)
+            {
+                var row = new GoalProgressRow
+                {
+                    Width = RowWidth(goalList),
+                    Height = 34
+                };
+                row.Bind(goal);
+                goalList.Controls.Add(row);
+            }
+            goalList.ResumeLayout();
+
+            bool hasItems = goals.Count > 0;
+            goalList.Visible = hasItems;
+            goalEmpty.Visible = !hasItems;
+        }
+
+        private static int RowWidth(FlowLayoutPanel host) => Math.Max(80, host.ClientSize.Width - 4);
+
+        private static void ResizeRows(FlowLayoutPanel host)
+        {
+            int width = RowWidth(host);
+            foreach (Control child in host.Controls)
             {
                 if (child.Width != width)
                     child.Width = width;

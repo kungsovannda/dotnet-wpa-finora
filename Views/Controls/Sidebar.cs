@@ -28,6 +28,8 @@ namespace PersonalExpenseTracker.Views.Controls
                 NavigationItem.Dashboard => btnDashboard,
                 NavigationItem.Transaction => btnTransaction,
                 NavigationItem.Category => btnCategory,
+                NavigationItem.SavingGoal => btnSavingGoal,
+                NavigationItem.Report => btnReport,
                 NavigationItem.Setting => btnSetting,
                 _ => btnDashboard
             };
@@ -37,7 +39,7 @@ namespace PersonalExpenseTracker.Views.Controls
 
         private void ResetAllButtons()
         {
-            foreach (var btn in new[] { btnDashboard, btnTransaction, btnCategory, btnSetting })
+            foreach (var btn in new[] { btnDashboard, btnTransaction, btnCategory, btnSavingGoal, btnReport, btnSetting })
             {
                 btn.Selected = false;
             }
@@ -65,6 +67,18 @@ namespace PersonalExpenseTracker.Views.Controls
         {
             UpdateActiveState(NavigationItem.Transaction);
             NavigationRequested?.Invoke(this, new NavigationEventArgs(NavigationItem.Transaction));
+        }
+
+        private void btnSavingGoal_Click(object sender, EventArgs e)
+        {
+            UpdateActiveState(NavigationItem.SavingGoal);
+            NavigationRequested?.Invoke(this, new NavigationEventArgs(NavigationItem.SavingGoal));
+        }
+
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            UpdateActiveState(NavigationItem.Report);
+            NavigationRequested?.Invoke(this, new NavigationEventArgs(NavigationItem.Report));
         }
     }
 }

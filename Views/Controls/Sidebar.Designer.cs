@@ -39,6 +39,8 @@ namespace PersonalExpenseTracker.Views.Controls
             btnDashboard = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
             btnTransaction = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
             btnCategory = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
+            btnSavingGoal = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
+            btnReport = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
             btnSetting = new PersonalExpenseTracker.Views.UI.Controls.NavItem();
             navSpacer = new Panel();
             edge = new Panel();
@@ -118,14 +120,18 @@ namespace PersonalExpenseTracker.Views.Controls
             nav.Controls.Add(btnDashboard, 0, 1);
             nav.Controls.Add(btnTransaction, 0, 2);
             nav.Controls.Add(btnCategory, 0, 3);
-            nav.Controls.Add(btnSetting, 0, 4);
-            nav.Controls.Add(navSpacer, 0, 5);
+            nav.Controls.Add(btnSavingGoal, 0, 4);
+            nav.Controls.Add(btnReport, 0, 5);
+            nav.Controls.Add(btnSetting, 0, 6);
+            nav.Controls.Add(navSpacer, 0, 7);
             nav.Dock = DockStyle.Fill;
             nav.Location = new Point(12, 4);
             nav.Margin = new Padding(0);
             nav.Name = "nav";
-            nav.RowCount = 6;
+            nav.RowCount = 8;
             nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             nav.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
@@ -189,6 +195,34 @@ namespace PersonalExpenseTracker.Views.Controls
             btnCategory.TabIndex = 3;
             btnCategory.Click += btnCategory_Click;
             // 
+            // btnSavingGoal
+            // 
+            btnSavingGoal.BackColor = Color.Transparent;
+            btnSavingGoal.Caption = "Saving Goals";
+            btnSavingGoal.Dock = DockStyle.Fill;
+            btnSavingGoal.Font = new Font("Lexend SemiBold", 10.5F);
+            btnSavingGoal.Icon = "sparkles";
+            btnSavingGoal.Location = new Point(0, 166);
+            btnSavingGoal.Margin = new Padding(0, 2, 0, 2);
+            btnSavingGoal.Name = "btnSavingGoal";
+            btnSavingGoal.Size = new Size(224, 40);
+            btnSavingGoal.TabIndex = 4;
+            btnSavingGoal.Click += btnSavingGoal_Click;
+            // 
+            // btnReport
+            // 
+            btnReport.BackColor = Color.Transparent;
+            btnReport.Caption = "Reports";
+            btnReport.Dock = DockStyle.Fill;
+            btnReport.Font = new Font("Lexend SemiBold", 10.5F);
+            btnReport.Icon = "reports";
+            btnReport.Location = new Point(0, 210);
+            btnReport.Margin = new Padding(0, 2, 0, 2);
+            btnReport.Name = "btnReport";
+            btnReport.Size = new Size(224, 40);
+            btnReport.TabIndex = 5;
+            btnReport.Click += btnReport_Click;
+            // 
             // btnSetting
             // 
             btnSetting.BackColor = Color.Transparent;
@@ -196,22 +230,22 @@ namespace PersonalExpenseTracker.Views.Controls
             btnSetting.Dock = DockStyle.Fill;
             btnSetting.Font = new Font("Lexend SemiBold", 10.5F);
             btnSetting.Icon = "settings";
-            btnSetting.Location = new Point(0, 166);
+            btnSetting.Location = new Point(0, 254);
             btnSetting.Margin = new Padding(0, 2, 0, 2);
             btnSetting.Name = "btnSetting";
             btnSetting.Size = new Size(224, 40);
-            btnSetting.TabIndex = 4;
+            btnSetting.TabIndex = 6;
             btnSetting.Click += btnSetting_Click;
             // 
             // navSpacer
             // 
             navSpacer.BackColor = Color.FromArgb(255, 255, 255);
             navSpacer.Dock = DockStyle.Fill;
-            navSpacer.Location = new Point(0, 208);
+            navSpacer.Location = new Point(0, 296);
             navSpacer.Margin = new Padding(0);
             navSpacer.Name = "navSpacer";
-            navSpacer.Size = new Size(224, 412);
-            navSpacer.TabIndex = 5;
+            navSpacer.Size = new Size(224, 324);
+            navSpacer.TabIndex = 7;
             // 
             // edge
             // 
@@ -251,6 +285,8 @@ namespace PersonalExpenseTracker.Views.Controls
         private Views.UI.Controls.NavItem btnDashboard;
         private Views.UI.Controls.NavItem btnTransaction;
         private Views.UI.Controls.NavItem btnCategory;
+        private Views.UI.Controls.NavItem btnSavingGoal;
+        private Views.UI.Controls.NavItem btnReport;
         private Views.UI.Controls.NavItem btnSetting;
         private Panel edge;
     }

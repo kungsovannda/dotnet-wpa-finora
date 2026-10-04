@@ -1,5 +1,8 @@
-﻿using PersonalExpenseTracker.Dtos;
+﻿using PersonalExpenseTracker.Domains;
+using PersonalExpenseTracker.Dtos;
 using PersonalExpenseTracker.Features.Categories;
+using PersonalExpenseTracker.Utils;
+using PersonalExpenseTracker.Views.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +33,13 @@ namespace PersonalExpenseTracker.Views.Forms
             var data = new CreateTransactionDto
             {
                 Amount = _amount,
-                Description = txtDescription.Text
+                Description = txtDescription.Text,
+                // An unset date field means "now", which is also what a brand new
+                // transaction normally is.
+                Date = dtDate.Value ?? DateTime.Now,
+                PaymentMethod = SelectedPaymentMethod(),
+                Reference = txtReference.Text,
+                Merchant = txtMerchant.Text
             };
 
             if (cbCategory.SelectedItem is CategoryResponseDto selectedCategory)
@@ -40,6 +49,13 @@ namespace PersonalExpenseTracker.Views.Forms
             }
 
             return data;
+        }
+
+        private PaymentMethod SelectedPaymentMethod()
+        {
+            return cbPaymentMethod.SelectedItem is PaymentMethodOption option
+                ? option.Method
+                : PaymentMethod.CASH;
         }
 
         private void TransactionDialog_Load(object sender, EventArgs e)
@@ -56,6 +72,12 @@ namespace PersonalExpenseTracker.Views.Forms
                 cbCategory.SelectedIndex = 0;
             }
 
+            cbPaymentMethod.DataSource = new BindingSource(PaymentMethods.Options, string.Empty);
+            cbPaymentMethod.DisplayMember = nameof(PaymentMethodOption.Label);
+            cbPaymentMethod.SelectedIndex = 0;
+
+            dtDate.Value = DateTime.Now;
+
             // The amount is the one value the user must supply, so start there.
             txtAmount.FocusInput();
         }
@@ -66,6 +88,19 @@ namespace PersonalExpenseTracker.Views.Forms
             // values away and leave the user to retype all of them.
             if (!TryReadAmount(out decimal amount))
                 return;
+
+            if (string.IsNullOrWhiteSpace(txtDescription.Text))
+            {
+                ShowError("Describe the transaction before saving.");
+                txtDescription.FocusInput();
+                return;
+            }
+
+            if (cbCategory.SelectedItem is null)
+            {
+                ShowError("Choose a category before saving.");
+                return;
+            }
 
             _amount = amount;
 
@@ -80,52 +115,10 @@ namespace PersonalExpenseTracker.Views.Forms
         /// </summary>
         private bool TryReadAmount(out decimal amount)
         {
-            string raw = (txtAmount.Text ?? string.Empty).Trim();
+            if (MoneyInput.TryRead(txtAmount, "an amount", out amount, out string error))
+                return true;
 
-            if (raw.Length == 0)
-                return RejectAmount("Enter an amount before saving.", out amount);
-
-            amount = ParseAmount(raw);
-
-            if (amount == 0m)
-            {
-                bool isANumber = decimal.TryParse(
-                    raw, NumberStyles.Currency, CultureInfo.CurrentCulture, out _);
-
-                return RejectAmount(
-                    isANumber
-                        ? "The amount must be greater than zero."
-                        : $"\"{raw}\" is not a valid amount.",
-                    out amount);
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Parses a typed amount, returning zero for anything unusable. Zero is
-        /// deliberately the failure value: it is the one figure the service
-        /// rejects anyway, so bad input can never become a valid transaction.
-        /// </summary>
-        private decimal ParseAmount(string raw)
-        {
-            raw = (raw ?? string.Empty).Trim();
-
-            if (raw.Length == 0)
-                return 0m;
-
-            bool parsed =
-                decimal.TryParse(raw, NumberStyles.Currency, CultureInfo.CurrentCulture, out decimal amount) ||
-                decimal.TryParse(raw, NumberStyles.Currency, CultureInfo.InvariantCulture, out amount);
-
-            return parsed && amount > 0m ? amount : 0m;
-        }
-
-        /// <summary>Reports an unusable amount and returns false for TryReadAmount.</summary>
-        private bool RejectAmount(string message, out decimal amount)
-        {
-            amount = 0m;
-            ShowError(message);
+            ShowError(error);
             txtAmount.FocusInput();
             return false;
         }

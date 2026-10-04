@@ -27,22 +27,24 @@ namespace PersonalExpenseTracker.Views.Forms
 
         public CreateCategoryDto GetData()
         {
-            var categoryDto = new CreateCategoryDto();
-            categoryDto.Name = txtCategoryName.Text;
-            categoryDto.Description = txtDescription.Text;
-            categoryDto.Type = Enum.Parse<TransactionType>(cbType.SelectedItem?.ToString()?.ToUpper() ?? string.Empty);
-            categoryDto.Emoji = Emoji.Normalize(txtEmoji.Glyph);
-            return categoryDto;
+            return new CreateCategoryDto
+            {
+                Name = txtCategoryName.Text,
+                Description = txtDescription.Text,
+                Type = Enum.Parse<TransactionType>(cbType.SelectedItem?.ToString()?.ToUpper() ?? string.Empty),
+                Emoji = Emoji.Normalize(txtEmoji.Glyph)
+            };
         }
 
         public UpdateCategoryDto GetUpdateData()
         {
-            var categoryDto = new UpdateCategoryDto();
-            categoryDto.Name = txtCategoryName.Text;
-            categoryDto.Description = txtDescription.Text;
-            categoryDto.Type = Enum.Parse<TransactionType>(cbType.SelectedItem?.ToString()?.ToUpper() ?? string.Empty);
-            categoryDto.Emoji = Emoji.Normalize(txtEmoji.Glyph);
-            return categoryDto;
+            return new UpdateCategoryDto
+            {
+                Name = txtCategoryName.Text,
+                Description = txtDescription.Text,
+                Type = Enum.Parse<TransactionType>(cbType.SelectedItem?.ToString()?.ToUpper() ?? string.Empty),
+                Emoji = Emoji.Normalize(txtEmoji.Glyph)
+            };
         }
 
         private void txtEmoji_Click(object? sender, EventArgs e)

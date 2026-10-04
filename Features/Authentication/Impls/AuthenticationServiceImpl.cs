@@ -1,6 +1,7 @@
 using System;
 using PersonalExpenseTracker.Domains;
 using PersonalExpenseTracker.Exceptions;
+using PersonalExpenseTracker.Utils;
 
 namespace PersonalExpenseTracker.Features.Authentication.Impls
 {
@@ -23,12 +24,26 @@ namespace PersonalExpenseTracker.Features.Authentication.Impls
                 throw new AuthenticationException("Invalid username or password.");
             }
 
-            if (!user.Password.Equals(password))
+            if (!Verify(user, password))
             {
                 throw new AuthenticationException("Invalid username or password.");
             }
 
             return user;
+        }
+
+
+        private bool Verify(User user, string password)
+        {
+            if (PasswordHasher.IsEncoded(user.Password))
+                return PasswordHasher.Verify(password, user.Password);
+
+            if (!string.Equals(user.Password, password, StringComparison.Ordinal))
+                return false;
+
+            user.Password = PasswordHasher.Hash(password);
+            _userRepository.Update(user);
+            return true;
         }
 
         public User Register(string username, string password, string firstName, string lastName, string email)
@@ -43,7 +58,7 @@ namespace PersonalExpenseTracker.Features.Authentication.Impls
             var newUser = new User
             {
                 Username = username,
-                Password = password,
+                Password = PasswordHasher.Hash(password),
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email
@@ -63,6 +78,38 @@ namespace PersonalExpenseTracker.Features.Authentication.Impls
             {
                 return false;
             }
+        }
+
+        public void ChangePassword(string username, string currentPassword, string newPassword)
+        {
+            ValidateLoginInput(username, currentPassword);
+
+            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+            {
+                throw new ValidationException("New password must be at least 6 characters long.");
+            }
+
+            var user = _userRepository.FindByUsername(username);
+            if (user == null)
+            {
+                throw new AuthenticationException("Invalid username or password.");
+            }
+
+            if (!Verify(user, currentPassword))
+            {
+                throw new AuthenticationException("Current password is incorrect.");
+            }
+
+            // Comparing the stored value is not enough: the current password and
+            // the new one may hash differently by chance, so the new one is checked
+            // against the plain text it was derived from.
+            if (string.Equals(currentPassword, newPassword, StringComparison.Ordinal))
+            {
+                throw new ValidationException("New password must be different from the current password.");
+            }
+
+            user.Password = PasswordHasher.Hash(newPassword);
+            _userRepository.Update(user);
         }
 
         private void ValidateLoginInput(string username, string password)
@@ -90,24 +137,27 @@ namespace PersonalExpenseTracker.Features.Authentication.Impls
                 throw new ValidationException("Password must be at least 6 characters long.");
             }
 
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length > 50)
+            if (!string.IsNullOrWhiteSpace(firstName) && firstName.Length > 50)
             {
-                throw new ValidationException("First name is required and cannot exceed 50 characters.");
+                throw new ValidationException("First name cannot exceed 50 characters.");
             }
 
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length > 50)
+            if (!string.IsNullOrWhiteSpace(lastName) && lastName.Length > 50)
             {
-                throw new ValidationException("Last name is required and cannot exceed 50 characters.");
+                throw new ValidationException("Last name cannot exceed 50 characters.");
             }
 
-            if (string.IsNullOrWhiteSpace(email) || email.Length > 100)
+            if (!string.IsNullOrWhiteSpace(email))
             {
-                throw new ValidationException("Email is required and cannot exceed 100 characters.");
-            }
+                if (email.Length > 100)
+                {
+                    throw new ValidationException("Email cannot exceed 100 characters.");
+                }
 
-            if (!email.Contains("@"))
-            {
-                throw new ValidationException("Email format is invalid.");
+                if (!email.Contains("@"))
+                {
+                    throw new ValidationException("Email format is invalid.");
+                }
             }
         }
     }

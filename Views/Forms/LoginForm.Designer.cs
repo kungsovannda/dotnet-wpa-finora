@@ -39,7 +39,9 @@ namespace PersonalExpenseTracker.Views.Forms
             fieldPassword = new PersonalExpenseTracker.Views.UI.Controls.FormField();
             txtPassword = new PersonalExpenseTracker.Views.UI.Controls.AppTextField();
             btnLogin = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
+            btnSwitch = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
             btnExit = new PersonalExpenseTracker.Views.UI.Controls.AppButton();
+            lbError = new Label();
             lbFooter = new Label();
             root.SuspendLayout();
             brandRow.SuspendLayout();
@@ -54,14 +56,16 @@ namespace PersonalExpenseTracker.Views.Forms
             root.Controls.Add(heading1, 0, 2);
             root.Controls.Add(fieldUsername, 0, 3);
             root.Controls.Add(fieldPassword, 0, 4);
-            root.Controls.Add(btnLogin, 0, 5);
-            root.Controls.Add(btnExit, 0, 6);
-            root.Controls.Add(lbFooter, 0, 7);
+            root.Controls.Add(lbError, 0, 5);
+            root.Controls.Add(btnLogin, 0, 6);
+            root.Controls.Add(btnSwitch, 0, 7);
+            root.Controls.Add(btnExit, 0, 8);
+            root.Controls.Add(lbFooter, 0, 9);
             root.Dock = DockStyle.Fill;
             root.Location = new Point(44, 0);
             root.Margin = new Padding(0);
             root.Name = "root";
-            root.RowCount = 9;
+            root.RowCount = 11;
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             root.RowStyles.Add(new RowStyle());
             root.RowStyles.Add(new RowStyle());
@@ -70,8 +74,9 @@ namespace PersonalExpenseTracker.Views.Forms
             root.RowStyles.Add(new RowStyle());
             root.RowStyles.Add(new RowStyle());
             root.RowStyles.Add(new RowStyle());
+            root.RowStyles.Add(new RowStyle());
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            root.Size = new Size(332, 560);
+            root.Size = new Size(332, 580);
             root.TabIndex = 0;
             // 
             // brandRow
@@ -81,7 +86,7 @@ namespace PersonalExpenseTracker.Views.Forms
             brandRow.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             brandRow.BackColor = Color.FromArgb(255, 255, 255);
             brandRow.Controls.Add(lbBrand);
-            brandRow.Location = new Point(106, 67);
+            brandRow.Location = new Point(106, 57);
             brandRow.Margin = new Padding(0, 0, 0, 20);
             brandRow.Name = "brandRow";
             brandRow.Size = new Size(119, 46);
@@ -108,7 +113,7 @@ namespace PersonalExpenseTracker.Views.Forms
             heading1.BackColor = Color.FromArgb(255, 255, 255);
             heading1.description = "Sign in to continue to your personal finance tracker.";
             heading1.Dock = DockStyle.Top;
-            heading1.Location = new Point(0, 133);
+            heading1.Location = new Point(0, 123);
             heading1.Margin = new Padding(0, 0, 0, 20);
             heading1.Name = "heading1";
             heading1.Size = new Size(332, 54);
@@ -172,6 +177,21 @@ namespace PersonalExpenseTracker.Views.Forms
             txtPassword.TabIndex = 0;
             txtPassword.TabStop = false;
             // 
+            // lbError
+            // 
+            lbError.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lbError.AutoSize = false;
+            lbError.BackColor = Color.FromArgb(255, 255, 255);
+            lbError.Font = new Font("Lexend", 9.5F);
+            lbError.ForeColor = Color.FromArgb(185, 28, 28);
+            lbError.Location = new Point(0, 331);
+            lbError.Margin = new Padding(0, 0, 0, 10);
+            lbError.Name = "lbError";
+            lbError.Size = new Size(332, 20);
+            lbError.TabIndex = 4;
+            lbError.TextAlign = ContentAlignment.MiddleLeft;
+            lbError.Visible = false;
+            // 
             // btnLogin
             // 
             btnLogin.AutoWidth = false;
@@ -180,14 +200,32 @@ namespace PersonalExpenseTracker.Views.Forms
             btnLogin.Dock = DockStyle.Top;
             btnLogin.Font = new Font("Lexend SemiBold", 10.5F);
             btnLogin.ForeColor = Color.FromArgb(24, 24, 27);
-            btnLogin.Location = new Point(0, 365);
+            btnLogin.Location = new Point(0, 395);
             btnLogin.Margin = new Padding(0, 0, 0, 10);
             btnLogin.MinimumSize = new Size(80, 0);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(332, 42);
-            btnLogin.TabIndex = 4;
+            btnLogin.TabIndex = 5;
             btnLogin.Text = "Sign in";
             btnLogin.Click += btnLogin_Click;
+            // 
+            // btnSwitch
+            // 
+            btnSwitch.AutoWidth = false;
+            btnSwitch.BackColor = Color.Transparent;
+            btnSwitch.Caption = "Create an account";
+            btnSwitch.Dock = DockStyle.Top;
+            btnSwitch.Font = new Font("Lexend SemiBold", 9.5F);
+            btnSwitch.ForeColor = Color.FromArgb(245, 158, 11);
+            btnSwitch.Location = new Point(0, 447);
+            btnSwitch.Margin = new Padding(0, 0, 0, 6);
+            btnSwitch.MinimumSize = new Size(80, 0);
+            btnSwitch.Name = "btnSwitch";
+            btnSwitch.Size = new Size(332, 32);
+            btnSwitch.TabIndex = 6;
+            btnSwitch.Text = "Create an account";
+            btnSwitch.Variant = UI.Controls.AppButtonVariant.Ghost;
+            btnSwitch.Click += btnSwitch_Click;
             // 
             // btnExit
             // 
@@ -197,12 +235,12 @@ namespace PersonalExpenseTracker.Views.Forms
             btnExit.Dock = DockStyle.Top;
             btnExit.Font = new Font("Lexend SemiBold", 10.5F);
             btnExit.ForeColor = Color.FromArgb(82, 82, 91);
-            btnExit.Location = new Point(0, 417);
+            btnExit.Location = new Point(0, 485);
             btnExit.Margin = new Padding(0, 0, 0, 18);
             btnExit.MinimumSize = new Size(59, 0);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(332, 38);
-            btnExit.TabIndex = 5;
+            btnExit.TabIndex = 7;
             btnExit.Text = "Exit";
             btnExit.Variant = UI.Controls.AppButtonVariant.Ghost;
             btnExit.Click += btnExit_Click;
@@ -213,11 +251,11 @@ namespace PersonalExpenseTracker.Views.Forms
             lbFooter.Dock = DockStyle.Top;
             lbFooter.Font = new Font("Lexend", 9F);
             lbFooter.ForeColor = Color.FromArgb(161, 161, 170);
-            lbFooter.Location = new Point(0, 473);
+            lbFooter.Location = new Point(0, 545);
             lbFooter.Margin = new Padding(0);
             lbFooter.Name = "lbFooter";
             lbFooter.Size = new Size(332, 19);
-            lbFooter.TabIndex = 6;
+            lbFooter.TabIndex = 8;
             lbFooter.Text = "© 2026 Finora";
             lbFooter.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -251,7 +289,9 @@ namespace PersonalExpenseTracker.Views.Forms
         private Views.UI.Controls.FormField fieldPassword;
         private Views.UI.Controls.AppTextField txtPassword;
         private Views.UI.Controls.AppButton btnLogin;
+        private Views.UI.Controls.AppButton btnSwitch;
         private Views.UI.Controls.AppButton btnExit;
+        private Label lbError;
         private Label lbFooter;
     }
 }

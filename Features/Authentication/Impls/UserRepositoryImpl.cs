@@ -1,40 +1,46 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PersonalExpenseTracker.Domains;
+using PersonalExpenseTracker.Persistence;
 
 namespace PersonalExpenseTracker.Features.Authentication.Impls
 {
     public class UserRepositoryImpl : UserRepository
     {
-        private static List<User> users = new List<User>();
-        private static long nextId = 1;
+        private readonly FinoraDbContext _db;
+
+        public UserRepositoryImpl(FinoraDbContext db)
+        {
+            _db = db;
+        }
 
         public User Save(User user)
         {
-            user.Id = nextId++;
-            users.Add(user);
+            _db.Users.Add(user);
+            _db.SaveChanges();
             return user;
         }
 
-        public User FindById(long id)
+        public User? FindById(long id)
         {
-            return users.FirstOrDefault(u => u.Id == id);
+            return _db.Users.FirstOrDefault(u => u.Id == id);
         }
 
-        public User FindByUsername(string username)
+        public User? FindByUsername(string username)
         {
-            return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return _db.Users.FirstOrDefault(u => u.Username.ToLower() == (username ?? string.Empty).ToLower());
         }
 
         public List<User> FindAll()
         {
-            return new List<User>(users);
+            return _db.Users.AsNoTracking().OrderBy(u => u.Id).ToList();
         }
 
-        public User Update(User user)
+        public User? Update(User user)
         {
-            var existingUser = FindById(user.Id);
+            var existingUser = _db.Users.FirstOrDefault(u => u.Id == user.Id);
             if (existingUser == null)
                 return null;
 
@@ -43,21 +49,23 @@ namespace PersonalExpenseTracker.Features.Authentication.Impls
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
+            _db.SaveChanges();
             return existingUser;
         }
 
         public void Delete(long id)
         {
-            var user = FindById(id);
+            var user = _db.Users.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
-                users.Remove(user);
+                _db.Users.Remove(user);
+                _db.SaveChanges();
             }
         }
 
         public bool ExistsByUsername(string username)
         {
-            return users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return _db.Users.Any(u => u.Username.ToLower() == (username ?? string.Empty).ToLower());
         }
     }
 }

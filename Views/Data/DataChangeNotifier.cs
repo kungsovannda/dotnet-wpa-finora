@@ -9,7 +9,8 @@ namespace PersonalExpenseTracker.Views.Data
         None = 0,
         Transactions = 1,
         Categories = 2,
-        All = Transactions | Categories
+        SavingGoals = 4,
+        All = Transactions | Categories | SavingGoals
     }
 
     public sealed class DataChangedEventArgs : EventArgs
