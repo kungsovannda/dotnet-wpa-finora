@@ -34,8 +34,8 @@ namespace PersonalExpenseTracker.Views.Forms
             _reportsController = reportsController;
             _savingGoalController = savingGoalController;
             _changes = changes;
-            recentList.ClientSizeChanged += (_, _) => ResizeRows(recentList);
-            goalList.ClientSizeChanged += (_, _) => ResizeRows(goalList);
+            recentList.ClientSizeChanged += (_, _) => FlowList.FitRows(recentList);
+            goalList.ClientSizeChanged += (_, _) => FlowList.FitRows(goalList);
 
             // The dashboard renders transactions, their categories, the monthly
             // report and the saving goals, so any write can invalidate it. When it
@@ -162,16 +162,25 @@ namespace PersonalExpenseTracker.Views.Forms
             }
 
             recentList.SuspendLayout();
-            recentList.Controls.Clear();
+
+            // Disposing takes each row out of the panel; a bare Clear would
+            // leave the previous rows alive for the rest of the session.
+            while (recentList.Controls.Count > 0)
+                recentList.Controls[0].Dispose();
+
             foreach (var item in recent)
             {
                 recentList.Controls.Add(new TransactionRow
                 {
                     Item = item,
-                    Width = RowWidth(recentList)
+                    Width = FlowList.RowWidth(recentList)
                 });
             }
             recentList.ResumeLayout();
+
+            // Re-fitted once the scrollbar state has settled, so a list long
+            // enough to scroll never drags a horizontal scrollbar with it.
+            FlowList.FitRows(recentList);
 
             bool hasItems = recent.Count > 0;
             recentList.Visible = hasItems;
@@ -198,12 +207,16 @@ namespace PersonalExpenseTracker.Views.Forms
                 .ToList();
 
             goalList.SuspendLayout();
-            goalList.Controls.Clear();
+
+            // Disposing takes each row out of the panel.
+            while (goalList.Controls.Count > 0)
+                goalList.Controls[0].Dispose();
+
             foreach (var goal in funded)
             {
                 var row = new GoalProgressRow
                 {
-                    Width = RowWidth(goalList),
+                    Width = FlowList.RowWidth(goalList),
                     Height = 34
                 };
                 row.Bind(goal);
@@ -211,21 +224,11 @@ namespace PersonalExpenseTracker.Views.Forms
             }
             goalList.ResumeLayout();
 
+            FlowList.FitRows(goalList);
+
             bool hasItems = goals.Count > 0;
             goalList.Visible = hasItems;
             goalEmpty.Visible = !hasItems;
-        }
-
-        private static int RowWidth(FlowLayoutPanel host) => Math.Max(80, host.ClientSize.Width - 4);
-
-        private static void ResizeRows(FlowLayoutPanel host)
-        {
-            int width = RowWidth(host);
-            foreach (Control child in host.Controls)
-            {
-                if (child.Width != width)
-                    child.Width = width;
-            }
         }
 
         private void DashboardControl_Load(object sender, EventArgs e)
