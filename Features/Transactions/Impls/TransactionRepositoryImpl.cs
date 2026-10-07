@@ -113,7 +113,7 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
 
         public Transaction? Update(Transaction transaction)
         {
-            var existingTransaction = _db.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+            var existingTransaction = Owned(_db.Transactions).FirstOrDefault(t => t.Id == transaction.Id);
             if (existingTransaction == null)
                 return null;
 
@@ -133,10 +133,12 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
 
         public void Delete(long id)
         {
-            var transaction = _db.Transactions.FirstOrDefault(t => t.Id == id);
+            var transaction = Owned(_db.Transactions).FirstOrDefault(t => t.Id == id);
             if (transaction != null)
             {
-                _db.Transactions.Remove(transaction);
+                // Soft delete: the money record is kept for later reporting; it
+                // is simply no longer returned by any live query.
+                transaction.IsDeleted = true;
                 _db.SaveChanges();
             }
         }
@@ -238,9 +240,13 @@ namespace PersonalExpenseTracker.Features.Transactions.Impls
         /// </summary>
         private IQueryable<Transaction> Owned(IQueryable<Transaction> query)
         {
-            return _session.UserId.HasValue
+            query = _session.UserId.HasValue
                 ? query.Where(t => t.UserId == _session.UserId.Value || t.UserId == null)
                 : query.Where(t => false);
+
+            // Soft-deleted rows stay in the table but leave every read: they
+            // exist so nothing is ever orphaned, and no page shows them again.
+            return query.Where(t => !t.IsDeleted);
         }
 
         /// <summary>

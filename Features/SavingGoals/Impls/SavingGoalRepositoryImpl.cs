@@ -53,7 +53,7 @@ namespace PersonalExpenseTracker.Features.SavingGoals.Impls
 
         public SavingGoal? Update(SavingGoal goal)
         {
-            var existing = _db.SavingGoals.FirstOrDefault(g => g.Id == goal.Id);
+            var existing = Owned(_db.SavingGoals).FirstOrDefault(g => g.Id == goal.Id);
             if (existing == null)
                 return null;
 
@@ -70,10 +70,12 @@ namespace PersonalExpenseTracker.Features.SavingGoals.Impls
 
         public void Delete(long id)
         {
-            var goal = _db.SavingGoals.FirstOrDefault(g => g.Id == id);
+            var goal = Owned(_db.SavingGoals).FirstOrDefault(g => g.Id == id);
             if (goal != null)
             {
-                _db.SavingGoals.Remove(goal);
+                // Soft delete: the goal (and with it the contribution history
+                // that lives under it) is hidden, not removed.
+                goal.IsDeleted = true;
                 _db.SaveChanges();
             }
         }
@@ -90,7 +92,7 @@ namespace PersonalExpenseTracker.Features.SavingGoals.Impls
 
         public void AddContribution(SavingGoal goal, SavingGoalContribution contribution)
         {
-            var stored = _db.SavingGoals.FirstOrDefault(g => g.Id == goal.Id)
+            var stored = _db.SavingGoals.FirstOrDefault(g => g.Id == goal.Id && !g.IsDeleted)
                 ?? throw new InvalidOperationException($"Saving goal {goal.Id} no longer exists.");
 
             contribution.SavingGoalId = stored.Id;
@@ -105,7 +107,7 @@ namespace PersonalExpenseTracker.Features.SavingGoals.Impls
 
         public void RemoveContribution(SavingGoal goal, long contributionId)
         {
-            var stored = _db.SavingGoals.FirstOrDefault(g => g.Id == goal.Id)
+            var stored = _db.SavingGoals.FirstOrDefault(g => g.Id == goal.Id && !g.IsDeleted)
                 ?? throw new InvalidOperationException($"Saving goal {goal.Id} no longer exists.");
 
             var contribution = _db.SavingGoalContributions
@@ -129,9 +131,13 @@ namespace PersonalExpenseTracker.Features.SavingGoals.Impls
         /// </summary>
         private IQueryable<SavingGoal> Owned(IQueryable<SavingGoal> query)
         {
-            return _session.UserId.HasValue
+            query = _session.UserId.HasValue
                 ? query.Where(g => g.UserId == _session.UserId.Value || g.UserId == null)
                 : query.Where(g => false);
+
+            // Soft-deleted goals stay in the table but leave every read; their
+            // contributions go with them because there is no other route to them.
+            return query.Where(g => !g.IsDeleted);
         }
     }
 }

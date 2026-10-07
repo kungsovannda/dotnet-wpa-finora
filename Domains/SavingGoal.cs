@@ -35,6 +35,12 @@ namespace PersonalExpenseTracker.Domains
         /// <summary>Set by the user to retire a goal without deleting its history.</summary>
         public bool IsArchived { get; set; }
 
+        /// <summary>
+        /// Soft-delete marker. Setting it hides the goal - and with it its
+        /// contributions - from every read without removing the rows.
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; set; }

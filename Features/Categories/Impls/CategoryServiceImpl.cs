@@ -85,17 +85,10 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
                 throw new CategoryNotFoundException(id);
             }
 
-            // Deleting a category that still has transactions would take real
-            // financial history with it, so the category is kept until it is
-            // empty. The user is told how many records are in the way rather
-            // than being offered a silent cascade.
-            int inUse = _repository.CountTransactions(id);
-            if (inUse > 0)
-            {
-                throw new ValidationException(inUse == 1
-                    ? "This category still has 1 transaction. Move or delete it before removing the category."
-                    : $"This category still has {inUse} transactions. Move or delete them before removing the category.");
-            }
+            // With soft delete in place, we keep the category row but mark it
+            // as deleted so existing transactions that reference it remain
+            // intact for historical reporting. The old blocking rule that
+            // forced the category to be empty is no longer needed.
 
             _repository.Delete(id);
         }

@@ -300,13 +300,6 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private void DeleteGoal(SavingGoalResponseDto goal)
         {
-            string warning = goal.ContributionCount == 0
-                ? $"Delete the goal '{goal.Name}'?"
-                : $"Delete the goal '{goal.Name}' and its {goal.ContributionCount} contribution record(s)? This cannot be undone.";
-
-            if (MessageBox.Show(this, warning, "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
-                return;
-
             try
             {
                 _controller.DeleteSavingGoal(goal.Id);

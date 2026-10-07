@@ -36,6 +36,12 @@ namespace PersonalExpenseTracker.Domains
         /// <summary>Where it happened: a shop, a payee, a city.</summary>
         public string Merchant { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Soft-delete marker. Setting it hides the row from every read; the
+        /// money record itself stays in the database.
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; set; }

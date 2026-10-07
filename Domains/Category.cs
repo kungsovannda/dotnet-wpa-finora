@@ -20,6 +20,12 @@ namespace PersonalExpenseTracker.Domains
         /// <summary>Emoji shown on the category card (presentation value).</summary>
         public string Emoji { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Soft-delete marker. Setting it hides the row from every read without
+        /// removing the financial history that references it.
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

@@ -334,19 +334,14 @@ namespace PersonalExpenseTracker.Views.Forms
 
         private void DeleteCategory(long id)
         {
-            var category = _controller.GetCategory(id);
-            DialogResult result = MessageBox.Show(this, $"Are you sure you want to delete the category '{category.Name}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
+            try
             {
-                try
-                {
-                    _controller.DeleteCategory(id);
-                    _changes.Notify(DataChange.Categories);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                _controller.DeleteCategory(id);
+                _changes.Notify(DataChange.Categories);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
