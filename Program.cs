@@ -38,6 +38,10 @@ namespace PersonalExpenseTracker
             // the scope and is cleared explicitly on logout.
             services.AddSingleton<CurrentUserSession>();
 
+            // App-level configuration (number/date format), persisted next to
+            // the database and applied as soon as it is read.
+            services.AddSingleton<AppPreferencesStore>();
+
             // Register Repository implementations
             services.AddScoped<CategoryRepository, CategoryRepositoryImpl>();
             services.AddScoped<TransactionRepository, TransactionRepositoryImpl>();
@@ -75,11 +79,16 @@ namespace PersonalExpenseTracker
             services.AddTransient<SettingControl>();
 
             // Dialogs that need a controller are resolved by the page that
-            // opens them; the rest are plain forms built with `new`.
+            // opens them; the rest are plain forms built with `new`. The
+            // password change lives inline on the settings page now, so no
+            // dialog is registered for it.
             services.AddTransient<TransactionDialog>();
-            services.AddTransient<ChangePasswordDialog>();
 
             ServiceProvider = services.BuildServiceProvider();
+
+            // Preferences decide how every amount and date is formatted, so they
+            // are loaded and applied before any window is built.
+            _ = ServiceProvider.GetRequiredService<AppPreferencesStore>();
 
             ApplicationConfiguration.Initialize();
 

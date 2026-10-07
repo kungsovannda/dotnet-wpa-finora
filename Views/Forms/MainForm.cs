@@ -42,15 +42,33 @@ namespace PersonalExpenseTracker.Views.Forms
             ShowPage(_dashboard, reload: false);
         }
 
+        /// <summary>
+        /// Brings one page to the front. Every page is attached to the host
+        /// exactly once and then switched by visibility - never detached.
+        ///
+        /// Detaching a page lets it fall back to the default font, and putting
+        /// it back makes it inherit the host font again. That font change
+        /// re-runs the page's font-based auto-scale pass, which grew every
+        /// card, title and row from the second visit onwards. Keeping each
+        /// page parented for the life of the form means the layout is computed
+        /// once and stays identical on every visit.
+        /// </summary>
         private void ShowPage(UserControl page, bool reload = true)
         {
-            bool alreadyShowing = ReferenceEquals(_current, page) && ReferenceEquals(page.Parent, panel);
+            bool alreadyShowing = ReferenceEquals(_current, page);
+
+            if (!ReferenceEquals(page.Parent, panel))
+            {
+                page.Dock = DockStyle.Fill;
+                panel.Controls.Add(page);
+            }
 
             _current = page;
 
-            panel.Controls.Clear();
-            page.Dock = DockStyle.Fill;
-            panel.Controls.Add(page);
+            foreach (Control child in panel.Controls)
+                child.Visible = ReferenceEquals(child, page);
+
+            page.BringToFront();
 
             if (reload && !alreadyShowing && page is IRefreshablePage refreshable)
                 refreshable.RefreshData();

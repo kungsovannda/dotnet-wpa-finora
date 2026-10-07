@@ -40,7 +40,7 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
 
         public Category? Update(Category category)
         {
-            var existingCategory = _db.Categories.FirstOrDefault(c => c.Id == category.Id);
+            var existingCategory = Owned(_db.Categories).FirstOrDefault(c => c.Id == category.Id);
             if (existingCategory == null)
                 return null;
 
@@ -53,10 +53,12 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
 
         public void Delete(long id)
         {
-            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            var category = Owned(_db.Categories).FirstOrDefault(c => c.Id == id);
             if (category != null)
             {
-                _db.Categories.Remove(category);
+                // Soft delete: the row stays so transactions that already carry
+                // this label keep their history; every read filters it out.
+                category.IsDeleted = true;
                 _db.SaveChanges();
             }
         }
@@ -83,8 +85,9 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
         {
             // Counted in SQL, and across every account, not just the caller's: a
             // category is shared data, so one user's transactions can pin it for
-            // everyone.
-            return _db.Transactions.Count(t => t.CategoryId == categoryId);
+            // everyone. Only live transactions pin: rows the user has already
+            // deleted are hidden, so they must not block a deletion either.
+            return _db.Transactions.Count(t => t.CategoryId == categoryId && !t.IsDeleted);
         }
 
         /// <summary>
@@ -95,9 +98,14 @@ namespace PersonalExpenseTracker.Features.Categories.Impls
         /// </summary>
         private IQueryable<Category> Owned(IQueryable<Category> query)
         {
-            return _session.UserId.HasValue
+            query = _session.UserId.HasValue
                 ? query.Where(c => c.UserId == _session.UserId.Value || c.UserId == null)
                 : query.Where(c => false);
+
+            // Every read is a live read: soft-deleted rows exist only so the
+            // history they label is never orphaned, and nothing in the app needs
+            // to see them again.
+            return query.Where(c => !c.IsDeleted);
         }
     }
 }

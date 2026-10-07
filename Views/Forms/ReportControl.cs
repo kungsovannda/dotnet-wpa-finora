@@ -41,6 +41,13 @@ namespace PersonalExpenseTracker.Views.Forms
             InitializeComponent();
             BackColor = Colors.Background;
 
+            // The lists size their rows from the visible width, and the visible
+            // width changes whenever a scrollbar appears or disappears - so the
+            // rows are re-fitted whenever the panel itself resizes.
+            categoryList.ClientSizeChanged += (_, _) => FlowList.FitRows(categoryList);
+            methodList.ClientSizeChanged += (_, _) => FlowList.FitRows(methodList);
+            goalList.ClientSizeChanged += (_, _) => FlowList.FitRows(goalList);
+
             _changes.Changed += Changes_Changed;
             Disposed += ReportControl_Disposed;
         }
@@ -280,7 +287,7 @@ namespace PersonalExpenseTracker.Views.Forms
             // Bars are drawn relative to the largest row, so the biggest figure
             // in the group always fills the width.
             decimal largest = rows.Max(r => r.Amount);
-            int rowWidth = Math.Max(160, host.ClientSize.Width - 4);
+            int rowWidth = FlowList.RowWidth(host);
 
             foreach (var row in rows)
             {
@@ -302,6 +309,10 @@ namespace PersonalExpenseTracker.Views.Forms
 
             host.Visible = true;
             empty.Visible = false;
+
+            // Rows sized before the scrollbar settled are re-fitted now, so the
+            // list never asks for a horizontal scrollbar it does not need.
+            FlowList.FitRows(host);
         }
 
         private void LoadMonthlySummary()
@@ -356,7 +367,7 @@ namespace PersonalExpenseTracker.Views.Forms
             {
                 var row = new GoalProgressRow
                 {
-                    Width = Math.Max(160, goalList.ClientSize.Width - 4),
+                    Width = FlowList.RowWidth(goalList),
                     Height = 36
                 };
 
@@ -368,6 +379,8 @@ namespace PersonalExpenseTracker.Views.Forms
 
             goalList.Visible = true;
             goalEmpty.Visible = false;
+
+            FlowList.FitRows(goalList);
 
             // The card title carries the headline so the list below can stay
             // one line per goal.

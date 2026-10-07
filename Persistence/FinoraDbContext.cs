@@ -64,7 +64,12 @@ namespace PersonalExpenseTracker.Persistence
                 category.Property(c => c.Emoji).HasMaxLength(16);
                 category.Property(c => c.Type).HasConversion<string>().HasMaxLength(16);
                 category.Property(c => c.CreatedAt).IsRequired();
-                category.HasIndex(c => c.Name).IsUnique();
+                category.Property(c => c.IsDeleted).IsRequired();
+                // A name only has to be unique among the live rows: a soft-deleted
+                // category keeps its row (and its name) so the label never leaves
+                // financial history behind, but nothing stops a replacement from
+                // reusing the same name.
+                category.HasIndex(c => c.Name).IsUnique().HasFilter("[IsDeleted] = 0");
 
                 // Restrict, not Cascade: a category is a label on transactions, and
                 // removing the label must never remove the money record. The
@@ -88,6 +93,7 @@ namespace PersonalExpenseTracker.Persistence
                 transaction.Property(t => t.Merchant).HasMaxLength(120);
                 transaction.Property(t => t.Date).IsRequired();
                 transaction.Property(t => t.CreatedAt).IsRequired();
+                transaction.Property(t => t.IsDeleted).IsRequired();
                 transaction.HasIndex(t => t.Date);
                 transaction.HasIndex(t => t.CategoryId);
             });
@@ -103,7 +109,10 @@ namespace PersonalExpenseTracker.Persistence
                 goal.Property(g => g.TargetAmount).IsRequired();
                 goal.Property(g => g.CurrentAmount).IsRequired();
                 goal.Property(g => g.CreatedAt).IsRequired();
-                goal.HasIndex(g => g.Name).IsUnique();
+                goal.Property(g => g.IsDeleted).IsRequired();
+                // Same rule as categories: only the live rows share the unique
+                // name, so a deleted goal's name is free for a new one.
+                goal.HasIndex(g => g.Name).IsUnique().HasFilter("[IsDeleted] = 0");
 
                 goal.HasMany(g => g.Contributions)
                     .WithOne(c => c.SavingGoal)
